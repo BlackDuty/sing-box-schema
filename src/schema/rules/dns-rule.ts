@@ -9,6 +9,7 @@ import { listable } from "@/utils";
 
 // #region DNS Rule Action
 const DNSRejectAction = z.object({
+  type: z.literal("reject"),
   method: z
     .enum(["default", "drop"])
     .optional()
@@ -22,6 +23,7 @@ const DNSRejectAction = z.object({
 });
 
 const DNSRouteAction = z.object({
+  type: z.literal("route"),
   server: z.string().describe("Tag of target server."),
   strategy: DomainStrategy.optional().describe(
     "Set domain strategy for this query."
@@ -42,6 +44,7 @@ const DNSRouteAction = z.object({
 });
 
 const DNSRouteOptionsAction = z.object({
+  type: z.literal("route-options"),
   disable_cache: z
     .boolean()
     .optional()
@@ -60,6 +63,7 @@ const DNSRouteOptionsAction = z.object({
 const DNSRecord = z.string().describe("Text DNS record.");
 
 const DNSRouteActionPredefined = z.object({
+  type: z.literal("predefined"),
   rcode: z
     .enum(["NOERROR", "FORMERR", "SERVFAIL", "NXDOMAIN", "NOTIMP", "REFUSED"])
     .optional()
@@ -76,14 +80,10 @@ const DNSRouteActionPredefined = z.object({
 });
 
 export const DNSRuleAction = z.discriminatedUnion("action", [
-  z.object({ action: z.literal("route") }).extend(DNSRouteAction),
-  z
-    .object({ action: z.literal("route-options") })
-    .extend(DNSRouteOptionsAction),
-  z.object({ action: z.literal("reject") }).extend(DNSRejectAction),
-  z
-    .object({ action: z.literal("predefined") })
-    .extend(DNSRouteActionPredefined),
+  DNSRouteAction,
+  DNSRouteOptionsAction,
+  DNSRejectAction,
+  DNSRouteActionPredefined,
 ]);
 // #endregion
 
@@ -191,12 +191,6 @@ const LogicalDNSRule = z
   })
   .and(DNSRuleAction);
 
-/*
-export const DNSRule = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("default") }).extend(DefaultDNSRule),
-  z.object({ type: z.literal("logical") }).extend(LogicalDNSRule),
-]);
-*/
 export const DNSRule = z.union([DefaultDNSRule, LogicalDNSRule]);
 export type DNSRule = z.infer<typeof DNSRule>;
 // #endregion

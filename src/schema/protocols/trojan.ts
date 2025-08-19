@@ -19,31 +19,31 @@ export const TrojanUser = z.object({
 // #endregion
 
 // #region Inbound
-export const TrojanInboundOptions = z
-  .object({
-    type: z.literal("trojan"),
-    tag: z.string().optional(),
-    users: z.array(TrojanUser).optional(),
-    tls: InboundTLSOptions.optional(),
-    fallback: ServerOptions.optional(),
-    fallback_for_alpn: z.record(z.string(), ServerOptions).optional(),
-    multiplex: InboundMultiplexOptions.optional(),
-    transport: V2RayTransportOptions.optional(),
-  })
-  .extend(ListenOptions);
+export const TrojanInboundOptions = z.object({
+  type: z.literal("trojan"),
+  tag: z.string().optional(),
+  users: z.array(TrojanUser).optional(),
+  tls: InboundTLSOptions.optional(),
+  fallback: ServerOptions.optional(),
+  fallback_for_alpn: z.record(z.string(), ServerOptions).optional(),
+  multiplex: InboundMultiplexOptions.optional(),
+  transport: V2RayTransportOptions.optional(),
+
+  ...ListenOptions.shape,
+});
 // #endregion
 
 // #region Outbound
-export const TrojanOutboundOptions = z
-  .object({
-    type: z.literal("trojan"),
-    tag: z.string().optional(),
-    password: z.string(),
-    network: Network.optional(),
-    tls: OutboundTLSOptions.optional(),
-    multiplex: OutboundMultiplexOptions.optional(),
-    transport: V2RayTransportOptions.optional(),
-  })
-  .extend(DialerOptions)
-  .extend(ServerOptions);
+export const TrojanOutboundOptions = z.object({
+  type: z.literal("trojan"),
+  tag: z.string().optional(),
+  password: z.string(),
+  network: Network.optional(),
+  tls: OutboundTLSOptions.optional(),
+  multiplex: OutboundMultiplexOptions.optional(),
+  transport: V2RayTransportOptions.optional(),
+
+  ...ServerOptions.shape,
+  ...DialerOptions.shape,
+});
 // #endregion

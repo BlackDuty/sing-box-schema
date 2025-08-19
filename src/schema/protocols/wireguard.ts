@@ -12,50 +12,50 @@ export const WireGuardPeer = z.object({
   reserved: z.array(z.number().int()).optional(),
 });
 
-export const WireGuardEndpointOptions = z
-  .object({
-    type: z.literal("wireguard"),
-    tag: z.string().optional(),
-    system: z.boolean().optional(),
-    name: z.string().optional(),
-    mtu: z.number().int().optional(),
-    address: z.union([z.string(), z.array(z.string())]),
-    private_key: z.string(),
-    listen_port: z.number().int().optional(),
-    peers: z.array(WireGuardPeer).optional(),
-    udp_timeout: z.string().optional(),
-    workers: z.number().int().optional(),
-  })
-  .extend(DialerOptions);
+export const WireGuardEndpointOptions = z.object({
+  type: z.literal("wireguard"),
+  tag: z.string().optional(),
+  system: z.boolean().optional(),
+  name: z.string().optional(),
+  mtu: z.number().int().optional(),
+  address: z.union([z.string(), z.array(z.string())]),
+  private_key: z.string(),
+  listen_port: z.number().int().optional(),
+  peers: z.array(WireGuardPeer).optional(),
+  udp_timeout: z.string().optional(),
+  workers: z.number().int().optional(),
+
+  ...DialerOptions.shape,
+});
 // #endregion
 
 // #region Outbound
-export const LegacyWireGuardPeer = z
-  .object({
-    public_key: z.string().optional(),
-    pre_shared_key: z.string().optional(),
-    allowed_ips: z.union([z.string(), z.array(z.string())]).optional(),
-    reserved: z.array(z.number().int()).optional(),
-  })
-  .extend(ServerOptions);
+export const LegacyWireGuardPeer = z.object({
+  public_key: z.string().optional(),
+  pre_shared_key: z.string().optional(),
+  allowed_ips: z.union([z.string(), z.array(z.string())]).optional(),
+  reserved: z.array(z.number().int()).optional(),
 
-export const LegacyWireGuardOutboundOptions = z
-  .object({
-    type: z.literal("wireguard"),
-    tag: z.string().optional(),
-    system_interface: z.boolean().optional(),
-    gso: z.boolean().optional(),
-    interface_name: z.string().optional(),
-    local_address: z.union([z.string(), z.array(z.string())]),
-    private_key: z.string(),
-    peers: z.array(LegacyWireGuardPeer).optional(),
-    peer_public_key: z.string(),
-    pre_shared_key: z.string().optional(),
-    reserved: z.array(z.number().int()).optional(),
-    workers: z.number().int().optional(),
-    mtu: z.number().int().optional(),
-    network: Network.optional(),
-  })
-  .extend(DialerOptions)
-  .extend(ServerOptions);
+  ...ServerOptions.shape,
+});
+
+export const LegacyWireGuardOutboundOptions = z.object({
+  type: z.literal("wireguard"),
+  tag: z.string().optional(),
+  system_interface: z.boolean().optional(),
+  gso: z.boolean().optional(),
+  interface_name: z.string().optional(),
+  local_address: z.union([z.string(), z.array(z.string())]),
+  private_key: z.string(),
+  peers: z.array(LegacyWireGuardPeer).optional(),
+  peer_public_key: z.string(),
+  pre_shared_key: z.string().optional(),
+  reserved: z.array(z.number().int()).optional(),
+  workers: z.number().int().optional(),
+  mtu: z.number().int().optional(),
+  network: Network.optional(),
+
+  ...ServerOptions.shape,
+  ...DialerOptions.shape,
+});
 // #endregion

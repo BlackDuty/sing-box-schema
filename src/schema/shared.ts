@@ -47,34 +47,31 @@ export const InboundOptions = z.object({
 });
 export type InboundOptions = z.infer<typeof InboundOptions>;
 
-export const ListenOptions = z
-  .object({
-    listen: z.string().optional().describe("Listen address."),
-    listen_port: z.number().int().optional().describe("Listen port."),
-    bind_interface: z
-      .string()
-      .optional()
-      .describe("The network interface to bind to."),
-    routing_mark: FwMark.optional().describe("Set netfilter routing mark."),
-    reuse_addr: z.boolean().optional().describe("Reuse listener address."),
-    netns: z
-      .string()
-      .optional()
-      .describe("Set network namespace, name or path."),
-    tcp_keep_alive: z.string().optional().describe("TCP keep alive interval."),
-    tcp_keep_alive_interval: z
-      .string()
-      .optional()
-      .describe("TCP keep alive interval."),
-    tcp_fast_open: z.boolean().optional().describe("Enable TCP Fast Open."),
-    tcp_multi_path: z.boolean().optional().describe("Enable TCP Multi Path."),
-    udp_fragment: z.boolean().optional().describe("Enable UDP fragmentation."),
-    udp_timeout: z
-      .union([z.string(), z.number()])
-      .optional()
-      .describe("UDP NAT expiration time."),
-  })
-  .extend(InboundOptions);
+export const ListenOptions = z.object({
+  listen: z.string().optional().describe("Listen address."),
+  listen_port: z.number().int().optional().describe("Listen port."),
+  bind_interface: z
+    .string()
+    .optional()
+    .describe("The network interface to bind to."),
+  routing_mark: FwMark.optional().describe("Set netfilter routing mark."),
+  reuse_addr: z.boolean().optional().describe("Reuse listener address."),
+  netns: z.string().optional().describe("Set network namespace, name or path."),
+  tcp_keep_alive: z.string().optional().describe("TCP keep alive interval."),
+  tcp_keep_alive_interval: z
+    .string()
+    .optional()
+    .describe("TCP keep alive interval."),
+  tcp_fast_open: z.boolean().optional().describe("Enable TCP Fast Open."),
+  tcp_multi_path: z.boolean().optional().describe("Enable TCP Multi Path."),
+  udp_fragment: z.boolean().optional().describe("Enable UDP fragmentation."),
+  udp_timeout: z
+    .union([z.string(), z.number()])
+    .optional()
+    .describe("UDP NAT expiration time."),
+
+  ...InboundOptions.shape,
+});
 export type ListenOptions = z.infer<typeof ListenOptions>;
 // #endregion
 
@@ -213,9 +210,10 @@ const InboundECHOptions = z.object({
 const InboundRealityOptions = z.object({
   enabled: z.boolean().optional(),
   handshake: z
-    .object({})
-    .extend(ServerOptions)
-    .extend(DialerOptions)
+    .object({
+      ...ServerOptions.shape,
+      ...DialerOptions.shape,
+    })
     .optional(),
   private_key: z.string().optional(),
   short_id: listable(z.string()).optional(),
@@ -305,6 +303,7 @@ export type OutboundMultiplexOptions = z.infer<typeof OutboundMultiplexOptions>;
 
 // #region V2Ray Transport
 const V2RayHTTPOptions = z.object({
+  type: z.literal("http"),
   host: listable(z.string()).optional(),
   path: z.string().optional(),
   method: z.string().optional(),
@@ -314,15 +313,19 @@ const V2RayHTTPOptions = z.object({
 });
 
 const V2RayWebsocketOptions = z.object({
+  type: z.literal("ws"),
   path: z.string().optional(),
   headers: z.record(z.string(), z.string()).optional(),
   max_early_data: z.number().int().optional(),
   early_data_header_name: z.string().optional(),
 });
 
-const V2RayQUICOptions = z.object({});
+const V2RayQUICOptions = z.object({
+  type: z.literal("quic"),
+});
 
 const V2RayGRPCOptions = z.object({
+  type: z.literal("grpc"),
   service_name: z.string().optional(),
   idle_timeout: z.string().optional(),
   ping_timeout: z.string().optional(),
@@ -330,17 +333,18 @@ const V2RayGRPCOptions = z.object({
 });
 
 const V2RayHTTPUpgradeOptions = z.object({
+  type: z.literal("httpupgrade"),
   host: z.string().optional(),
   path: z.string().optional(),
   headers: z.record(z.string(), z.string()).optional(),
 });
 
 export const V2RayTransportOptions = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("http") }).extend(V2RayHTTPOptions),
-  z.object({ type: z.literal("ws") }).extend(V2RayWebsocketOptions),
-  z.object({ type: z.literal("quic") }).extend(V2RayQUICOptions),
-  z.object({ type: z.literal("grpc") }).extend(V2RayGRPCOptions),
-  z.object({ type: z.literal("httpupgrade") }).extend(V2RayHTTPUpgradeOptions),
+  V2RayHTTPOptions,
+  V2RayWebsocketOptions,
+  V2RayQUICOptions,
+  V2RayGRPCOptions,
+  V2RayHTTPUpgradeOptions,
 ]);
 export type V2RayTransportOptions = z.infer<typeof V2RayTransportOptions>;
 // #endregion

@@ -7,6 +7,8 @@ import { DialerOptions, DomainStrategy, OutboundTLSOptions } from "./shared";
 export const LocalDNSServerOptions = z.object({
   type: z.literal("local"),
   tag: z.string(),
+
+  ...DialerOptions.shape,
 });
 
 export const HostsDNSServerOptions = z.object({
@@ -21,115 +23,115 @@ export const HostsDNSServerOptions = z.object({
     .describe("Predefined hosts."),
 });
 
-export const TCPDNSServerOptions = z
-  .object({
-    type: z.literal("tcp"),
-    tag: z.string(),
-    server: z.string().describe("The address of the TCP DNS server."),
-    server_port: z
-      .number()
-      .int()
-      .optional()
-      .describe("The port of the TCP DNS server."),
-  })
-  .extend(DialerOptions);
+export const TCPDNSServerOptions = z.object({
+  type: z.literal("tcp"),
+  tag: z.string(),
+  server: z.string().describe("The address of the TCP DNS server."),
+  server_port: z
+    .number()
+    .int()
+    .optional()
+    .describe("The port of the TCP DNS server."),
 
-export const UDPDNSServerOptions = z
-  .object({
-    type: z.literal("udp"),
-    tag: z.string(),
-    server: z.string().describe("The address of the UDP DNS server."),
-    server_port: z
-      .number()
-      .int()
-      .optional()
-      .describe("The port of the UDP DNS server."),
-  })
-  .extend(DialerOptions);
+  ...DialerOptions.shape,
+});
 
-export const TLSDNSServerOptions = z
-  .object({
-    type: z.literal("tls"),
-    tag: z.string(),
-    server: z.string().describe("The address of the TLS DNS server."),
-    server_port: z
-      .number()
-      .int()
-      .optional()
-      .describe("The port of the TLS DNS server."),
-    tls: OutboundTLSOptions.optional().describe("TLS configuration."),
-  })
-  .extend(DialerOptions);
+export const UDPDNSServerOptions = z.object({
+  type: z.literal("udp"),
+  tag: z.string(),
+  server: z.string().describe("The address of the UDP DNS server."),
+  server_port: z
+    .number()
+    .int()
+    .optional()
+    .describe("The port of the UDP DNS server."),
 
-export const QUICDNSServerOptions = z
-  .object({
-    type: z.literal("quic"),
-    tag: z.string(),
-    server: z.string().describe("The address of the QUIC DNS server."),
-    server_port: z
-      .number()
-      .int()
-      .optional()
-      .describe("The port of the QUIC DNS server."),
-    tls: OutboundTLSOptions.optional().describe("TLS configuration."),
-  })
-  .extend(DialerOptions);
+  ...DialerOptions.shape,
+});
 
-export const HTTPSDNSServerOptions = z
-  .object({
-    type: z.literal("https"),
-    tag: z.string(),
-    server: z.string().describe("The address of the HTTPS DNS server."),
-    server_port: z
-      .number()
-      .int()
-      .optional()
-      .describe("The port of the HTTPS DNS server."),
-    path: z
-      .string()
-      .optional()
-      .describe(
-        "The path of the HTTPS DNS server. `/dns-query` will be used by default."
-      ),
-    headers: z
-      .record(z.string(), z.string())
-      .optional()
-      .describe("Additional headers to be sent to the DNS server."),
-    tls: OutboundTLSOptions.optional().describe("TLS configuration."),
-  })
-  .extend(DialerOptions);
+export const TLSDNSServerOptions = z.object({
+  type: z.literal("tls"),
+  tag: z.string(),
+  server: z.string().describe("The address of the TLS DNS server."),
+  server_port: z
+    .number()
+    .int()
+    .optional()
+    .describe("The port of the TLS DNS server."),
+  tls: OutboundTLSOptions.optional().describe("TLS configuration."),
 
-export const HTTP3DNSServerOptions = z
-  .object({
-    type: z.literal("h3"),
-    tag: z.string(),
-    server: z.string().describe("The address of the HTTP3 DNS server."),
-    server_port: z
-      .number()
-      .int()
-      .optional()
-      .describe("The port of the HTTP3 DNS server."),
-    path: z
-      .string()
-      .optional()
-      .describe(
-        "The path of the HTTP3 DNS server. `/dns-query` will be used by default."
-      ),
-    headers: z
-      .record(z.string(), z.string())
-      .optional()
-      .describe("Additional headers to be sent to the DNS server."),
-    tls: OutboundTLSOptions.optional().describe("TLS configuration."),
-  })
-  .extend(DialerOptions);
+  ...DialerOptions.shape,
+});
 
-export const DHCPDNSServerOptions = z
-  .object({
-    type: z.literal("dhcp"),
-    tag: z.string(),
-    interface: z.string().optional().describe("Interface name to listen on."),
-  })
-  .extend(DialerOptions);
+export const QUICDNSServerOptions = z.object({
+  type: z.literal("quic"),
+  tag: z.string(),
+  server: z.string().describe("The address of the QUIC DNS server."),
+  server_port: z
+    .number()
+    .int()
+    .optional()
+    .describe("The port of the QUIC DNS server."),
+  tls: OutboundTLSOptions.optional().describe("TLS configuration."),
+
+  ...DialerOptions.shape,
+});
+
+export const HTTPSDNSServerOptions = z.object({
+  type: z.literal("https"),
+  tag: z.string(),
+  server: z.string().describe("The address of the HTTPS DNS server."),
+  server_port: z
+    .number()
+    .int()
+    .optional()
+    .describe("The port of the HTTPS DNS server."),
+  path: z
+    .string()
+    .optional()
+    .describe(
+      "The path of the HTTPS DNS server. `/dns-query` will be used by default."
+    ),
+  headers: z
+    .record(z.string(), z.string())
+    .optional()
+    .describe("Additional headers to be sent to the DNS server."),
+  tls: OutboundTLSOptions.optional().describe("TLS configuration."),
+
+  ...DialerOptions.shape,
+});
+
+export const HTTP3DNSServerOptions = z.object({
+  type: z.literal("h3"),
+  tag: z.string(),
+  server: z.string().describe("The address of the HTTP3 DNS server."),
+  server_port: z
+    .number()
+    .int()
+    .optional()
+    .describe("The port of the HTTP3 DNS server."),
+  path: z
+    .string()
+    .optional()
+    .describe(
+      "The path of the HTTP3 DNS server. `/dns-query` will be used by default."
+    ),
+  headers: z
+    .record(z.string(), z.string())
+    .optional()
+    .describe("Additional headers to be sent to the DNS server."),
+  tls: OutboundTLSOptions.optional().describe("TLS configuration."),
+
+  ...DialerOptions.shape,
+});
+
+export const DHCPDNSServerOptions = z.object({
+  type: z.literal("dhcp"),
+  tag: z.string(),
+  interface: z.string().optional().describe("Interface name to listen on."),
+
+  ...DialerOptions.shape,
+});
 
 export const FakeIPDNSServerOptions = z.object({
   type: z.literal("fakeip"),
@@ -193,15 +195,15 @@ export const LegacyDNSFakeIPOptions = z.object({
   inet6_range: z.string().optional(), // prefix
 });
 
-export const DNSOptions = z
-  .object({
-    servers: z.array(DNSServer).optional(),
-    rules: z.array(DNSRule).optional(),
-    final: z.string().optional(),
-    reverse_mapping: z.boolean().optional(),
-    fakeip: LegacyDNSFakeIPOptions.optional(),
-  })
-  .extend(DNSClientOptions);
+export const DNSOptions = z.object({
+  servers: z.array(DNSServer).optional(),
+  rules: z.array(DNSRule).optional(),
+  final: z.string().optional(),
+  reverse_mapping: z.boolean().optional(),
+  fakeip: LegacyDNSFakeIPOptions.optional(),
+
+  ...DNSClientOptions.shape,
+});
 
 export type DNSOptions = z.infer<typeof DNSOptions>;
 // #endregion

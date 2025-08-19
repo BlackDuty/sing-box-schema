@@ -3,7 +3,6 @@ import { listable } from "../../utils";
 
 // #region Non-final Route Actions
 const RuleActionRouteOptions = z.object({
-  action: z.literal("route-options"),
   override_address: z
     .string()
     .optional()
@@ -103,19 +102,22 @@ const RuleActionResolve = z.object({
 });
 
 const RuleActionNonFinal = z.discriminatedUnion("action", [
-  RuleActionRouteOptions,
+  z.object({
+    action: z.literal("route-options"),
+    ...RuleActionRouteOptions.shape,
+  }),
   RuleActionSniff,
   RuleActionResolve,
 ]);
 // #endregion
 
 // #region Final Route Actions
-const RuleActionRoute = z
-  .object({
-    action: z.literal("route"),
-    outbound: z.string().describe("Tag of target outbound."),
-  })
-  .extend(RuleActionRouteOptions);
+const RuleActionRoute = z.object({
+  action: z.literal("route"),
+  outbound: z.string().describe("Tag of target outbound."),
+
+  ...RuleActionRouteOptions.shape,
+});
 
 const RuleActionReject = z.object({
   action: z.literal("reject"),
