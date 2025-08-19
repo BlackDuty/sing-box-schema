@@ -1,0 +1,31 @@
+{
+  "usageStatisticsEnabled": false,
+  "contextFileName": [
+    "GEMINI.md"
+  ],
+  "autoAccept": true,
+  "preferredEditor": "vscode",
+  "mcpServers": {
+    "sequential-thinking": {
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    "context7": {
+      "command": "bunx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ]
+    }
+  },
+  "includeDirectories": [
+    "~/Projects/sing-box"
+  ],
+  "loadMemoryFromIncludeDirectories": true,
+  "folderTrust": true,
+  "showLineNumbers": true,
+  "folderTrustFeature": true
+}

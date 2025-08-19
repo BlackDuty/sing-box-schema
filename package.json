@@ -1,0 +1,52 @@
+{
+  "name": "@black-ladder/sing-box-schema",
+  "version": "1.12.1",
+  "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "files": [
+    "./dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check --write",
+    "generate": "bun run scripts/gen-json-schema.ts"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "@tsconfig/bun": "^1.0.8",
+    "@types/bun": "^1.2.20",
+    "tsdown": "^0.14.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org",
+    "provenance": true
+  },
+  "readme": "README.md",
+  "dependencies": {
+    "zod": "^4.0.17"
+  }
+}
