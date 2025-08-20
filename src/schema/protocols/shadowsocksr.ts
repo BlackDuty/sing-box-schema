@@ -15,3 +15,7 @@ export const ShadowsocksROutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+
+export type ShadowsocksROutboundOptions = z.infer<
+  typeof ShadowsocksROutboundOptions
+>;

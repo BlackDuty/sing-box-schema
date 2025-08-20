@@ -17,3 +17,4 @@ export const MixedInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type MixedInboundOptions = z.infer<typeof MixedInboundOptions>;

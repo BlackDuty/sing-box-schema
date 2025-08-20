@@ -1,9 +1,9 @@
 import { z } from "zod";
 import {
-  ListenOptions,
   DialerOptions,
-  ServerOptions,
+  ListenOptions,
   OutboundTLSOptions,
+  ServerOptions,
 } from "../shared";
 
 const ShadowTLSUser = z.object({
@@ -41,6 +41,7 @@ export const ShadowTLSInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type ShadowTLSInboundOptions = z.infer<typeof ShadowTLSInboundOptions>;
 
 export const ShadowTLSOutboundOptions = z.object({
   type: z.literal("shadowtls"),
@@ -58,3 +59,4 @@ export const ShadowTLSOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type ShadowTLSOutboundOptions = z.infer<typeof ShadowTLSOutboundOptions>;

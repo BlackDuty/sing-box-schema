@@ -11,6 +11,7 @@ export const DirectInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type DirectInboundOptions = z.infer<typeof DirectInboundOptions>;
 // #endregion
 
 // #region Outbound
@@ -22,4 +23,5 @@ export const DirectOutboundOptions = z.object({
 
   ...DialerOptions.shape,
 });
+export type DirectOutboundOptions = z.infer<typeof DirectOutboundOptions>;
 // #endregion

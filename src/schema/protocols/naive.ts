@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ListenOptions, InboundTLSOptions, Network } from "../shared";
+import { InboundTLSOptions, ListenOptions, Network } from "../shared";
 
 const NaiveUser = z.object({
   username: z.string(),

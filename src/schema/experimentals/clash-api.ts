@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { listable } from "@/utils";
+import { listableString } from "@/utils";
 
 /**
  * Clash API settings.
@@ -12,7 +12,7 @@ export const ClashAPIOptions = z.object({
     .string()
     .optional()
     .describe(
-      "RESTful web API listening address. Clash API will be disabled if empty."
+      "RESTful web API listening address. Clash API will be disabled if empty.",
     ),
   /**
    * A relative path to the configuration directory or an absolute path to a directory in which you put some static web resource.
@@ -21,7 +21,7 @@ export const ClashAPIOptions = z.object({
     .string()
     .optional()
     .describe(
-      "A relative path to the configuration directory or an absolute path to a directory in which you put some static web resource."
+      "A relative path to the configuration directory or an absolute path to a directory in which you put some static web resource.",
     ),
   /**
    * ZIP download URL for the external UI, will be used if the specified `external_ui` directory is empty.
@@ -30,7 +30,7 @@ export const ClashAPIOptions = z.object({
     .string()
     .optional()
     .describe(
-      "ZIP download URL for the external UI, will be used if the specified `external_ui` directory is empty."
+      "ZIP download URL for the external UI, will be used if the specified `external_ui` directory is empty.",
     ),
   /**
    * The tag of the outbound to download the external UI.
@@ -56,7 +56,7 @@ export const ClashAPIOptions = z.object({
   /**
    * CORS allowed origins, `*` will be used if empty.
    */
-  access_control_allow_origin: listable(z.string())
+  access_control_allow_origin: listableString
     .optional()
     .describe("CORS allowed origins, `*` will be used if empty."),
   /**

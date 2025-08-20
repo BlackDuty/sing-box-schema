@@ -26,6 +26,7 @@ export const TUICInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type TUICInboundOptions = z.infer<typeof TUICInboundOptions>;
 
 export const TUICOutboundOptions = z.object({
   type: z.literal("tuic"),
@@ -43,3 +44,4 @@ export const TUICOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type TUICOutboundOptions = z.infer<typeof TUICOutboundOptions>;

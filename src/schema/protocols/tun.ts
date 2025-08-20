@@ -1,30 +1,22 @@
 import { z } from "zod";
-import {
-  ListenOptions,
-  InboundOptions,
-  FwMark,
-  Network,
-  UDPOverTCPOptions,
-  ServerOptions,
-  DialerOptions,
-} from "../shared";
-import { listable } from "../../utils";
+import { listableInts, listableString } from "../../utils";
+import { FwMark, ListenOptions } from "../shared";
 
 export const HTTPProxyOptions = z.object({
   enabled: z.boolean().optional().describe("Enable system HTTP proxy."),
   server: z.string().describe("HTTP proxy server address."),
   server_port: z.number().int().describe("HTTP proxy server port."),
-  bypass_domain: listable(z.string())
+  bypass_domain: listableString
     .optional()
     .describe("Hostnames that bypass the HTTP proxy."),
-  match_domain: listable(z.string())
+  match_domain: listableString
     .optional()
     .describe("Hostnames that use the HTTP proxy."),
 });
 
 export const TunPlatformOptions = z.object({
   http_proxy: HTTPProxyOptions.optional().describe(
-    "System HTTP proxy settings."
+    "System HTTP proxy settings.",
   ),
 });
 
@@ -35,7 +27,7 @@ export const TunInboundOptions = z.object({
     .string()
     .optional()
     .describe("Virtual device name, automatically selected if empty."),
-  address: listable(z.string())
+  address: listableString
     .optional()
     .describe("IPv4 and IPv6 prefix for the tun interface."),
   mtu: z.number().int().optional().describe("The maximum transmission unit."),
@@ -58,63 +50,59 @@ export const TunInboundOptions = z.object({
     .optional()
     .describe("Improve TUN routing and performance using nftables."),
   auto_redirect_input_mark: FwMark.optional().describe(
-    "Connection input mark used by `auto_redirect`."
+    "Connection input mark used by `auto_redirect`.",
   ),
   auto_redirect_output_mark: FwMark.optional().describe(
-    "Connection output mark used by `auto_redirect`."
+    "Connection output mark used by `auto_redirect`.",
   ),
-  loopback_address: listable(z.string())
+  loopback_address: listableString
     .optional()
     .describe(
-      "Loopback addresses make TCP connections to the specified address connect to the source address."
+      "Loopback addresses make TCP connections to the specified address connect to the source address.",
     ),
   strict_route: z
     .boolean()
     .optional()
     .describe("Enforce strict routing rules when `auto_route` is enabled."),
-  route_address: listable(z.string())
+  route_address: listableString
     .optional()
     .describe(
-      "Use custom routes instead of default when `auto_route` is enabled."
+      "Use custom routes instead of default when `auto_route` is enabled.",
     ),
-  route_address_set: listable(z.string())
+  route_address_set: listableString
     .optional()
     .describe(
-      "Add the destination IP CIDR rules in the specified rule-sets to the firewall."
+      "Add the destination IP CIDR rules in the specified rule-sets to the firewall.",
     ),
-  route_exclude_address: listable(z.string())
+  route_exclude_address: listableString
     .optional()
     .describe("Exclude custom routes when `auto_route` is enabled."),
-  route_exclude_address_set: listable(z.string())
+  route_exclude_address_set: listableString
     .optional()
     .describe(
-      "Add the destination IP CIDR rules in the specified rule-sets to the firewall."
+      "Add the destination IP CIDR rules in the specified rule-sets to the firewall.",
     ),
-  include_interface: listable(z.string())
+  include_interface: listableString
     .optional()
     .describe("Limit interfaces in route."),
-  exclude_interface: listable(z.string())
+  exclude_interface: listableString
     .optional()
     .describe("Exclude interfaces in route."),
-  include_uid: listable(z.number().int())
-    .optional()
-    .describe("Limit users in route."),
-  include_uid_range: listable(z.string())
+  include_uid: listableInts.optional().describe("Limit users in route."),
+  include_uid_range: listableString
     .optional()
     .describe("Limit users in route, but in range."),
-  exclude_uid: listable(z.number().int())
-    .optional()
-    .describe("Exclude users in route."),
-  exclude_uid_range: listable(z.string())
+  exclude_uid: listableInts.optional().describe("Exclude users in route."),
+  exclude_uid_range: listableString
     .optional()
     .describe("Exclude users in route, but in range."),
-  include_android_user: listable(z.number().int())
+  include_android_user: listableInts
     .optional()
     .describe("Limit android users in route."),
-  include_package: listable(z.string())
+  include_package: listableString
     .optional()
     .describe("Limit android packages in route."),
-  exclude_package: listable(z.string())
+  exclude_package: listableString
     .optional()
     .describe("Exclude android packages in route."),
   stack: z
@@ -122,7 +110,7 @@ export const TunInboundOptions = z.object({
     .optional()
     .describe("TCP/IP stack."),
   platform: TunPlatformOptions.optional().describe(
-    "Platform-specific settings, provided by client applications."
+    "Platform-specific settings, provided by client applications.",
   ),
 
   // Deprecated fields
@@ -130,24 +118,24 @@ export const TunInboundOptions = z.object({
     .boolean()
     .optional()
     .describe(
-      "Deprecated: GSO has no advantages for transparent proxy scenarios."
+      "Deprecated: GSO has no advantages for transparent proxy scenarios.",
     ),
-  inet4_address: listable(z.string())
+  inet4_address: listableString
     .optional()
     .describe("Deprecated: merged to `address`."),
-  inet6_address: listable(z.string())
+  inet6_address: listableString
     .optional()
     .describe("Deprecated: merged to `address`."),
-  inet4_route_address: listable(z.string())
+  inet4_route_address: listableString
     .optional()
     .describe("Deprecated: merged to `route_address`."),
-  inet6_route_address: listable(z.string())
+  inet6_route_address: listableString
     .optional()
     .describe("Deprecated: merged to `route_address`."),
-  inet4_route_exclude_address: listable(z.string())
+  inet4_route_exclude_address: listableString
     .optional()
     .describe("Deprecated: merged to `route_exclude_address`."),
-  inet6_route_exclude_address: listable(z.string())
+  inet6_route_exclude_address: listableString
     .optional()
     .describe("Deprecated: merged to `route_exclude_address`."),
   endpoint_independent_nat: z

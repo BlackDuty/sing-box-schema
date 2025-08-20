@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { listable } from "@/utils";
+import { listableString } from "@/utils";
 
 /**
  * Certificate settings for sing-box.
@@ -15,19 +15,19 @@ export const CertificateOptions = z.object({
   /**
    * The certificate line array to trust, in PEM format.
    */
-  certificate: listable(z.string())
+  certificate: listableString
     .optional()
     .describe("The certificate line array to trust, in PEM format."),
   /**
    * The paths to certificates to trust, in PEM format.
    */
-  certificate_path: listable(z.string())
+  certificate_path: listableString
     .optional()
     .describe("The paths to certificates to trust, in PEM format."),
   /**
    * The directory path to search for certificates to trust,in PEM format.
    */
-  certificate_directory_path: listable(z.string())
+  certificate_directory_path: listableString
     .optional()
     .describe(
       "The directory path to search for certificates to trust,in PEM format."

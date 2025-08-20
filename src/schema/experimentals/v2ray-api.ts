@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { listable } from "@/utils";
+import { listableString } from "@/utils";
 
 const V2RayAPIStatsOptions = z.object({
   /**
@@ -9,21 +9,19 @@ const V2RayAPIStatsOptions = z.object({
   /**
    * Inbound list to count traffic.
    */
-  inbounds: listable(z.string())
+  inbounds: listableString
     .optional()
     .describe("Inbound list to count traffic."),
   /**
    * Outbound list to count traffic.
    */
-  outbounds: listable(z.string())
+  outbounds: listableString
     .optional()
     .describe("Outbound list to count traffic."),
   /**
    * User list to count traffic.
    */
-  users: listable(z.string())
-    .optional()
-    .describe("User list to count traffic."),
+  users: listableString.optional().describe("User list to count traffic."),
 });
 
 /**
@@ -37,13 +35,13 @@ export const V2RayAPIOptions = z.object({
     .string()
     .optional()
     .describe(
-      "gRPC API listening address. V2Ray API will be disabled if empty."
+      "gRPC API listening address. V2Ray API will be disabled if empty.",
     ),
   /**
    * Traffic statistics service settings.
    */
   stats: V2RayAPIStatsOptions.optional().describe(
-    "Traffic statistics service settings."
+    "Traffic statistics service settings.",
   ),
 });
 

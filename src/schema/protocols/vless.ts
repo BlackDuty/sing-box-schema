@@ -27,6 +27,7 @@ export const VLESSInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type VLESSInboundOptions = z.infer<typeof VLESSInboundOptions>;
 
 export const VLESSOutboundOptions = z.object({
   type: z.literal("vless"),
@@ -42,3 +43,4 @@ export const VLESSOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type VLESSOutboundOptions = z.infer<typeof VLESSOutboundOptions>;

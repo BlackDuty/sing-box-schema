@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // #region Outbound
-export const URLTestOutboundSchema = z.object({
+export const URLTestOutbound = z.object({
   type: z.literal("urltest"),
   tag: z.string(),
   outbounds: z.array(z.string()),
@@ -11,4 +11,5 @@ export const URLTestOutboundSchema = z.object({
   idle_timeout: z.string().optional(),
   interrupt_exist_connections: z.boolean().optional(),
 });
+export type URLTestOutbound = z.infer<typeof URLTestOutbound>;
 // #endregion

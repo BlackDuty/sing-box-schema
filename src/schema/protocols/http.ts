@@ -1,11 +1,11 @@
 import { z } from "zod";
 import {
-  ListenOptions,
   DialerOptions,
-  ServerOptions,
-  InboundTLSOptions,
-  OutboundTLSOptions,
   HttpHeader,
+  InboundTLSOptions,
+  ListenOptions,
+  OutboundTLSOptions,
+  ServerOptions,
 } from "@/schema/shared";
 
 const HTTPUser = z.object({
@@ -25,6 +25,7 @@ export const HTTPInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type HTTPInboundOptions = z.infer<typeof HTTPInboundOptions>;
 
 export const HTTPOutboundOptions = z.object({
   type: z.literal("http"),
@@ -38,3 +39,4 @@ export const HTTPOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type HTTPOutboundOptions = z.infer<typeof HTTPOutboundOptions>;

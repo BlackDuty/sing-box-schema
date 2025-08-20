@@ -34,6 +34,7 @@ export const HysteriaInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type HysteriaInboundOptions = z.infer<typeof HysteriaInboundOptions>;
 // #endregion
 
 // #region Outbound
@@ -58,4 +59,5 @@ export const HysteriaOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type HysteriaOutboundOptions = z.infer<typeof HysteriaOutboundOptions>;
 // #endregion

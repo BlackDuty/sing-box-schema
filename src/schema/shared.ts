@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { listable } from "@/utils";
+import { listable, listableString } from "@/utils";
 
 // #region Base
 export const DomainStrategy = z.enum([
@@ -34,18 +34,18 @@ export const InboundOptions = z.object({
     .boolean()
     .optional()
     .describe(
-      "Override the connection destination address with the sniffed domain."
+      "Override the connection destination address with the sniffed domain.",
     ),
   sniff_timeout: z.string().optional().describe("Timeout for sniffing."),
   domain_strategy: DomainStrategy.optional().describe(
-    "If set, the requested domain name will be resolved to IP before routing."
+    "If set, the requested domain name will be resolved to IP before routing.",
   ),
   udp_disable_domain_unmapping: z.boolean().optional(),
   detour: z
     .string()
     .optional()
     .describe(
-      "If set, connections will be forwarded to the specified inbound."
+      "If set, connections will be forwarded to the specified inbound.",
     ),
 });
 export type InboundOptions = z.infer<typeof InboundOptions>;
@@ -93,7 +93,7 @@ export const NetworkStrategy = z.object({
     .string()
     .optional()
     .describe(
-      "The length of time to wait before spawning a RFC 6555 Fast Fallback connection."
+      "The length of time to wait before spawning a RFC 6555 Fast Fallback connection.",
     ),
 });
 export type NetworkStrategy = z.infer<typeof NetworkStrategy>;
@@ -143,7 +143,7 @@ export const DialerOptions = z.object({
   fallback_network_type: listable(NetworkType).optional(),
   fallback_delay: z.string().optional(),
   domain_strategy: DomainStrategy.optional().describe(
-    "Deprecated in sing-box 1.12.0"
+    "Deprecated in sing-box 1.12.0",
   ),
 });
 export type DialerOptions = z.infer<typeof DialerOptions>;
@@ -186,7 +186,7 @@ const DNS01Challenge = z.object({
 });
 
 const InboundACMEOptions = z.object({
-  domain: listable(z.string()).optional(),
+  domain: listableString.optional(),
   data_directory: z.string().optional(),
   default_server_name: z.string().optional(),
   email: z.string().optional(),
@@ -206,7 +206,7 @@ const InboundACMEOptions = z.object({
 
 const InboundECHOptions = z.object({
   enabled: z.boolean().optional(),
-  key: listable(z.string()).optional(),
+  key: listableString.optional(),
   key_path: z.string().optional(),
 });
 
@@ -219,20 +219,20 @@ const InboundRealityOptions = z.object({
     })
     .optional(),
   private_key: z.string().optional(),
-  short_id: listable(z.string()).optional(),
+  short_id: listableString.optional(),
   max_time_difference: z.string().optional(),
 });
 
 export const InboundTLSOptions = z.object({
   enabled: z.boolean().optional(),
   server_name: z.string().optional(),
-  alpn: listable(z.string()).optional(),
+  alpn: listableString.optional(),
   min_version: TLSVersion.optional(),
   max_version: TLSVersion.optional(),
   cipher_suites: listable(TLSCipherSuite).optional(),
-  certificate: listable(z.string()).optional(),
+  certificate: listableString.optional(),
   certificate_path: z.string().optional(),
-  key: listable(z.string()).optional(),
+  key: listableString.optional(),
   key_path: z.string().optional(),
   acme: InboundACMEOptions.optional(),
   ech: InboundECHOptions.optional(),
@@ -242,7 +242,7 @@ export type InboundTLSOptions = z.infer<typeof InboundTLSOptions>;
 
 const OutboundECHOptions = z.object({
   enabled: z.boolean().optional(),
-  config: listable(z.string()).optional(),
+  config: listableString.optional(),
   config_path: z.string().optional(),
 });
 
@@ -262,11 +262,11 @@ export const OutboundTLSOptions = z.object({
   disable_sni: z.boolean().optional(),
   server_name: z.string().optional(),
   insecure: z.boolean().optional(),
-  alpn: listable(z.string()).optional(),
+  alpn: listableString.optional(),
   min_version: TLSVersion.optional(),
   max_version: TLSVersion.optional(),
   cipher_suites: listable(TLSCipherSuite).optional(),
-  certificate: listable(z.string()).optional(),
+  certificate: listableString.optional(),
   certificate_path: z.string().optional(),
   fragment: z.boolean().optional(),
   fragment_fallback_delay: z.string().optional(),
@@ -307,7 +307,7 @@ export type OutboundMultiplexOptions = z.infer<typeof OutboundMultiplexOptions>;
 // #region V2Ray Transport
 const V2RayHTTPOptions = z.object({
   type: z.literal("http"),
-  host: listable(z.string()).optional(),
+  host: listableString.optional(),
   path: z.string().optional(),
   method: z.string().optional(),
   headers: HttpHeader.optional(),

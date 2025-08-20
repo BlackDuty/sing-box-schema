@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { listable } from "../../utils";
 import { Network, NetworkType } from "@/schema/shared";
+import { listable, listableInts, listableString } from "../../utils";
 
 // #region Headless Rule
 const DNSQueryType = z.union([z.string(), z.number().int()]);
@@ -10,34 +10,28 @@ const DefaultHeadlessRule = z.object({
     .optional()
     .describe("DNS query type. Values can be integers or type name strings."),
   network: listable(Network).optional().describe("`tcp` or `udp`."),
-  domain: listable(z.string()).optional().describe("Match full domain."),
-  domain_suffix: listable(z.string())
-    .optional()
-    .describe("Match domain suffix."),
-  domain_keyword: listable(z.string())
+  domain: listableString.optional().describe("Match full domain."),
+  domain_suffix: listableString.optional().describe("Match domain suffix."),
+  domain_keyword: listableString
     .optional()
     .describe("Match domain using keyword."),
-  domain_regex: listable(z.string())
+  domain_regex: listableString
     .optional()
     .describe("Match domain using regular expression."),
-  source_ip_cidr: listable(z.string())
-    .optional()
-    .describe("Match source IP CIDR."),
-  ip_cidr: listable(z.string()).optional().describe("Match IP CIDR."),
-  source_port: listable(z.number().int())
-    .optional()
-    .describe("Match source port."),
-  source_port_range: listable(z.string())
+  source_ip_cidr: listableString.optional().describe("Match source IP CIDR."),
+  ip_cidr: listableString.optional().describe("Match IP CIDR."),
+  source_port: listableInts.optional().describe("Match source port."),
+  source_port_range: listableString
     .optional()
     .describe("Match source port range."),
-  port: listable(z.number().int()).optional().describe("Match port."),
-  port_range: listable(z.string()).optional().describe("Match port range."),
-  process_name: listable(z.string()).optional().describe("Match process name."),
-  process_path: listable(z.string()).optional().describe("Match process path."),
-  process_path_regex: listable(z.string())
+  port: listableInts.optional().describe("Match port."),
+  port_range: listableString.optional().describe("Match port range."),
+  process_name: listableString.optional().describe("Match process name."),
+  process_path: listableString.optional().describe("Match process path."),
+  process_path_regex: listableString
     .optional()
     .describe("Match process path using regular expression."),
-  package_name: listable(z.string())
+  package_name: listableString
     .optional()
     .describe("Match android package name."),
   network_type: listable(NetworkType)
@@ -51,8 +45,8 @@ const DefaultHeadlessRule = z.object({
     .boolean()
     .optional()
     .describe("Match if network is in Low Data Mode."),
-  wifi_ssid: listable(z.string()).optional().describe("Match WiFi SSID."),
-  wifi_bssid: listable(z.string()).optional().describe("Match WiFi BSSID."),
+  wifi_ssid: listableString.optional().describe("Match WiFi SSID."),
+  wifi_bssid: listableString.optional().describe("Match WiFi BSSID."),
   invert: z.boolean().optional().describe("Invert match result."),
 });
 

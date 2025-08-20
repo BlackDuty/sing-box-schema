@@ -63,4 +63,7 @@ export const LegacyWireGuardOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type LegacyWireGuardOutboundOptions = z.infer<
+  typeof LegacyWireGuardOutboundOptions
+>;
 // #endregion

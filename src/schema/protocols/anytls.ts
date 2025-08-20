@@ -1,12 +1,12 @@
 import { z } from "zod";
+import { listableString } from "../../utils";
 import {
-  ListenOptions,
-  InboundTLSOptions,
   DialerOptions,
-  ServerOptions,
+  InboundTLSOptions,
+  ListenOptions,
   OutboundTLSOptions,
+  ServerOptions,
 } from "../shared";
-import { listable } from "../../utils";
 
 export const AnyTLSUser = z.object({
   name: z.string().optional(),
@@ -18,13 +18,14 @@ export const AnyTLSInboundOptions = z.object({
   type: z.literal("anytls"),
   tag: z.string(),
   users: z.array(AnyTLSUser).optional().describe("AnyTLS users."),
-  padding_scheme: listable(z.string())
+  padding_scheme: listableString
     .optional()
     .describe("AnyTLS padding scheme line array."),
   tls: InboundTLSOptions.optional().describe("TLS configuration."),
 
   ...ListenOptions.shape,
 });
+export type AnyTLSInboundOptions = z.infer<typeof AnyTLSInboundOptions>;
 // #endregion
 
 // #region Outbound
@@ -54,4 +55,5 @@ export const AnyTLSOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type AnyTLSOutboundOptions = z.infer<typeof AnyTLSOutboundOptions>;
 // #endregion

@@ -40,8 +40,8 @@ export * from "./schema/protocols/tor";
 export * from "./schema/protocols/trojan";
 export * from "./schema/protocols/tuic";
 export * from "./schema/protocols/tun";
-export * from "./schema/protocols/redirect"; // Added redirect
-export * from "./schema/protocols/tproxy";   // Added tproxy
+export * from "./schema/protocols/redirect";
+export * from "./schema/protocols/tproxy";
 export * from "./schema/protocols/vless";
 export * from "./schema/protocols/vmess";
 export * from "./schema/protocols/wireguard";

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { listable } from "../../utils";
+import { listable, listableInts, listableString } from "../../utils";
 
 // #region Route Actions
 const RuleActionRouteOptions = z.object({
@@ -26,13 +26,13 @@ const RuleActionRouteOptions = z.object({
     .boolean()
     .optional()
     .describe(
-      "If enabled, for UDP proxy requests addressed to a domain, the original packet address will be sent in the response instead of the mapped domain."
+      "If enabled, for UDP proxy requests addressed to a domain, the original packet address will be sent in the response instead of the mapped domain.",
     ),
   udp_connect: z
     .boolean()
     .optional()
     .describe(
-      "If enabled, attempts to connect UDP connection to the destination instead of listen."
+      "If enabled, attempts to connect UDP connection to the destination instead of listen.",
     ),
   udp_timeout: z.string().optional().describe("Timeout for UDP connections."),
   tls_fragment: z
@@ -43,13 +43,13 @@ const RuleActionRouteOptions = z.object({
     .string()
     .optional()
     .describe(
-      "The fallback value used when TLS segmentation cannot automatically determine the wait time."
+      "The fallback value used when TLS segmentation cannot automatically determine the wait time.",
     ),
   tls_record_fragment: z
     .string()
     .optional()
     .describe(
-      "Fragment TLS handshake into multiple TLS records to bypass firewalls."
+      "Fragment TLS handshake into multiple TLS records to bypass firewalls.",
     ),
 });
 
@@ -57,7 +57,7 @@ const RuleActionSniff = z.object({
   action: z
     .literal("sniff")
     .describe("Performs protocol sniffing on connections."),
-  sniffer: listable(z.string())
+  sniffer: listableString
     .optional()
     .describe("Enabled sniffers. All sniffers enabled by default."),
   timeout: z
@@ -74,13 +74,13 @@ const RuleActionResolve = z.object({
     .string()
     .optional()
     .describe(
-      "Specifies DNS server tag to use instead of selecting through DNS routing."
+      "Specifies DNS server tag to use instead of selecting through DNS routing.",
     ),
   strategy: z
     .enum(["prefer_ipv4", "prefer_ipv6", "ipv4_only", "ipv6_only"])
     .optional()
     .describe(
-      "DNS resolution strategy. `dns.strategy` will be used by default."
+      "DNS resolution strategy. `dns.strategy` will be used by default.",
     ),
   disable_cache: z
     .boolean()
@@ -97,7 +97,7 @@ const RuleActionResolve = z.object({
     .optional()
     .nullable()
     .describe(
-      "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default."
+      "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default.",
     ),
 });
 
@@ -117,13 +117,13 @@ const RuleActionReject = z.object({
     .enum(["default", "drop"])
     .optional()
     .describe(
-      "`default`: Reply with TCP RST for TCP connections, and ICMP port unreachable for UDP packets. `drop`: Drop packets."
+      "`default`: Reply with TCP RST for TCP connections, and ICMP port unreachable for UDP packets. `drop`: Drop packets.",
     ),
   no_drop: z
     .boolean()
     .optional()
     .describe(
-      "If not enabled, `method` will be temporarily overwritten to `drop` after 50 triggers in 30s."
+      "If not enabled, `method` will be temporarily overwritten to `drop` after 50 triggers in 30s.",
     ),
 });
 
@@ -140,7 +140,7 @@ const RuleActionRouteOptionsWithAction = z.object({
 
 // #region Route Rule
 const BaseRouteRule = z.object({
-  inbound: listable(z.string()).optional().describe("Tags of Inbound."),
+  inbound: listableString.optional().describe("Tags of Inbound."),
   ip_version: z
     .union([z.literal(4), z.literal(6)])
     .optional()
@@ -148,7 +148,7 @@ const BaseRouteRule = z.object({
   network: listable(z.enum(["tcp", "udp"]))
     .optional()
     .describe("`tcp` or `udp`."),
-  auth_user: listable(z.string())
+  auth_user: listableString
     .optional()
     .describe("Username, see each inbound for details."),
   protocol: listable(
@@ -163,104 +163,100 @@ const BaseRouteRule = z.object({
       "ssh",
       "rdp",
       "ntp",
-    ])
+    ]),
   )
     .optional()
     .describe("Sniffed protocol."),
   client: listable(z.enum(["chromium", "safari", "firefox", "quic-go"]))
     .optional()
     .describe("Sniffed client type."),
-  domain: listable(z.string()).optional().describe("Match full domain."),
-  domain_suffix: listable(z.string())
-    .optional()
-    .describe("Match domain suffix."),
-  domain_keyword: listable(z.string())
+  domain: listableString.optional().describe("Match full domain."),
+  domain_suffix: listableString.optional().describe("Match domain suffix."),
+  domain_keyword: listableString
     .optional()
     .describe("Match domain using keyword."),
-  domain_regex: listable(z.string())
+  domain_regex: listableString
     .optional()
     .describe("Match domain using regular expression."),
-  geosite: listable(z.string())
+  geosite: listableString
     .optional()
     .describe("Match geosite. Deprecated in sing-box 1.8.0."),
-  source_geoip: listable(z.string())
+  source_geoip: listableString
     .optional()
     .describe("Match source geoip. Deprecated in sing-box 1.8.0."),
-  geoip: listable(z.string())
+  geoip: listableString
     .optional()
     .describe("Match geoip. Deprecated in sing-box 1.8.0."),
-  source_ip_cidr: listable(z.string())
-    .optional()
-    .describe("Match source IP CIDR."),
+  source_ip_cidr: listableString.optional().describe("Match source IP CIDR."),
   source_ip_is_private: z
     .boolean()
     .optional()
     .describe("Match non-public source IP."),
-  ip_cidr: listable(z.string()).optional().describe("Match IP CIDR."),
+  ip_cidr: listableString.optional().describe("Match IP CIDR."),
   ip_is_private: z.boolean().optional().describe("Match non-public IP."),
   source_port: listable(z.number().int().min(0).max(65535))
     .optional()
     .describe("Match source port."),
-  source_port_range: listable(z.string())
+  source_port_range: listableString
     .optional()
     .describe("Match source port range."),
   port: listable(z.number().int().min(0).max(65535))
     .optional()
     .describe("Match port."),
-  port_range: listable(z.string()).optional().describe("Match port range."),
-  process_name: listable(z.string())
+  port_range: listableString.optional().describe("Match port range."),
+  process_name: listableString
     .optional()
     .describe(
-      "Match process name. Only supported on Linux, Windows, and macOS."
+      "Match process name. Only supported on Linux, Windows, and macOS.",
     ),
-  process_path: listable(z.string())
+  process_path: listableString
     .optional()
     .describe(
-      "Match process path. Only supported on Linux, Windows, and macOS."
+      "Match process path. Only supported on Linux, Windows, and macOS.",
     ),
-  process_path_regex: listable(z.string())
+  process_path_regex: listableString
     .optional()
     .describe(
-      "Match process path using regular expression. Only supported on Linux, Windows, and macOS."
+      "Match process path using regular expression. Only supported on Linux, Windows, and macOS.",
     ),
-  package_name: listable(z.string())
+  package_name: listableString
     .optional()
     .describe("Match android package name."),
-  user: listable(z.string())
+  user: listableString
     .optional()
     .describe("Match user name. Only supported on Linux."),
-  user_id: listable(z.number().int())
+  user_id: listableInts
     .optional()
     .describe("Match user id. Only supported on Linux."),
   clash_mode: z.string().optional().describe("Match Clash mode."),
   network_type: listable(z.enum(["wifi", "cellular", "ethernet", "other"]))
     .optional()
     .describe(
-      "Match network type. Only supported in graphical clients on Android and Apple platforms."
+      "Match network type. Only supported in graphical clients on Android and Apple platforms.",
     ),
   network_is_expensive: z
     .boolean()
     .optional()
     .describe(
-      "Match if network is considered Metered (on Android) or considered expensive. Only supported in graphical clients on Android and Apple platforms."
+      "Match if network is considered Metered (on Android) or considered expensive. Only supported in graphical clients on Android and Apple platforms.",
     ),
   network_is_constrained: z
     .boolean()
     .optional()
     .describe(
-      "Match if network is in Low Data Mode. Only supported in graphical clients on Apple platforms."
+      "Match if network is in Low Data Mode. Only supported in graphical clients on Apple platforms.",
     ),
-  wifi_ssid: listable(z.string())
+  wifi_ssid: listableString
     .optional()
     .describe(
-      "Match WiFi SSID. Only supported in graphical clients on Android and Apple platforms."
+      "Match WiFi SSID. Only supported in graphical clients on Android and Apple platforms.",
     ),
-  wifi_bssid: listable(z.string())
+  wifi_bssid: listableString
     .optional()
     .describe(
-      "Match WiFi BSSID. Only supported in graphical clients on Android and Apple platforms."
+      "Match WiFi BSSID. Only supported in graphical clients on Android and Apple platforms.",
     ),
-  rule_set: listable(z.string()).optional().describe("Match rule-set."),
+  rule_set: listableString.optional().describe("Match rule-set."),
   rule_set_ip_cidr_match_source: z
     .boolean()
     .optional()
@@ -269,7 +265,7 @@ const BaseRouteRule = z.object({
     .boolean()
     .optional()
     .describe(
-      "Deprecated in sing-box 1.10.0. Renamed to `rule_set_ip_cidr_match_source`."
+      "Deprecated in sing-box 1.10.0. Renamed to `rule_set_ip_cidr_match_source`.",
     ),
   invert: z.boolean().optional().describe("Invert match result."),
 });

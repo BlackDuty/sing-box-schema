@@ -37,6 +37,9 @@ export const ShadowsocksInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type ShadowsocksInboundOptions = z.infer<
+  typeof ShadowsocksInboundOptions
+>;
 // #endregion
 
 // #region Outbound
@@ -54,4 +57,7 @@ export const ShadowsocksOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type ShadowsocksOutboundOptions = z.infer<
+  typeof ShadowsocksOutboundOptions
+>;
 // #endregion

@@ -5,7 +5,7 @@ import {
   Network,
   NetworkType,
 } from "@/schema/shared";
-import { listable } from "@/utils";
+import { listable, listableInts, listableString } from "@/utils";
 
 // #region DNS Rule Action
 
@@ -13,7 +13,7 @@ const DNSRouteAction = z.object({
   action: z.literal("route").optional(),
   server: z.string().describe("Tag of target server."),
   strategy: DomainStrategy.optional().describe(
-    "Set domain strategy for this query."
+    "Set domain strategy for this query.",
   ),
   disable_cache: z
     .boolean()
@@ -40,7 +40,7 @@ const DNSRejectAction = z.object({
     .boolean()
     .optional()
     .describe(
-      "If not enabled, `method` will be temporarily overwritten to `drop` after 50 triggers in 30s."
+      "If not enabled, `method` will be temporarily overwritten to `drop` after 50 triggers in 30s.",
     ),
 });
 
@@ -86,32 +86,28 @@ const DNSRouteActionPredefined = z.object({
 const DNSQueryType = z.union([z.string(), z.number().int()]);
 
 const BaseDNSRule = z.object({
-  inbound: listable(z.string()).optional().describe("Tags of Inbound."),
+  inbound: listableString.optional().describe("Tags of Inbound."),
   ip_version: IpVersion.optional().describe(
-    "4 (A DNS query) or 6 (AAAA DNS query)."
+    "4 (A DNS query) or 6 (AAAA DNS query).",
   ),
   query_type: listable(DNSQueryType).optional().describe("DNS query type."),
   network: Network.optional().describe("`tcp` or `udp`."),
-  auth_user: listable(z.string()).optional().describe("Username."),
-  protocol: listable(z.string()).optional().describe("Sniffed protocol."),
-  domain: listable(z.string()).optional().describe("Match full domain."),
-  domain_suffix: listable(z.string())
-    .optional()
-    .describe("Match domain suffix."),
-  domain_keyword: listable(z.string())
+  auth_user: listableString.optional().describe("Username."),
+  protocol: listableString.optional().describe("Sniffed protocol."),
+  domain: listableString.optional().describe("Match full domain."),
+  domain_suffix: listableString.optional().describe("Match domain suffix."),
+  domain_keyword: listableString
     .optional()
     .describe("Match domain using keyword."),
-  domain_regex: listable(z.string())
+  domain_regex: listableString
     .optional()
     .describe("Match domain using regular expression."),
-  source_ip_cidr: listable(z.string())
-    .optional()
-    .describe("Match source IP CIDR."),
+  source_ip_cidr: listableString.optional().describe("Match source IP CIDR."),
   source_ip_is_private: z
     .boolean()
     .optional()
     .describe("Match non-public source IP."),
-  ip_cidr: listable(z.string())
+  ip_cidr: listableString
     .optional()
     .describe("Match IP CIDR with query response."),
   ip_is_private: z
@@ -122,24 +118,22 @@ const BaseDNSRule = z.object({
     .boolean()
     .optional()
     .describe("Match any IP with query response."),
-  source_port: listable(z.number().int())
-    .optional()
-    .describe("Match source port."),
-  source_port_range: listable(z.string())
+  source_port: listableInts.optional().describe("Match source port."),
+  source_port_range: listableString
     .optional()
     .describe("Match source port range."),
-  port: listable(z.number().int()).optional().describe("Match port."),
-  port_range: listable(z.string()).optional().describe("Match port range."),
-  process_name: listable(z.string()).optional().describe("Match process name."),
-  process_path: listable(z.string()).optional().describe("Match process path."),
-  process_path_regex: listable(z.string())
+  port: listableInts.optional().describe("Match port."),
+  port_range: listableString.optional().describe("Match port range."),
+  process_name: listableString.optional().describe("Match process name."),
+  process_path: listableString.optional().describe("Match process path."),
+  process_path_regex: listableString
     .optional()
     .describe("Match process path using regular expression."),
-  package_name: listable(z.string())
+  package_name: listableString
     .optional()
     .describe("Match android package name."),
-  user: listable(z.string()).optional().describe("Match user name."),
-  user_id: listable(z.number().int()).optional().describe("Match user id."),
+  user: listableString.optional().describe("Match user name."),
+  user_id: listableInts.optional().describe("Match user id."),
   clash_mode: z.string().optional().describe("Match Clash mode."),
   network_type: listable(NetworkType)
     .optional()
@@ -152,9 +146,9 @@ const BaseDNSRule = z.object({
     .boolean()
     .optional()
     .describe("Match if network is in Low Data Mode."),
-  wifi_ssid: listable(z.string()).optional().describe("Match WiFi SSID."),
-  wifi_bssid: listable(z.string()).optional().describe("Match WiFi BSSID."),
-  rule_set: listable(z.string()).optional().describe("Match rule-set."),
+  wifi_ssid: listableString.optional().describe("Match WiFi SSID."),
+  wifi_bssid: listableString.optional().describe("Match WiFi BSSID."),
+  rule_set: listableString.optional().describe("Match rule-set."),
   rule_set_ip_cidr_match_source: z
     .boolean()
     .optional()
@@ -164,7 +158,7 @@ const BaseDNSRule = z.object({
     .optional()
     .describe("Make `ip_cidr` rules in rule-sets accept empty query response."),
   invert: z.boolean().optional().describe("Invert match result."),
-  outbound: listable(z.string()).optional().describe("Match outbound."),
+  outbound: listableString.optional().describe("Match outbound."),
 });
 
 const DefaultDNSRule = z.union([

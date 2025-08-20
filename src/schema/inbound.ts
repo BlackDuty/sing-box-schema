@@ -1,21 +1,21 @@
 import { z } from "zod";
+import { AnyTLSInboundOptions } from "./protocols/anytls";
 import { DirectInboundOptions } from "./protocols/direct";
+import { HTTPInboundOptions } from "./protocols/http";
 import { HysteriaInboundOptions } from "./protocols/hysteria";
 import { Hysteria2InboundOptions } from "./protocols/hysteria2";
-import { ShadowsocksInboundOptions } from "./protocols/shadowsocks";
-import { TrojanInboundOptions } from "./protocols/trojan";
-import { TUICInboundOptions } from "./protocols/tuic";
-import { VLESSInboundOptions } from "./protocols/vless";
-import { VMessInboundOptions } from "./protocols/vmess";
-import { SocksInboundOptions } from "./protocols/socks";
-import { HTTPInboundOptions } from "./protocols/http";
 import { MixedInboundOptions } from "./protocols/mixed";
 import { NaiveInboundOptions } from "./protocols/naive";
-import { ShadowTLSInboundOptions } from "./protocols/shadowtls";
-import { AnyTLSInboundOptions } from "./protocols/anytls";
-import { TunInboundOptions } from "./protocols/tun";
 import { RedirectInboundOptions } from "./protocols/redirect";
+import { ShadowsocksInboundOptions } from "./protocols/shadowsocks";
+import { ShadowTLSInboundOptions } from "./protocols/shadowtls";
+import { SocksInboundOptions } from "./protocols/socks";
 import { TProxyInboundOptions } from "./protocols/tproxy";
+import { TrojanInboundOptions } from "./protocols/trojan";
+import { TUICInboundOptions } from "./protocols/tuic";
+import { TunInboundOptions } from "./protocols/tun";
+import { VLESSInboundOptions } from "./protocols/vless";
+import { VMessInboundOptions } from "./protocols/vmess";
 
 export const Inbound = z.discriminatedUnion("type", [
   DirectInboundOptions,

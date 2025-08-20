@@ -57,6 +57,7 @@ export const Hysteria2InboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type Hysteria2InboundOptions = z.infer<typeof Hysteria2InboundOptions>;
 
 export const Hysteria2OutboundOptions = z.object({
   type: z.literal("hysteria2"),
@@ -74,3 +75,4 @@ export const Hysteria2OutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type Hysteria2OutboundOptions = z.infer<typeof Hysteria2OutboundOptions>;

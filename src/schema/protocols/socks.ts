@@ -1,9 +1,9 @@
 import { z } from "zod";
 import {
-  ListenOptions,
   DialerOptions,
-  ServerOptions,
+  ListenOptions,
   Network,
+  ServerOptions,
   UDPOverTCPOptions,
 } from "@/schema/shared";
 
@@ -19,6 +19,7 @@ export const SocksInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type SocksInboundOptions = z.infer<typeof SocksInboundOptions>;
 
 export const SocksOutboundOptions = z.object({
   type: z.literal("socks"),
@@ -35,3 +36,4 @@ export const SocksOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type SocksOutboundOptions = z.infer<typeof SocksOutboundOptions>;

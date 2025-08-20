@@ -12,4 +12,5 @@ export const TorOutboundOptions = z.object({
 
   ...DialerOptions.shape,
 });
+export type TorOutboundOptions = z.infer<typeof TorOutboundOptions>;
 // #endregion

@@ -30,6 +30,7 @@ export const VMessInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type VMessInboundOptions = z.infer<typeof VMessInboundOptions>;
 // #endregion
 
 // #region Outbound
@@ -50,4 +51,5 @@ export const VMessOutboundOptions = z.object({
   ...DialerOptions.shape,
   ...ServerOptions.shape,
 });
+export type VMessOutboundOptions = z.infer<typeof VMessOutboundOptions>;
 // #endregion

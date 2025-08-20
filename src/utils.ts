@@ -16,3 +16,18 @@ import z from "zod";
  */
 export const listable = <T extends z.ZodTypeAny>(schema: T) =>
   z.union([schema, z.array(schema)]);
+
+/**
+ * Create a new Zod schema that allows either a single string or an array of
+ * strings. This is useful for defining configuration options that can be either
+ * a single string or a list of strings.
+ */
+export const listableString = listable(z.string());
+
+/**
+ * Create a new Zod schema that allows either a single number or an array of
+ * integers. This is useful for defining configuration options that can be either
+ * a single number or a list of numbers.
+ *
+ */
+export const listableInts = listable(z.number().int());

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { listable } from "@/utils";
+import { listableString } from "@/utils";
 import { DNSRule } from "./rules/dns-rule";
 import {
   DialerOptions,
@@ -19,11 +19,9 @@ export const LocalDNSServerOptions = z.object({
 export const HostsDNSServerOptions = z.object({
   type: z.literal("hosts"),
   tag: z.string(),
-  path: listable(z.string())
-    .optional()
-    .describe("List of paths to hosts files."),
+  path: listableString.optional().describe("List of paths to hosts files."),
   predefined: z
-    .record(z.string(), listable(z.string()))
+    .record(z.string(), listableString)
     .optional()
     .describe("Predefined hosts."),
 });
@@ -95,10 +93,10 @@ export const HTTPSDNSServerOptions = z.object({
     .string()
     .optional()
     .describe(
-      "The path of the HTTPS DNS server. `/dns-query` will be used by default."
+      "The path of the HTTPS DNS server. `/dns-query` will be used by default.",
     ),
   headers: HttpHeader.optional().describe(
-    "Additional headers to be sent to the DNS server."
+    "Additional headers to be sent to the DNS server.",
   ),
   tls: OutboundTLSOptions.optional().describe("TLS configuration."),
 
@@ -118,10 +116,10 @@ export const HTTP3DNSServerOptions = z.object({
     .string()
     .optional()
     .describe(
-      "The path of the HTTP3 DNS server. `/dns-query` will be used by default."
+      "The path of the HTTP3 DNS server. `/dns-query` will be used by default.",
     ),
   headers: HttpHeader.optional().describe(
-    "Additional headers to be sent to the DNS server."
+    "Additional headers to be sent to the DNS server.",
   ),
   tls: OutboundTLSOptions.optional().describe("TLS configuration."),
 
@@ -161,7 +159,7 @@ export const ResolvedDNSServerOptions = z.object({
     .boolean()
     .optional()
     .describe(
-      "Indicates whether the default DNS resolvers should be accepted."
+      "Indicates whether the default DNS resolvers should be accepted.",
     ),
 });
 

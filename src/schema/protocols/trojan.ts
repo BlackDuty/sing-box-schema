@@ -31,6 +31,7 @@ export const TrojanInboundOptions = z.object({
 
   ...ListenOptions.shape,
 });
+export type TrojanInboundOptions = z.infer<typeof TrojanInboundOptions>;
 // #endregion
 
 // #region Outbound
@@ -46,4 +47,5 @@ export const TrojanOutboundOptions = z.object({
   ...ServerOptions.shape,
   ...DialerOptions.shape,
 });
+export type TrojanOutboundOptions = z.infer<typeof TrojanOutboundOptions>;
 // #endregion
