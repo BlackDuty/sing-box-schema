@@ -11,20 +11,32 @@ import { TUICOutboundOptions } from "./protocols/tuic";
 import { VLESSOutboundOptions } from "./protocols/vless";
 import { VMessOutboundOptions } from "./protocols/vmess";
 import { LegacyWireGuardOutboundOptions } from "./protocols/wireguard";
+import { SocksOutboundOptions } from "./protocols/socks";
+import { HTTPOutboundOptions } from "./protocols/http";
+import { ShadowTLSOutboundOptions } from "./protocols/shadowtls";
+import { AnyTLSOutboundOptions } from "./protocols/anytls";
+import { SelectorOutboundSchema } from "./groups/selector";
+import { URLTestOutboundSchema } from "./groups/urltest";
 
 export const Outbound = z.discriminatedUnion("type", [
   DirectOutboundOptions,
+  SocksOutboundOptions,
+  HTTPOutboundOptions,
   ShadowsocksOutboundOptions,
-  TrojanOutboundOptions,
   VMessOutboundOptions,
+  TrojanOutboundOptions,
+  LegacyWireGuardOutboundOptions,
   HysteriaOutboundOptions,
+  ShadowTLSOutboundOptions,
+  AnyTLSOutboundOptions,
   Hysteria2OutboundOptions,
   TUICOutboundOptions,
   VLESSOutboundOptions,
-  LegacyWireGuardOutboundOptions,
   ShadowsocksROutboundOptions,
   SSHOutboundOptions,
   TorOutboundOptions,
+  SelectorOutboundSchema,
+  URLTestOutboundSchema,
   // Add other outbound types here
 ]);
 

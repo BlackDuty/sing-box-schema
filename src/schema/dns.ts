@@ -1,7 +1,12 @@
 import { z } from "zod";
 import { listable } from "@/utils";
 import { DNSRule } from "./rules/dns-rule";
-import { DialerOptions, DomainStrategy, OutboundTLSOptions } from "./shared";
+import {
+  DialerOptions,
+  DomainStrategy,
+  HttpHeader,
+  OutboundTLSOptions,
+} from "./shared";
 
 // #region DNS Servers
 export const LocalDNSServerOptions = z.object({
@@ -92,10 +97,9 @@ export const HTTPSDNSServerOptions = z.object({
     .describe(
       "The path of the HTTPS DNS server. `/dns-query` will be used by default."
     ),
-  headers: z
-    .record(z.string(), z.string())
-    .optional()
-    .describe("Additional headers to be sent to the DNS server."),
+  headers: HttpHeader.optional().describe(
+    "Additional headers to be sent to the DNS server."
+  ),
   tls: OutboundTLSOptions.optional().describe("TLS configuration."),
 
   ...DialerOptions.shape,
@@ -116,10 +120,9 @@ export const HTTP3DNSServerOptions = z.object({
     .describe(
       "The path of the HTTP3 DNS server. `/dns-query` will be used by default."
     ),
-  headers: z
-    .record(z.string(), z.string())
-    .optional()
-    .describe("Additional headers to be sent to the DNS server."),
+  headers: HttpHeader.optional().describe(
+    "Additional headers to be sent to the DNS server."
+  ),
   tls: OutboundTLSOptions.optional().describe("TLS configuration."),
 
   ...DialerOptions.shape,

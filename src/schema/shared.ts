@@ -11,7 +11,7 @@ export const DomainStrategy = z.enum([
 ]);
 export type DomainStrategy = z.infer<typeof DomainStrategy>;
 
-export const FwMark = z.number().int();
+export const FwMark = z.union([z.number().int(), z.string()]);
 export type FwMark = z.infer<typeof FwMark>;
 
 export const Network = listable(z.enum(["", "tcp", "udp"]));
@@ -22,6 +22,9 @@ export type Tag = z.infer<typeof Tag>;
 
 export const IpVersion = z.union([z.literal(4), z.literal(6)]);
 export type IpVersion = z.infer<typeof IpVersion>;
+
+export const HttpHeader = z.record(z.string(), z.string());
+export type HttpHeader = z.infer<typeof HttpHeader>;
 // #endregion
 
 // #region Listen
@@ -147,7 +150,7 @@ export type DialerOptions = z.infer<typeof DialerOptions>;
 
 export const ServerOptions = z.object({
   server: z.string(),
-  server_port: z.number().int(),
+  server_port: z.number().int().optional(),
 });
 export type ServerOptions = z.infer<typeof ServerOptions>;
 // #endregion
@@ -307,7 +310,7 @@ const V2RayHTTPOptions = z.object({
   host: listable(z.string()).optional(),
   path: z.string().optional(),
   method: z.string().optional(),
-  headers: z.record(z.string(), z.string()).optional(),
+  headers: HttpHeader.optional(),
   idle_timeout: z.string().optional(),
   ping_timeout: z.string().optional(),
 });
@@ -315,7 +318,7 @@ const V2RayHTTPOptions = z.object({
 const V2RayWebsocketOptions = z.object({
   type: z.literal("ws"),
   path: z.string().optional(),
-  headers: z.record(z.string(), z.string()).optional(),
+  headers: HttpHeader.optional(),
   max_early_data: z.number().int().optional(),
   early_data_header_name: z.string().optional(),
 });
@@ -336,7 +339,7 @@ const V2RayHTTPUpgradeOptions = z.object({
   type: z.literal("httpupgrade"),
   host: z.string().optional(),
   path: z.string().optional(),
-  headers: z.record(z.string(), z.string()).optional(),
+  headers: HttpHeader.optional(),
 });
 
 export const V2RayTransportOptions = z.discriminatedUnion("type", [

@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { listable } from "../../utils";
-import { Network, NetworkType } from "../shared";
+import { Network, NetworkType } from "@/schema/shared";
 
 // #region Headless Rule
 const DNSQueryType = z.union([z.string(), z.number().int()]);

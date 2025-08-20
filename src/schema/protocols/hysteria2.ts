@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   DialerOptions,
+  HttpHeader,
   InboundTLSOptions,
   ListenOptions,
   Network,
@@ -32,7 +33,7 @@ const Hysteria2MasqueradeProxy = z.object({
 const Hysteria2MasqueradeString = z.object({
   type: z.literal("string"),
   status_code: z.number().int().optional(),
-  headers: z.record(z.string(), z.string()).optional(),
+  headers: HttpHeader.optional(),
   content: z.string(),
 });
 
