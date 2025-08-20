@@ -1,6 +1,7 @@
 import * as z from "zod";
 import { Configuration } from "@";
 
+console.log("⚙️ Generating JSON Schema...");
 const jsonSchema = z.toJSONSchema(Configuration, {
   cycles: "ref",
   reused: "ref",
@@ -11,7 +12,9 @@ const jsonSchema = z.toJSONSchema(Configuration, {
   },
 });
 Bun.file("./dist/schema.json").write(JSON.stringify(jsonSchema, null, 2));
+console.log("✅ Done.");
 
+console.log("⚙️ Generating JSON Schema (zh)...");
 const jsonSchemaZh = z.toJSONSchema(Configuration, {
   cycles: "ref",
   reused: "ref",
@@ -29,5 +32,4 @@ const jsonSchemaZh = z.toJSONSchema(Configuration, {
   },
 });
 Bun.file("./dist/schema.zh.json").write(JSON.stringify(jsonSchemaZh, null, 2));
-
-console.log("Done.");
+console.log("✅ Done.");

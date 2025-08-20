@@ -2,23 +2,23 @@
 
 # Sing-box Schema <br> ✍️ 📦
 
-> Provides type-safe [**sing-box**](https://sing-box.sagernet.org/) configuration syntax support for code editors / TypeScript projects
+> 为代码编辑器 / TypeScript 项目提供类型安全的 [**sing-box**](https://sing-box.sagernet.org/) 配置语法支持
 
 [![Version - v1.12.2](https://img.shields.io/badge/Version-v1.12.2-yellow?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.12.2) [![JSON Schema - Draft 2020-12](https://img.shields.io/badge/JSON_Schema-Draft_2020--12-white?style=for-the-badge&labelColor=black&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8%2BCjxzdmcKICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICB4bWxuczpjYz0iaHR0cDovL2NyZWF0aXZlY29tbW9ucy5vcmcvbnMjIgogICB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiCiAgIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICAgaWQ9InN2ZzgiCiAgIHZlcnNpb249IjEuMSIKICAgdmlld0JveD0iMCAwIDcwLjQyMzI2OCA3MC40MjMyNiIKICAgaGVpZ2h0PSIxMDAuNjA0NjdtbSIKICAgd2lkdGg9IjEwMC42MDQ2N21tIj4KICA8ZGVmcwogICAgIGlkPSJkZWZzMiIgLz4KICA8ZwogICAgIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMDQuMjI3ODUsLTQ1LjUwNzkyMykiCiAgICAgaWQ9ImxheWVyMSI%2BCiAgICA8cGF0aAogICAgICAgaWQ9InBhdGg0NTQ0IgogICAgICAgZD0ibSAxMjIuOTk0MDEsMTE0LjE4OTg1IGMgLTQuMzI4OTcsLTAuOTQwNCAtNy41ODA0NCwtMy40Nzg0OCAtOC43MTI1MSwtNi44MDA5NSAtMC43ODkyMSwtMi4zMTYxOCAtMC42NzY4MiwtNi4wNzIzOCAwLjMzMzYzLC0xMS4xNTA1OTggMC40ODUwNywtMi40Mzc4MzYgMC44ODE2OSwtNS4zNDc4NDMgMC44ODEzOSwtNi40NjY2ODggLTkuOGUtNCwtMy43MTgwOTggLTEuNzExMDYsLTUuNzM1NDE4IC01LjEwMDEsLTYuMDE2NDYyIGwgLTEuOTU0OSwtMC4xNjIxMTYgdiAtMi4zOTI2NTUgLTIuMzkyNjU3IGwgMS44NTIwOCwtMC4yNTA4NTUgYyAyLjcwMjQzLC0wLjM2NjAzMSAzLjc0NDQxLC0xLjAyODM4IDQuNTc2MjksLTIuOTA4OTg0IDAuNjExMjEsLTEuMzgxNzI2IDAuNjg4ODQsLTIuMDY4NjQ4IDAuNTA1NTIsLTQuNDcyODY5IC0wLjExOTEzLC0xLjU2MjI0NCAtMC41MzUyNywtNC4zNDg1NjggLTAuOTI0NzcsLTYuMTkxODMyIC0wLjk4OTU0LC00LjY4Mjg2OCAtMC45NDgyMiwtOC40ODU0NzEgMC4xMTcwNywtMTAuNzczMTYzIDEuNTY4NjIsLTMuMzY4NTg5IDUuNDM3MDUsLTUuODU0NTUzIDkuOTMyNDgsLTYuMzgyOTAzIGwgMS45MzI5OSwtMC4yMjcxODUgdiAyLjUxODAxNSAyLjUxODAxNSBoIC0xLjI5OTczIGMgLTEuNzcxODYsMCAtNC4yNDk3LDEuMjYyNDEzIC00Ljg4MzUsMi40ODgwNTQgLTAuNjA3OTcsMS4xNzU2NzQgLTAuNjU0MDUsMi44NjQxNDYgLTAuMTU4MzQsNS44MDIyMjMgMC43ODM0Myw0LjY0MzUwOCAxLjA0NzA3LDkuMDk4MzQ0IDAuNjc1OTIsMTEuNDIxNjM2IC0wLjQyNDY0LDIuNjU4MTQyIC0xLjk3NDc3LDUuNzk2MzI4IC0zLjY3OTEsNy40NDgyMzYgbCAtMS4xODAxMiwxLjE0MzgxMyAxLjYxNDk3LDEuOTgyNzUyIGMgMS45OTA1MSwyLjQ0MzgwMSAyLjc2NDU4LDQuMTQ4NzQ0IDMuMjQyODQsNy4xNDI1NjEgMC4zNzgzNSwyLjM2ODM0MSAwLjA4NDQsNy4yODI2NzMgLTAuNjcwNzIsMTEuMjEzOTgyIC0xLjA1MzU5LDUuNDg1MTQgMC4xNjIzLDcuNjUxNDEgNC42NjIwOSw4LjMwNjEzIGwgMS42NzU2OSwwLjI0MzgyIHYgMi40NDc4MiBjIDAsMi43OTIxMSAwLjE3MDg2LDIuNjk3MDggLTMuNDM5MTcsMS45MTI4NiB6IgogICAgICAgc3R5bGU9ImZpbGw6I2ZmZjtzdHJva2Utd2lkdGg6MC4zNTI3Nzc3NSIgLz4KICAgIDxwYXRoCiAgICAgICBpZD0icGF0aDQ1NDYiCiAgICAgICBkPSJtIDE1Mi4yMzA0LDExMi4yNDkzMiB2IC0yLjQyOTg3IGwgMi4wNDk2OSwtMC40MjMzNiBjIDIuMjYyNzYsLTAuNDY3MzYgNC4wNTQsLTEuODYzNCA0LjQ1ODQyLC0zLjQ3NDc1IDAuMTI3NCwtMC41MDc1OCAtMC4xMTI2NywtMy4xNjM5OCAtMC41MzM0NywtNS45MDMxMSAtMS4zNzE4MywtOC45Mjk1NTIgLTAuNjExNCwtMTMuNTM3MDQyIDIuODU0ODIsLTE3LjI5NzQ1MiBsIDEuNDgyMzcsLTEuNjA4MTggLTEuMTEwOCwtMS4yNjUxMiBjIC0zLjk3ODU1LC00LjUzMTMyIC00LjY2ODg1LC04LjU1MjIwOCAtMy4xNTM2NCwtMTguMzY5NTQ3IDAuNzYzNDIsLTQuOTQ2MzA1IDAuNzY0MDksLTQuOTk0MzIyIDAuMDg3LC02LjE3MzYxMSAtMC43OTcxMywtMS4zODgyNzggLTMuMjgzODUsLTIuNzc2MDMzIC00Ljk3NDM4LC0yLjc3NjAzMyBoIC0xLjE1OTk3IHYgLTIuNDY5NDQ1IGMgMCwtMi44MTEwNTcgLTAuMDU4MywtMi43NzM4NDYgMy4yNDU4MywtMi4wNzI3ODggMy45NjQ1LDAuODQxMTc5IDYuODA0NDgsMi44NTMyNzIgOC4yNzc4Nyw1Ljg2NDc3NSAwLjg0NTQ0LDEuNzI4MDI2IDAuOTcyNzUsMi40MDAxMzYgMC45NDkxMSw1LjAxMDg4OSAtMC4wMTUsMS42NTgzNDkgLTAuMzU3NTgsNC42ODIwNTQgLTAuNzYxMjUsNi43MTkzNDYgLTEuNDk4NjcsNy41NjM1OTQgLTEuMzY1MSw5LjU3NjIwNCAwLjc2NTQsMTEuNTMyODE0IDAuOTg5MTUsMC45MDg0MiAxLjY0MDEyLDEuMTcyNzQgMy4zNzAzMiwxLjM2ODQ5IGwgMi4xNDQzOSwwLjI0MjYxIHYgMi40MjM4NyAyLjQyMzg4IGwgLTEuNjc1Nyw3LjFlLTQgYyAtMi4xNTE3LDdlLTQgLTMuOTMyMywwLjkwOTI0IC00LjgzODY5LDIuNDY4ODkgLTAuOTUxOTQsMS42MzgwMyAtMC44OTIzOSw1LjIwNjc1IDAuMTczNjQsMTAuNDA2OTUgMC45MDY0OCw0LjQyMTkwMiAxLjA1MjUzLDguNDU4NDUyIDAuMzg4MiwxMC43Mjg3NTIgLTAuNzAwNTksMi4zOTQwNiAtMy44MTk5NSw1LjI5NjA5IC02Ljc0NzQ1LDYuMjc3MTggLTEuMjYxMTgsMC40MjI2NiAtMi45Njc3NSwwLjg3MDk2IC0zLjc5MjM2LDAuOTk2MjMgbCAtMS40OTkzMSwwLjIyNzc1IHoiCiAgICAgICBzdHlsZT0iZmlsbDojZmZmO3N0cm9rZS13aWR0aDowLjM1Mjc3Nzc4IiAvPgogICAgPHBhdGgKICAgICAgIGlkPSJwYXRoNDU0OCIKICAgICAgIGQ9Im0gMTMxLjc0MjM5LDEwOC4yNjU5MiBjIC0xLjAyMTYzLC0xLjI5ODggLTAuODcyOTQsLTMuNTM2NTIgMC4zODA4NywtNS43MzE4NSAwLjkyNzc2LC0xLjYyNDQ2IDQuODA4NjIsLTYuOTQ4NTQ5IDcuNjEwNjYsLTEwLjQ0MDk0OSBsIDEuMTMwOTQsLTEuNDA5NTggLTEuODAyMTMsLTUuMjI1MjMgYyAtMi4wMjE0NywtNS44NjEyMyAtMi4wMDk4LC01Ljk3NDY3IDAuNjU1ODEsLTYuMzcyMjUgbCAxLjQ2ODM0LC0wLjIxOSAxLjY0MDc2LDMuMzUwNiBjIDAuOTAyNDIsMS44NDI4MyAxLjc2OTgyLDMuMzUwNjEgMS45Mjc1NSwzLjM1MDYxIDAuMTU3NzQsMCAxLjc3NDg5LC0xLjc1NTQyIDMuNTkzNjgsLTMuOTAwOTIgMy4xNTkxOCwtMy43MjY2NyAzLjM1Njg4LC0zLjg5MTY1IDQuNDI1OTEsLTMuNjkzMzQgMC42NDU1MiwwLjExOTc0IDEuMjE4NTgsMC4wNDY1IDEuMzU0MzIsLTAuMTczMTYgMC4zMTgxOCwtMC41MTQ4MSAxLjIzMDgzLDAuMjQ3MDQgMS4yMzA4MywxLjAyNzQ2IDAsMC4zMjAwOSAtMC40NTQzOCwxLjEzNDA5IC0xLjAwOTcyLDEuODA4ODggLTIuMjY3NzEsMi43NTU0OSAtNy4xMDQxNyw5LjI3MTU1IC03LjEwNDE3LDkuNTcxMyAwLDAuMTc2ODUgMC45NzUwMiwyLjQ1MzAyIDIuMTY2NzEsNS4wNTgxNiBsIDIuMTY2Nyw0LjczNjYwOSAtMC42NTgyMywwLjk4NDU5IGMgLTAuMzYyMDMsMC41NDE1MiAtMC42NjIzNiwxLjEyNjAzIC0wLjY2NzQsMS4yOTg5MSAtMC4wMDUsMC4xNzI4OCAtMC4yNzc2OSwwLjQ4MzcxIC0wLjYwNTg4LDAuNjkwNzMgLTAuODMxNzQsMC41MjQ2NCAtMS40NDY1NiwtMC4xMTU0MSAtMy45ODk0LC00LjE1MzExOSAtMS4xNjQxNywtMS44NDg1NiAtMi4yMzE2MywtMy4zNjQ5MSAtMi4zNzIxNSwtMy4zNjk2NyAtMC4zMTMwOSwtMC4wMTA2IC0zLjc5MTEsNS4xMzE5NjkgLTYuNDc5NTUsOS41ODA2MzkgLTIuMzcwOTMsMy45MjMyNCAtMS45Mzg4NSwzLjQyMDQgLTMuMjY2MTQsMy44MDEwNiAtMC45NTUzMywwLjI3Mzk4IC0xLjE5MzQ4LDAuMTk4NDMgLTEuNzk4MzEsLTAuNTcwNDggeiIKICAgICAgIHN0eWxlPSJmaWxsOiNmZmY7c3Ryb2tlLXdpZHRoOjAuMzUyNzc3NzUiIC8%2BCiAgICA8cGF0aAogICAgICAgaWQ9InBhdGg0NTUwIgogICAgICAgZD0ibSAxMzEuOTg1NjcsODMuNjc3MDkxIGMgLTIuMTUxNDgsLTMuODQ3MiAtNi4wMTgzLC05LjQyODI5IC03LjU3ODQyLC0xMC45MzgxNSAtMC43OTI1MiwtMC43NjY5OCAtMS40NDA5NCwtMS41NzQ5NCAtMS40NDA5NCwtMS43OTU0NiAwLC0wLjYwMTYgMS42MTY5NSwtMS4yMTk3NSAzLjE5MDU4LC0xLjIxOTc1IDEuNjk4MjIsMCAzLjQ5NTk3LDEuNDc3NzcgNS4wOTk3LDQuMTkyMDMgMC41ODIwOCwwLjk4NTE1IDEuMTU2NDEsMS43OTQzNCAxLjI3NjI5LDEuNzk4MTkgMC4xMTk4OCwwLjAwNCAwLjgwODczLC0xLjY1MTE2IDEuNTMwNzgsLTMuNjc3NzkgMS41NDY0LC00LjM0MDM5IDUuNjIzNTEsLTEyLjc3Nzk5OSA3LjIyNDUzLC0xNC45NTEyMjkgMS4zNzI2LC0xLjg2MzE2IDMuNDI5MzYsLTIuODY1MTY1IDUuOTAyNzQsLTIuODc1Njc2IDMuMjMzNzUsLTAuMDEzNzQgMy4yNDI2OCwwLjEzMDA2NyAwLjIwNDc0LDMuMjk2NjYzIC00LjYzNTk5LDQuODMyMzI3IC02Ljc2MzIxLDguODA5NjMyIC0xMS4yNTE1NSwyMS4wMzcyNTIgLTEuMjQ2MzcsMy4zOTU0OSAtMi4zOTAzMiw2LjQ3ODk1IC0yLjU0MjEyLDYuODUyMTQgLTAuMjMwMjIsMC41NjU5NyAtMC40OTgzMywwLjI4MDk2IC0xLjYxNjMzLC0xLjcxODIyIHoiCiAgICAgICBzdHlsZT0iZmlsbDojZmZmO3N0cm9rZS13aWR0aDowLjM1Mjc3Nzc1IiAvPgogIDwvZz4KPC9zdmc%2BCg%3D%3D&logoColor=white)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)]([https://](https://www.typescriptlang.org/)) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
 
-**English** | [**中文**](./README_ZH.md)
+[**English**](./README.md) | **中文**
 
 </div>
 
-## Adapted Version
+## 适配版本
 
 Sing-box v1.12.2
 
-## Usage
+## 使用方法
 
-### JSON Schema / For Users
+### JSON Schema / 面向用户
 
-You can use it in Visual Studio Code or other JSON Schema-supported editors. Open the `sing-box` configuration JSON file and add the following at the top of the file:
+你可以在 Visual Studio Code 中或其他支持 JSON Schema 的编辑器中使用，打开用于 `sing-box` 的配置 JSON 文件，在文件头部添加
 
 ```json
 {
@@ -26,7 +26,7 @@ You can use it in Visual Studio Code or other JSON Schema-supported editors. Ope
 }
 ```
 
-Or use the Chinese version:
+或使用中文版本
 
 ```json
 {
@@ -34,14 +34,14 @@ Or use the Chinese version:
 }
 ```
 
-### Zod Schema / For Developers
+### Zod Schema / 面向开发者
 
-If you are a developer working with `sing-box` configurations in a TypeScript or JavaScript project, you can use the `Configuration` Schema to validate your configuration objects programmatically.
+如果您是开发者，在 TypeScript 或 JavaScript 项目中处理 `sing-box` 配置，您可以使用 `Configuration` Schema 以编程方式验证您的配置对象。
 
 ```typescript
 import { Configuration } from '@black-ladder/sing-box-schema';
 
-// Your sing-box configuration object
+// 您的 sing-box 配置对象
 const myConfig = {
   "log": {
     "level": "info"
@@ -59,60 +59,61 @@ const myConfig = {
     }
   ]
 
-  // ... more configurations
+  // ... 更多配置
 };
 
 try {
   const validatedConfig = Configuration.parse(myConfig);
-  console.log('Configuration is valid!', validatedConfig);
+  console.log('配置有效！', validatedConfig);
 } catch (error) {
-  console.error('Configuration is invalid:', error);
-  // 'error' will be a ZodError instance with detailed validation issues.
+  console.error('配置无效：', error);
+  // 'error' 将是一个 ZodError 实例，包含详细的验证问题。
 }
 ```
 
-## Installation
+## 安装
 
-Install this library using your favorite package manager:
+使用您喜欢的包管理器安装此库：
 
 ```bash
 bun add @black-ladder/sing-box-schema
-# or
+# 或
 npm install @black-ladder/sing-box-schema
-# or
+# 或
 yarn add @black-ladder/sing-box-schema
 ```
 
-### Local Development and Contributions
 
-If you wish to contribute to the `sing-box-schema` project or develop locally, please follow these steps:
+### 本地开发与贡献
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/black-ladder/sing-box-schema.git
-    cd sing-box-schema
-    ```
-2.  **Install dependencies**:
-    ```bash
-    bun install
-    ```
-3.  **Build the project**:
-    ```bash
-    bun run build
-    ```
-    This will compile the TypeScript code and generate the JSON Schema files in the `dist` directory.
-4.  **Code Linting and Formatting**:
-    ```bash
-    bun run lint
-    ```
-5.  **Manually Generate JSON Schema**:
-    ```bash
-    bun run generate
-    ```
-    This command is automatically run during the `build` process, but you can run it manually if needed.
+如果您希望为 `sing-box-schema` 项目做出贡献或进行本地开发，请遵循以下步骤：
 
-Contributions are welcome! Feel free to open an issue or submit a pull request.
+1.  **克隆仓库**：
+```bash
+git clone https://github.com/black-ladder/sing-box-schema.git
+cd sing-box-schema
+```
+2.  **安装依赖**：
+```bash
+bun install
+```
+3.  **构建项目**：
+```bash
+bun run build
+```
+这将编译 TypeScript 代码并在 `dist` 目录中生成 JSON Schema 文件。
+45.  **代码检查与格式化**：
+```bash
+bun run lint
+```
+5.  **手动生成 JSON Schema**：
+```bash
+bun run generate
+```
+此命令在 `build` 过程中会自动运行，但您也可以根据需要手动运行它。
 
-## License
+欢迎贡献！请随时提出问题或提交拉取请求。
 
-This project is licensed under the MIT License.
+## 许可证
+
+本项目采用 MIT 许可证。

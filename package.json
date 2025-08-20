@@ -1,18 +1,37 @@
 {
   "name": "@black-ladder/sing-box-schema",
   "version": "1.12.2",
-  "description": "",
-  "keywords": [],
+  "description": "A comprehensive Zod schema for sing-box configuration files, built with TypeScript and Bun.",
+  "keywords": [
+    "sing-box",
+    "schema",
+    "zod",
+    "typescript",
+    "bun",
+    "configuration"
+  ],
+  "homepage": "https://github.com/black-ladder/sing-box-schema#readme",
+  "bugs": {
+    "url": "https://github.com/black-ladder/sing-box-schema/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/black-ladder/sing-box-schema.git"
+  },
+  "author": "black-ladder",
   "license": "MIT",
   "files": [
-    "./dist"
+    "./dist",
+    "dist/schema.json",
+    "dist/schema.zh.json"
   ],
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && bun run generate",
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write",
-    "generate": "bun run scripts/gen-json-schema.ts"
+    "generate": "bun run scripts/gen-json-schema.ts",
+    "prepublishOnly": "bun run build"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -48,5 +67,6 @@
   "readme": "README.md",
   "dependencies": {
     "zod": "^4.0.17"
-  }
+  },
+  "packageManager": "bun@1.2.20"
 }
