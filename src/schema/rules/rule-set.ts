@@ -3,104 +3,228 @@ import { Network, NetworkType } from "@/schema/shared";
 import { listable, listableInts, listableString } from "../../utils";
 
 // #region Headless Rule
-const DNSQueryType = z.union([z.string(), z.number().int()]);
+const DNSQueryType = z.union([z.string(), z.number().int()]).meta({
+  description: "DNS query type. Values can be integers or type name strings.",
+  description_zh: "DNS 查询类型。值可以为整数或者类型名称字符串。",
+});
 
 const DefaultHeadlessRule = z.object({
-  query_type: listable(DNSQueryType)
-    .optional()
-    .describe("DNS query type. Values can be integers or type name strings."),
-  network: listable(Network).optional().describe("`tcp` or `udp`."),
-  domain: listableString.optional().describe("Match full domain."),
-  domain_suffix: listableString.optional().describe("Match domain suffix."),
-  domain_keyword: listableString
-    .optional()
-    .describe("Match domain using keyword."),
-  domain_regex: listableString
-    .optional()
-    .describe("Match domain using regular expression."),
-  source_ip_cidr: listableString.optional().describe("Match source IP CIDR."),
-  ip_cidr: listableString.optional().describe("Match IP CIDR."),
-  source_port: listableInts.optional().describe("Match source port."),
-  source_port_range: listableString
-    .optional()
-    .describe("Match source port range."),
-  port: listableInts.optional().describe("Match port."),
-  port_range: listableString.optional().describe("Match port range."),
-  process_name: listableString.optional().describe("Match process name."),
-  process_path: listableString.optional().describe("Match process path."),
-  process_path_regex: listableString
-    .optional()
-    .describe("Match process path using regular expression."),
-  package_name: listableString
-    .optional()
-    .describe("Match android package name."),
-  network_type: listable(NetworkType)
-    .optional()
-    .describe("Match network type."),
-  network_is_expensive: z
-    .boolean()
-    .optional()
-    .describe("Match if network is considered Metered."),
-  network_is_constrained: z
-    .boolean()
-    .optional()
-    .describe("Match if network is in Low Data Mode."),
-  wifi_ssid: listableString.optional().describe("Match WiFi SSID."),
-  wifi_bssid: listableString.optional().describe("Match WiFi BSSID."),
-  invert: z.boolean().optional().describe("Invert match result."),
+  query_type: listable(DNSQueryType).optional().meta({
+    description: "DNS query type.",
+    description_zh: "DNS 查询类型。",
+  }),
+  network: listable(Network).optional().meta({
+    description: "`tcp` or `udp`.",
+    description_zh: "`tcp` 或 `udp`。",
+  }),
+  domain: listableString.optional().meta({
+    description: "Match full domain.",
+    description_zh: "匹配完整域名。",
+  }),
+  domain_suffix: listableString.optional().meta({
+    description: "Match domain suffix.",
+    description_zh: "匹配域名后缀。",
+  }),
+  domain_keyword: listableString.optional().meta({
+    description: "Match domain using keyword.",
+    description_zh: "匹配域名关键字。",
+  }),
+  domain_regex: listableString.optional().meta({
+    description: "Match domain using regular expression.",
+    description_zh: "匹配域名正则表达式。",
+  }),
+  source_ip_cidr: listableString.optional().meta({
+    description: "Match source IP CIDR.",
+    description_zh: "匹配源 IP CIDR。",
+  }),
+  ip_cidr: listableString.optional().meta({
+    description: "Match IP CIDR.",
+    description_zh: "匹配 IP CIDR。",
+  }),
+  source_port: listableInts.optional().meta({
+    description: "Match source port.",
+    description_zh: "匹配源端口。",
+  }),
+  source_port_range: listableString.optional().meta({
+    description: "Match source port range.",
+    description_zh: "匹配源端口范围。",
+  }),
+  port: listableInts.optional().meta({
+    description: "Match port.",
+    description_zh: "匹配端口。",
+  }),
+  port_range: listableString.optional().meta({
+    description: "Match port range.",
+    description_zh: "匹配端口范围。",
+  }),
+  process_name: listableString.optional().meta({
+    description: "Match process name.",
+    description_zh: "匹配进程名称。",
+  }),
+  process_path: listableString.optional().meta({
+    description: "Match process path.",
+    description_zh: "匹配进程路径。",
+  }),
+  process_path_regex: listableString.optional().meta({
+    description: "Match process path using regular expression.",
+    description_zh: "使用正则表达式匹配进程路径。",
+  }),
+  package_name: listableString.optional().meta({
+    description: "Match android package name.",
+    description_zh: "匹配 Android 应用包名。",
+  }),
+  network_type: listable(NetworkType).optional().meta({
+    description: "Match network type.",
+    description_zh: "匹配网络类型。",
+  }),
+  network_is_expensive: z.boolean().optional().meta({
+    description: "Match if network is considered Metered.",
+    description_zh: "匹配如果网络被视为计费。",
+  }),
+  network_is_constrained: z.boolean().optional().meta({
+    description: "Match if network is in Low Data Mode.",
+    description_zh: "匹配如果网络在低数据模式下。",
+  }),
+  wifi_ssid: listableString.optional().meta({
+    description: "Match WiFi SSID.",
+    description_zh: "匹配 WiFi SSID。",
+  }),
+  wifi_bssid: listableString.optional().meta({
+    description: "Match WiFi BSSID.",
+    description_zh: "匹配 WiFi BSSID。",
+  }),
+  invert: z.boolean().optional().meta({
+    description: "Invert match result.",
+    description_zh: "反选匹配结果。",
+  }),
 });
 
-const LogicalHeadlessRule = z.object({
-  type: z.literal("logical"),
-  mode: z.enum(["and", "or"]).describe("`and` or `or`."),
-  get rules() {
-    return z.array(HeadlessRule).optional().describe("Included rules.");
-  },
-  invert: z.boolean().optional().describe("Invert match result."),
-});
+const LogicalHeadlessRule = z
+  .object({
+    type: z.literal("logical").meta({
+      description: "Rule type.",
+      description_zh: "规则类型。",
+    }),
+    mode: z.enum(["and", "or"]).meta({
+      description: "`and` or `or`.",
+      description_zh: "`and` 或 `or`。",
+    }),
+    get rules() {
+      return z.array(HeadlessRule).optional().meta({
+        description: "Included rules.",
+        description_zh: "包括的规则。",
+      });
+    },
+    invert: z.boolean().optional().meta({
+      description: "Invert match result.",
+      description_zh: "反选匹配结果。",
+    }),
+  })
+  .meta({
+    id: "LogicalHeadlessRule",
+    title: "Logical Headless Rule",
+    title_zh: "逻辑无头规则",
+  });
 
-export const HeadlessRule = z.union([DefaultHeadlessRule, LogicalHeadlessRule]);
+export const HeadlessRule = z
+  .union([DefaultHeadlessRule, LogicalHeadlessRule])
+  .meta({
+    id: "HeadlessRule",
+    title: "Headless Rule",
+    title_zh: "无头规则",
+  });
 // #endregion
 
 // #region Rule Set
-const InlineRuleSetOptions = z.object({
-  type: z.literal("inline"),
-  tag: z.string().describe("Tag of rule-set."),
-  rules: z.array(HeadlessRule).describe("List of Headless Rules."),
-});
+const InlineRuleSetOptions = z
+  .object({
+    type: z.literal("inline").meta({
+      description: "Rule set type.",
+      description_zh: "规则集类型。",
+    }),
+    tag: z.string().meta({
+      description: "Tag of rule-set.",
+      description_zh: "规则集的标签。",
+    }),
+    rules: z.array(HeadlessRule).meta({
+      description: "List of Headless Rules.",
+      description_zh: "无头规则列表。",
+    }),
+  })
+  .meta({
+    id: "InlineRuleSetOptions",
+    title: "Inline Rule Set Options",
+    title_zh: "内联规则集选项",
+  });
 
-const LocalRuleSetOptions = z.object({
-  type: z.literal("local"),
-  tag: z.string().describe("Tag of rule-set."),
-  format: z
-    .enum(["source", "binary"])
-    .optional()
-    .describe("Format of rule-set file, `source` or `binary`."),
-  path: z.string().describe("File path of rule-set."),
-});
+const LocalRuleSetOptions = z
+  .object({
+    type: z.literal("local").meta({
+      description: "Rule set type.",
+      description_zh: "规则集类型。",
+    }),
+    tag: z.string().meta({
+      description: "Tag of rule-set.",
+      description_zh: "规则集的标签。",
+    }),
+    format: z.enum(["source", "binary"]).optional().meta({
+      description: "Format of rule-set file, `source` or `binary`.",
+      description_zh: "规则集文件格式，`source` 或 `binary`。",
+    }),
+    path: z.string().meta({
+      description: "File path of rule-set.",
+      description_zh: "规则集的文件路径。",
+    }),
+  })
+  .meta({
+    id: "LocalRuleSetOptions",
+    title: "Local Rule Set Options",
+    title_zh: "本地规则集选项",
+  });
 
-const RemoteRuleSetOptions = z.object({
-  type: z.literal("remote"),
-  tag: z.string().describe("Tag of rule-set."),
-  format: z
-    .enum(["source", "binary"])
-    .optional()
-    .describe("Format of rule-set file, `source` or `binary`."),
-  url: z.string().describe("Download URL of rule-set."),
-  download_detour: z
-    .string()
-    .optional()
-    .describe("Tag of the outbound to download rule-set."),
-  update_interval: z
-    .string()
-    .optional()
-    .describe("Update interval of rule-set."),
-});
+const RemoteRuleSetOptions = z
+  .object({
+    type: z.literal("remote").meta({
+      description: "Rule set type.",
+      description_zh: "规则集类型。",
+    }),
+    tag: z.string().meta({
+      description: "Tag of rule-set.",
+      description_zh: "规则集的标签。",
+    }),
+    format: z.enum(["source", "binary"]).optional().meta({
+      description: "Format of rule-set file, `source` or `binary`.",
+      description_zh: "规则集文件格式，`source` 或 `binary`。",
+    }),
+    url: z.string().meta({
+      description: "Download URL of rule-set.",
+      description_zh: "规则集的下载 URL。",
+    }),
+    download_detour: z.string().optional().meta({
+      description: "Tag of the outbound to download rule-set.",
+      description_zh: "用于下载规则集的出站的标签。",
+    }),
+    update_interval: z.string().optional().meta({
+      description: "Update interval of rule-set.",
+      description_zh: "规则集的更新间隔。",
+    }),
+  })
+  .meta({
+    id: "RemoteRuleSetOptions",
+    title: "Remote Rule Set Options",
+    title_zh: "远程规则集选项",
+  });
 
-export const RuleSet = z.discriminatedUnion("type", [
-  InlineRuleSetOptions,
-  LocalRuleSetOptions,
-  RemoteRuleSetOptions,
-]);
+export const RuleSet = z
+  .discriminatedUnion("type", [
+    InlineRuleSetOptions,
+    LocalRuleSetOptions,
+    RemoteRuleSetOptions,
+  ])
+  .meta({
+    id: "RuleSet",
+    title: "Rule Set",
+    title_zh: "规则集",
+  });
 export type RuleSet = z.infer<typeof RuleSet>;
 // #endregion

@@ -17,25 +17,31 @@ import { TunInboundOptions } from "./protocols/tun";
 import { VLESSInboundOptions } from "./protocols/vless";
 import { VMessInboundOptions } from "./protocols/vmess";
 
-export const Inbound = z.discriminatedUnion("type", [
-  DirectInboundOptions,
-  MixedInboundOptions,
-  SocksInboundOptions,
-  HTTPInboundOptions,
-  ShadowsocksInboundOptions,
-  VMessInboundOptions,
-  TrojanInboundOptions,
-  NaiveInboundOptions,
-  HysteriaInboundOptions,
-  ShadowTLSInboundOptions,
-  Hysteria2InboundOptions,
-  AnyTLSInboundOptions,
-  VLESSInboundOptions,
-  TUICInboundOptions,
-  TunInboundOptions,
-  RedirectInboundOptions,
-  TProxyInboundOptions,
-  // Add other inbound types here
-]);
+export const Inbound = z
+  .discriminatedUnion("type", [
+    DirectInboundOptions,
+    MixedInboundOptions,
+    SocksInboundOptions,
+    HTTPInboundOptions,
+    ShadowsocksInboundOptions,
+    VMessInboundOptions,
+    TrojanInboundOptions,
+    NaiveInboundOptions,
+    HysteriaInboundOptions,
+    ShadowTLSInboundOptions,
+    Hysteria2InboundOptions,
+    AnyTLSInboundOptions,
+    VLESSInboundOptions,
+    TUICInboundOptions,
+    TunInboundOptions,
+    RedirectInboundOptions,
+    TProxyInboundOptions,
+    // Add other inbound types here
+  ])
+  .meta({
+    id: "Inbound",
+    title: "Inbound",
+    title_zh: "入站",
+  });
 
 export type Inbound = z.infer<typeof Inbound>;

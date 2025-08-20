@@ -16,47 +16,71 @@ const ShadowTLSHandshakeOptions = z.object({
   ...DialerOptions.shape,
 });
 
-export const ShadowTLSInboundOptions = z.object({
-  type: z.literal("shadowtls"),
-  tag: z.string().optional(),
-  version: z
-    .number()
-    .int()
-    .min(1)
-    .max(3)
-    .optional()
-    .describe("ShadowTLS protocol version."),
-  password: z.string().optional().describe("ShadowTLS password."),
-  users: z.array(ShadowTLSUser).optional().describe("ShadowTLS users."),
-  handshake: ShadowTLSHandshakeOptions,
-  handshake_for_server_name: z
-    .record(z.string(), ShadowTLSHandshakeOptions)
-    .optional()
-    .describe("Handshake server address for specific server name."),
-  strict_mode: z.boolean().optional().describe("ShadowTLS strict mode."),
-  wildcard_sni: z
-    .enum(["off", "authed", "all"])
-    .optional()
-    .describe("ShadowTLS wildcard SNI mode."),
+export const ShadowTLSInboundOptions = z
+  .object({
+    type: z.literal("shadowtls"),
+    tag: z.string().optional(),
+    version: z.number().int().min(1).max(3).optional().meta({
+      description: "ShadowTLS protocol version.",
+      description_zh: "ShadowTLS 协议版本。",
+    }),
+    password: z.string().optional().meta({
+      description: "ShadowTLS password.",
+      description_zh: "ShadowTLS 密码。",
+    }),
+    users: z.array(ShadowTLSUser).optional().meta({
+      description: "ShadowTLS users.",
+      description_zh: "ShadowTLS 用户。",
+    }),
+    handshake: ShadowTLSHandshakeOptions,
+    handshake_for_server_name: z
+      .record(z.string(), ShadowTLSHandshakeOptions)
+      .optional()
+      .meta({
+        description: "Handshake server address for specific server name.",
+        description_zh: "对于特定服务器名称的握手服务器地址。",
+      }),
+    strict_mode: z.boolean().optional().meta({
+      description: "ShadowTLS strict mode.",
+      description_zh: "ShadowTLS 严格模式。",
+    }),
+    wildcard_sni: z.enum(["off", "authed", "all"]).optional().meta({
+      description: "ShadowTLS wildcard SNI mode.",
+      description_zh: "ShadowTLS 通配符 SNI 模式。",
+    }),
 
-  ...ListenOptions.shape,
-});
+    ...ListenOptions.shape,
+  })
+  .meta({
+    id: "ShadowTLSInboundOptions",
+    title: "ShadowTLS Inbound",
+    title_zh: "ShadowTLS 入站",
+  });
 export type ShadowTLSInboundOptions = z.infer<typeof ShadowTLSInboundOptions>;
 
-export const ShadowTLSOutboundOptions = z.object({
-  type: z.literal("shadowtls"),
-  tag: z.string().optional(),
-  version: z
-    .number()
-    .int()
-    .min(1)
-    .max(3)
-    .optional()
-    .describe("ShadowTLS protocol version."),
-  password: z.string().optional().describe("Set password."),
-  tls: OutboundTLSOptions.describe("TLS configuration."),
+export const ShadowTLSOutboundOptions = z
+  .object({
+    type: z.literal("shadowtls"),
+    tag: z.string().optional(),
+    version: z.number().int().min(1).max(3).optional().meta({
+      description: "ShadowTLS protocol version.",
+      description_zh: "ShadowTLS 协议版本。",
+    }),
+    password: z.string().optional().meta({
+      description: "Set password.",
+      description_zh: "设置密码。",
+    }),
+    tls: OutboundTLSOptions.meta({
+      description: "TLS configuration.",
+      description_zh: "TLS 配置。",
+    }),
 
-  ...ServerOptions.shape,
-  ...DialerOptions.shape,
-});
+    ...ServerOptions.shape,
+    ...DialerOptions.shape,
+  })
+  .meta({
+    id: "ShadowTLSOutboundOptions",
+    title: "ShadowTLS Outbound",
+    title_zh: "ShadowTLS 出站",
+  });
 export type ShadowTLSOutboundOptions = z.infer<typeof ShadowTLSOutboundOptions>;

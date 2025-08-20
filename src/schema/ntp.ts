@@ -1,28 +1,29 @@
 import { z } from "zod";
 import { DialerOptions, ServerOptions } from "./shared";
 
-/**
- * NTP settings for sing-box.
- */
-export const NTPOptions = z.object({
-  /**
-   * Enable NTP service.
-   */
-  enabled: z.boolean().optional().describe("Enable NTP service."),
-  /**
-   * Time synchronization interval.
-   */
-  interval: z.string().optional().describe("Time synchronization interval."),
-  /**
-   * Write the updated time to the system.
-   */
-  write_to_system: z
-    .boolean()
-    .optional()
-    .describe("Write the updated time to the system."),
+export const NTPOptions = z
+  .object({
+    enabled: z.boolean().optional().meta({
+      description: "Enable NTP service.",
+      description_zh: "启用 NTP 服务。",
+    }),
+    interval: z.string().optional().meta({
+      description: "Time synchronization interval.",
+      description_zh: "时间同步间隔。",
+    }),
+    write_to_system: z.boolean().optional().meta({
+      description: "Write the updated time to the system.",
+    }),
 
-  ...ServerOptions.shape,
-  ...DialerOptions.shape,
-});
+    ...ServerOptions.shape,
+    ...DialerOptions.shape,
+  })
+  .meta({
+    id: "NTPOptions",
+    title: "NTP",
+    title_zh: "NTP",
+    description: "Built-in NTP client service.",
+    description_zh: "内建的 NTP 客户端服务。",
+  });
 
 export type NTPOptions = z.infer<typeof NTPOptions>;

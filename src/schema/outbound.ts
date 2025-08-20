@@ -18,26 +18,32 @@ import { VLESSOutboundOptions } from "./protocols/vless";
 import { VMessOutboundOptions } from "./protocols/vmess";
 import { LegacyWireGuardOutboundOptions } from "./protocols/wireguard";
 
-export const Outbound = z.discriminatedUnion("type", [
-  DirectOutboundOptions,
-  SocksOutboundOptions,
-  HTTPOutboundOptions,
-  ShadowsocksOutboundOptions,
-  VMessOutboundOptions,
-  TrojanOutboundOptions,
-  LegacyWireGuardOutboundOptions,
-  HysteriaOutboundOptions,
-  ShadowTLSOutboundOptions,
-  AnyTLSOutboundOptions,
-  Hysteria2OutboundOptions,
-  TUICOutboundOptions,
-  VLESSOutboundOptions,
-  ShadowsocksROutboundOptions,
-  SSHOutboundOptions,
-  TorOutboundOptions,
-  SelectorOutbound,
-  URLTestOutbound,
-  // Add other outbound types here
-]);
+export const Outbound = z
+  .discriminatedUnion("type", [
+    DirectOutboundOptions,
+    SocksOutboundOptions,
+    HTTPOutboundOptions,
+    ShadowsocksOutboundOptions,
+    VMessOutboundOptions,
+    TrojanOutboundOptions,
+    LegacyWireGuardOutboundOptions,
+    HysteriaOutboundOptions,
+    ShadowTLSOutboundOptions,
+    AnyTLSOutboundOptions,
+    Hysteria2OutboundOptions,
+    TUICOutboundOptions,
+    VLESSOutboundOptions,
+    ShadowsocksROutboundOptions,
+    SSHOutboundOptions,
+    TorOutboundOptions,
+    SelectorOutbound,
+    URLTestOutbound,
+    // Add other outbound types here
+  ])
+  .meta({
+    id: "Outbound",
+    title: "Outbound",
+    title_zh: "出站",
+  });
 
 export type Outbound = z.infer<typeof Outbound>;
