@@ -22,7 +22,7 @@ Sing-box v1.12.2
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-ladder/sing-box-schema@1.12.2/dist/schema.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.json"
 }
 ```
 
@@ -30,7 +30,7 @@ Sing-box v1.12.2
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-ladder/sing-box-schema@1.12.2/dist/schema.zh.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.zh.json"
 }
 ```
 
@@ -39,7 +39,7 @@ Sing-box v1.12.2
 如果您是开发者，在 TypeScript 或 JavaScript 项目中处理 `sing-box` 配置，您可以使用 `Configuration` Schema 以编程方式验证您的配置对象。
 
 ```typescript
-import { Configuration } from '@black-ladder/sing-box-schema';
+import { Configuration } from '@black-duty/sing-box-schema';
 
 // 您的 sing-box 配置对象
 const myConfig = {
@@ -76,11 +76,11 @@ try {
 使用您喜欢的包管理器安装此库：
 
 ```bash
-bun add @black-ladder/sing-box-schema
+bun add @black-duty/sing-box-schema
 # 或
-npm install @black-ladder/sing-box-schema
+npm install @black-duty/sing-box-schema
 # 或
-yarn add @black-ladder/sing-box-schema
+yarn add @black-duty/sing-box-schema
 ```
 
 
@@ -90,7 +90,7 @@ yarn add @black-ladder/sing-box-schema
 
 1.  **克隆仓库**：
 ```bash
-git clone https://github.com/black-ladder/sing-box-schema.git
+git clone https://github.com/BlackDuty/sing-box-schema.git
 cd sing-box-schema
 ```
 2.  **安装依赖**：

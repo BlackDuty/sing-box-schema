@@ -1,5 +1,5 @@
 {
-  "name": "@black-ladder/sing-box-schema",
+  "name": "@black-duty/sing-box-schema",
   "version": "1.12.2",
   "description": "A comprehensive Zod schema for sing-box configuration files, built with TypeScript and Bun.",
   "keywords": [
@@ -10,15 +10,15 @@
     "bun",
     "configuration"
   ],
-  "homepage": "https://github.com/black-ladder/sing-box-schema#readme",
+  "homepage": "https://github.com/BlackDuty/sing-box-schema#readme",
   "bugs": {
-    "url": "https://github.com/black-ladder/sing-box-schema/issues"
+    "url": "https://github.com/BlackDuty/sing-box-schema/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/black-ladder/sing-box-schema.git"
+    "url": "git+https://github.com/BlackDuty/sing-box-schema.git"
   },
-  "author": "black-ladder",
+  "author": "BlackDuty",
   "license": "MIT",
   "files": [
     "./dist",

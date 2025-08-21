@@ -22,7 +22,7 @@ You can use it in Visual Studio Code or other JSON Schema-supported editors. Ope
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-ladder/sing-box-schema@1.12.2/dist/schema.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.json"
 }
 ```
 
@@ -30,7 +30,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-ladder/sing-box-schema@1.12.2/dist/schema.zh.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.zh.json"
 }
 ```
 
@@ -39,7 +39,7 @@ Or use the Chinese version:
 If you are a developer working with `sing-box` configurations in a TypeScript or JavaScript project, you can use the `Configuration` Schema to validate your configuration objects programmatically.
 
 ```typescript
-import { Configuration } from '@black-ladder/sing-box-schema';
+import { Configuration } from '@black-duty/sing-box-schema';
 
 // Your sing-box configuration object
 const myConfig = {
@@ -76,11 +76,11 @@ try {
 Install this library using your favorite package manager:
 
 ```bash
-bun add @black-ladder/sing-box-schema
+bun add @black-duty/sing-box-schema
 # or
-npm install @black-ladder/sing-box-schema
+npm install @black-duty/sing-box-schema
 # or
-yarn add @black-ladder/sing-box-schema
+yarn add @black-duty/sing-box-schema
 ```
 
 ### Local Development and Contributions
@@ -88,28 +88,28 @@ yarn add @black-ladder/sing-box-schema
 If you wish to contribute to the `sing-box-schema` project or develop locally, please follow these steps:
 
 1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/black-ladder/sing-box-schema.git
-    cd sing-box-schema
-    ```
+```bash
+git clone https://github.com/BlackDuty/sing-box-schema.git
+cd sing-box-schema
+```
 2.  **Install dependencies**:
-    ```bash
-    bun install
-    ```
+```bash
+bun install
+```
 3.  **Build the project**:
-    ```bash
-    bun run build
-    ```
-    This will compile the TypeScript code and generate the JSON Schema files in the `dist` directory.
+```bash
+bun run build
+```
+This will compile the TypeScript code and generate the JSON Schema files in the `dist` directory.
 4.  **Code Linting and Formatting**:
-    ```bash
-    bun run lint
-    ```
+```bash
+bun run lint
+```
 5.  **Manually Generate JSON Schema**:
-    ```bash
-    bun run generate
-    ```
-    This command is automatically run during the `build` process, but you can run it manually if needed.
+```bash
+bun run generate
+```
+This command is automatically run during the `build` process, but you can run it manually if needed.
 
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 
