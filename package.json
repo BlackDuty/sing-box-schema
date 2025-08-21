@@ -1,7 +1,7 @@
 {
   "name": "@black-duty/sing-box-schema",
   "version": "1.12.2",
-  "description": "A comprehensive Zod schema for sing-box configuration files, built with TypeScript and Bun.",
+  "description": "A comprehensive Zod & JSON schema for sing-box configuration files, built with TypeScript.",
   "keywords": [
     "sing-box",
     "schema",
@@ -22,8 +22,8 @@
   "license": "MIT",
   "files": [
     "./dist",
-    "dist/schema.json",
-    "dist/schema.zh.json"
+    "schema.json",
+    "schema.zh.json"
   ],
   "scripts": {
     "build": "tsdown && bun run generate",
@@ -47,7 +47,9 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./schema.json": "./schema.json",
+    "./schema.zh.json": "./schema.zh.json"
   },
   "type": "module",
   "devDependencies": {

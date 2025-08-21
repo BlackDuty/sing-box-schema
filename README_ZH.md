@@ -22,7 +22,7 @@ Sing-box v1.12.2
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.json"
 }
 ```
 
@@ -30,7 +30,7 @@ Sing-box v1.12.2
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.zh.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.zh.json"
 }
 ```
 

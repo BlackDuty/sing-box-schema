@@ -11,7 +11,7 @@ const jsonSchema = z.toJSONSchema(Configuration, {
     delete ctx.jsonSchema.description_zh;
   },
 });
-Bun.file("./dist/schema.json").write(JSON.stringify(jsonSchema, null, 2));
+Bun.file("./schema.json").write(JSON.stringify(jsonSchema, null, 2));
 console.log("✅ Done.");
 
 console.log("⚙️ Generating JSON Schema (zh)...");
@@ -31,5 +31,5 @@ const jsonSchemaZh = z.toJSONSchema(Configuration, {
     delete ctx.jsonSchema.description_zh;
   },
 });
-Bun.file("./dist/schema.zh.json").write(JSON.stringify(jsonSchemaZh, null, 2));
+Bun.file("./schema.zh.json").write(JSON.stringify(jsonSchemaZh, null, 2));
 console.log("✅ Done.");

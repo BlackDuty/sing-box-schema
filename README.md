@@ -22,7 +22,7 @@ You can use it in Visual Studio Code or other JSON Schema-supported editors. Ope
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.json"
 }
 ```
 
@@ -30,7 +30,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/dist/schema.zh.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.zh.json"
 }
 ```
 
