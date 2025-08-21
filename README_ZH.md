@@ -12,7 +12,9 @@
 
 ## 适配版本
 
-Sing-box v1.12.2
+Sing-box v1.12.x
+
+本项目的标签与 `sing-box` 项目版本对应。切换不同的标签以获取与 `sing-box` 不同版本兼容的配置格式。
 
 ## 使用方法
 
@@ -31,6 +33,24 @@ Sing-box v1.12.2
 ```json
 {
   "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.zh.json"
+}
+```
+
+除了 Unpkg 的 npm 镜像之外，你还可以直接使用 GitHub 仓库链接或 GitHub Release 链接：
+
+- GitHub 仓库 (raw.githubusercontent.com):
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.2/schema.json"
+}
+```
+
+- GitHub Release (针对特定版本):
+
+```json
+{
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.json"
 }
 ```
 

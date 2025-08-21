@@ -12,7 +12,9 @@
 
 ## Adapted Version
 
-Sing-box v1.12.2
+Sing-box v1.12.x
+
+This project's tags correspond to the `sing-box` project's versions. Switch to different tags to get configuration formats compatible with different `sing-box` versions.
 
 ## Usage
 
@@ -31,6 +33,24 @@ Or use the Chinese version:
 ```json
 {
   "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.zh.json"
+}
+```
+
+In addition to Unpkg's npm mirror, you can also directly use links from the GitHub repository or GitHub Releases:
+
+- GitHub Repository (raw.githubusercontent.com):
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.2/schema.json"
+}
+```
+
+- GitHub Releases (for specific versions):
+
+```json
+{
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.json"
 }
 ```
 
