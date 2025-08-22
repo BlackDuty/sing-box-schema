@@ -22,6 +22,7 @@ The project is organized into the following main directories:
     -   `src/schema/services`: Contains schemas for services like `derp`, `resolved`, etc.
     -   `src/schema/experimentals`: Contains schemas for experimental features.
     -   `src/schema/rules`: Contains schemas for routing and DNS rules.
+    -   `src/schema/groups`: Contains schemas for groups like `selector` and `urltest`.
 -   `src/utils.ts`: Contains utility functions used by the schemas.
 -   `src/index.ts`: The main entry point of the library, exporting all the schemas.
 -   `scripts`: Contains scripts for the project, like generating the JSON schema.

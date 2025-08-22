@@ -1,29 +1,23 @@
 {
   "usageStatisticsEnabled": false,
   "contextFileName": [
-    "GEMINI.md"
+    "GEMINI.md",
+    ".gemini/rules/language.md",
+    ".gemini/rules/task-workflow.md"
   ],
   "autoAccept": true,
   "preferredEditor": "vscode",
   "mcpServers": {
     "sequential-thinking": {
       "command": "bunx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
+      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
     },
     "context7": {
       "command": "bunx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp"
-      ]
+      "args": ["-y", "@upstash/context7-mcp"]
     }
   },
-  "includeDirectories": [
-    "~/Projects/sing-box"
-  ],
+  "includeDirectories": ["~/Projects/sing-box"],
   "loadMemoryFromIncludeDirectories": true,
   "folderTrust": true,
   "showLineNumbers": true,
