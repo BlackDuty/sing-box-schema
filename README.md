@@ -16,6 +16,17 @@ Sing-box v1.12.x
 
 This project's tags correspond to the `sing-box` project's versions. Switch to different tags to get configuration formats compatible with different `sing-box` versions.
 
+## Branch Description
+
+This project has the following branches, each adapted to different versions of `sing-box`:
+
+-   **main**: The main branch with the latest commits.
+-   **stable**: Adapts to the stable version of `sing-box` (currently v1.12.x).
+-   **legacy**: Adapts to older versions of `sing-box` (e.g., older versions in the Play Store / App Store that cannot be updated), currently v1.11.x.
+-   **🚧 next**: \[WIP\] Adapts to the actively developed version of `sing-box` (currently v1.13.x).
+
+Developers can switch between different branches to adapt to their progress. For regular users, it is recommended to use tags to locate specific versions.
+
 ## Usage
 
 ### JSON Schema / For Users
