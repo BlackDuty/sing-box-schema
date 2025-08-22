@@ -67,7 +67,6 @@ export const RouteOptions = z
       description_zh:
         "默认出站标签。如果为空，将使用第一个可用于对应协议的出站。",
     }),
-    find_process: z.boolean().optional(),
     auto_detect_interface: z.boolean().optional().meta({
       description:
         "Bind outbound connections to the default NIC by default to prevent routing loops under tun.",
