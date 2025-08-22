@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync } from "node:fs";
 
 function checkVersion(expectedVersion: string | undefined) {
   if (!expectedVersion) {
@@ -12,16 +12,31 @@ function checkVersion(expectedVersion: string | undefined) {
 
   const readmeMdPath = "./README.md";
   const readmeZhMdPath = "./README_ZH.md";
+  const packageJsonPath = "./package.json";
+  const configSchemaPath = "./src/schema/configuration.ts";
 
   const readmeMdContent = readFileSync(readmeMdPath, "utf8");
   const readmeZhMdContent = readFileSync(readmeZhMdPath, "utf8");
+  const packageJsonContent = readFileSync(packageJsonPath, "utf8");
+  const configSchemaContent = readFileSync(configSchemaPath, "utf8");
 
   const filesToCheck = [
     { name: readmeMdPath, content: readmeMdContent },
     { name: readmeZhMdPath, content: readmeZhMdContent },
+    { name: configSchemaPath, content: configSchemaContent },
   ];
 
   let allVersionsMatch = true;
+
+  // Check package.json version
+  console.log(`👀 Checking versions in ${packageJsonPath}...`);
+  const packageJson = JSON.parse(packageJsonContent);
+  if (packageJson.version !== expectedVersion) {
+    console.error(
+      `❌ Mismatch in ${packageJsonPath}: Expected ${expectedVersion}, found ${packageJson.version}`,
+    );
+    allVersionsMatch = false;
+  }
 
   const versionPatterns = [
     /Version-v(\d+\.\d+\.\d+)/g, // Markdown badge
@@ -29,20 +44,22 @@ function checkVersion(expectedVersion: string | undefined) {
     /@black-duty\/sing-box-schema@(\d+\.\d+\.\d+)/g, // Unpkg JSON Schema link
     /sing-box-schema\/refs\/tags\/v(\d+\.\d+\.\d+)/g, // GitHub raw JSON Schema link
     /sing-box-schema\/releases\/download\/v(\d+\.\d+\.\d+)/g, // GitHub Release JSON Schema link
+    /version: "(\d+\.\d+\.\d+)"/g, // Zod Schema Meta
   ];
 
   for (const file of filesToCheck) {
     console.log(`👀 Checking versions in ${file.name}...`);
     for (const pattern of versionPatterns) {
-      let match;
-      while ((match = pattern.exec(file.content)) !== null) {
+      const matches = file.content.matchAll(pattern);
+      for (const match of matches) {
         const foundVersion = match[1];
         if (!foundVersion) {
-          console.error(`⚠️ No version found in ${file.name}`);
+          console.error(`⚠️ No version found in ${file.name} for pattern ${pattern}`);
           allVersionsMatch = false;
+          continue;
         }
         // For 'Sing-box vX.Y.x', we only check X.Y part
-        else if (
+        if (
           pattern.source.includes("Sing-box v") &&
           foundVersion.endsWith(".x")
         ) {
@@ -53,13 +70,13 @@ function checkVersion(expectedVersion: string | undefined) {
           const foundMajorMinor = foundVersion.split(".").slice(0, 2).join(".");
           if (expectedMajorMinor !== foundMajorMinor) {
             console.error(
-              `❌ Mismatch in ${file.name}: Expected major.minor ${expectedMajorMinor}, found ${foundMajorMinor} (from ${foundVersion})`
+              `❌ Mismatch in ${file.name}: Expected major.minor ${expectedMajorMinor}, found ${foundMajorMinor} (from ${foundVersion})`,
             );
             allVersionsMatch = false;
           }
         } else if (foundVersion !== expectedVersion) {
           console.error(
-            `❌ Mismatch in ${file.name}: Expected ${expectedVersion}, found ${foundVersion}`
+            `❌ Mismatch in ${file.name}: Expected ${expectedVersion}, found ${foundVersion}`,
           );
           allVersionsMatch = false;
         }
@@ -70,7 +87,7 @@ function checkVersion(expectedVersion: string | undefined) {
   if (allVersionsMatch) {
     console.log(`✅ All version numbers match ${expectedVersion}.`);
   } else {
-    console.error("❌ Version check failed. Please update the README files.");
+    console.error("❌ Version check failed. Please update the version numbers in the files.");
     process.exit(1);
   }
 }
