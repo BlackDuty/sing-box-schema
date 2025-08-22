@@ -2,12 +2,7 @@ import { z } from "zod";
 import { listable } from "@/utils";
 import { RouteRule } from "./rules/route-rule";
 import { RuleSet } from "./rules/rule-set";
-import {
-  DomainResolverOptions,
-  FwMark,
-  NetworkStrategy,
-  NetworkType,
-} from "./shared";
+import { FwMark, NetworkStrategy, NetworkType } from "./shared";
 
 export const GeoIPOptions = z
   .object({
@@ -67,7 +62,6 @@ export const RouteOptions = z
       description_zh:
         "默认出站标签。如果为空，将使用第一个可用于对应协议的出站。",
     }),
-    find_process: z.boolean().optional(),
     auto_detect_interface: z.boolean().optional().meta({
       description:
         "Bind outbound connections to the default NIC by default to prevent routing loops under tun.",
@@ -90,13 +84,6 @@ export const RouteOptions = z
       description: "Set routing mark by default.",
       description_zh: "默认为出站连接设置路由标记。",
     }),
-    default_domain_resolver: z
-      .union([z.string(), DomainResolverOptions])
-      .optional()
-      .meta({
-        description: "Set domain resolver to use for resolving domain names.",
-        description_zh: "用于设置解析域名的域名解析器。",
-      }),
     default_network_strategy: z
       .union([z.string(), NetworkStrategy])
       .optional()

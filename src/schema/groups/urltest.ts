@@ -26,7 +26,8 @@ export const URLTestOutbound = z
       description_zh: "空闲超时。",
     }),
     interrupt_exist_connections: z.boolean().optional().meta({
-      description: "Interrupt existing connections when the selected outbound has changed.",
+      description:
+        "Interrupt existing connections when the selected outbound has changed.",
       description_zh: "当选定的出站发生更改时，中断现有连接。",
     }),
   })

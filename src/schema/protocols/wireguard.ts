@@ -24,10 +24,13 @@ export const WireGuardPeer = z.object({
     description: "WireGuard peer pre-shared key.",
     description_zh: "对等方的预共享密钥。",
   }),
-  allowed_ips: z.union([z.string(), z.array(z.string())]).optional().meta({
-    description: "WireGuard allowed IPs.",
-    description_zh: "对等方的允许 IP 地址。",
-  }),
+  allowed_ips: z
+    .union([z.string(), z.array(z.string())])
+    .optional()
+    .meta({
+      description: "WireGuard allowed IPs.",
+      description_zh: "对等方的允许 IP 地址。",
+    }),
   persistent_keepalive_interval: z.number().int().optional().meta({
     description: "WireGuard persistent keepalive interval, in seconds.",
     description_zh: "对等方的持久性保持活动间隔，以秒为单位。",
@@ -55,7 +58,8 @@ export const WireGuardEndpointOptions = z
       description_zh: "WireGuard MTU。",
     }),
     address: z.union([z.string(), z.array(z.string())]).meta({
-      description: "List of IP (v4 or v6) address prefixes to be assigned to the interface.",
+      description:
+        "List of IP (v4 or v6) address prefixes to be assigned to the interface.",
       description_zh: "接口的 IPv4/IPv6 地址或地址段的列表。",
     }),
     private_key: z.string().meta({
@@ -99,10 +103,13 @@ export const LegacyWireGuardPeer = z.object({
     description: "WireGuard pre-shared key.",
     description_zh: "WireGuard 预共享密钥。",
   }),
-  allowed_ips: z.union([z.string(), z.array(z.string())]).optional().meta({
-    description: "WireGuard allowed IPs.",
-    description_zh: "WireGuard 允许 IP。",
-  }),
+  allowed_ips: z
+    .union([z.string(), z.array(z.string())])
+    .optional()
+    .meta({
+      description: "WireGuard allowed IPs.",
+      description_zh: "WireGuard 允许 IP。",
+    }),
   reserved: Reserved.optional().meta({
     description: "WireGuard reserved field bytes.",
     description_zh: "WireGuard 保留字段字节。",
@@ -129,7 +136,8 @@ export const LegacyWireGuardOutboundOptions = z
       description_zh: "为系统接口自定义设备名称。",
     }),
     local_address: z.union([z.string(), z.array(z.string())]).meta({
-      description: "List of IP (v4 or v6) address prefixes to be assigned to the interface.",
+      description:
+        "List of IP (v4 or v6) address prefixes to be assigned to the interface.",
       description_zh: "接口的 IPv4/IPv6 地址或地址段的列表。",
     }),
     private_key: z.string().meta({
@@ -172,6 +180,7 @@ export const LegacyWireGuardOutboundOptions = z
     id: "LegacyWireGuardOutboundOptions",
     title: "Legacy WireGuard Outbound",
     title_zh: "旧版 WireGuard 出站",
+    deprecated: true,
   });
 export type LegacyWireGuardOutboundOptions = z.infer<
   typeof LegacyWireGuardOutboundOptions

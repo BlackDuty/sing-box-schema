@@ -1,12 +1,8 @@
 import { z } from "zod";
-import { TailscaleEndpointOptions } from "./protocols/tailscale";
 import { WireGuardEndpointOptions } from "./protocols/wireguard";
 
 export const Endpoint = z
-  .discriminatedUnion("type", [
-    WireGuardEndpointOptions,
-    TailscaleEndpointOptions,
-  ])
+  .discriminatedUnion("type", [WireGuardEndpointOptions])
   .meta({
     id: "Endpoint",
     title: "Endpoint",

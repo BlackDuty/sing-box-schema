@@ -19,14 +19,17 @@ export const LogOptions = z
       .enum(["trace", "debug", "info", "warn", "error", "fatal", "panic"])
       .optional()
       .meta({
-        description: "Log level. One of: `trace` `debug` `info` `warn` `error` `fatal` `panic`.",
-        description_zh: "日志等级，可选值：`trace` `debug` `info` `warn` `error` `fatal` `panic`。",
+        description:
+          "Log level. One of: `trace` `debug` `info` `warn` `error` `fatal` `panic`.",
+        description_zh:
+          "日志等级，可选值：`trace` `debug` `info` `warn` `error` `fatal` `panic`。",
       }),
     /**
      * Output file path.
      */
     output: z.string().optional().meta({
-      description: "Output file path. Will not write log to console after enable.",
+      description:
+        "Output file path. Will not write log to console after enable.",
       description_zh: "输出文件路径，启动后将不输出到控制台。",
     }),
     /**

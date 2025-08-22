@@ -72,18 +72,13 @@ export const TunInboundOptions = z
       description: "Connection output mark used by `auto_redirect`.",
       description_zh: "`auto_redirect` 使用的连接输出标记。",
     }),
-    loopback_address: listableString.optional().meta({
-      description:
-        "Loopback addresses make TCP connections to the specified address connect to the source address.",
-      description_zh:
-        "环回地址是用于使指向指定地址的 TCP 连接连接到来源地址的。",
-    }),
     strict_route: z.boolean().optional().meta({
       description: "Enforce strict routing rules when `auto_route` is enabled.",
       description_zh: "当启用 `auto_route` 时，强制执行严格的路由规则。",
     }),
     route_address: listableString.optional().meta({
-      description: "Use custom routes instead of default when `auto_route` is enabled.",
+      description:
+        "Use custom routes instead of default when `auto_route` is enabled.",
       description_zh: "设置到 Tun 的自定义路由。",
     }),
     route_address_set: listableString.optional().meta({
@@ -141,7 +136,8 @@ export const TunInboundOptions = z
       description_zh: "TCP/IP 栈。",
     }),
     platform: TunPlatformOptions.optional().meta({
-      description: "Platform-specific settings, provided by client applications.",
+      description:
+        "Platform-specific settings, provided by client applications.",
       description_zh: "平台特定的设置，由客户端应用提供。",
     }),
 
@@ -162,12 +158,14 @@ export const TunInboundOptions = z
       deprecated: true,
     }),
     inet4_route_address: listableString.optional().meta({
-      description: "Use custom routes instead of default when `auto_route` is enabled.",
+      description:
+        "Use custom routes instead of default when `auto_route` is enabled.",
       description_zh: "启用 `auto_route` 时使用自定义路由而不是默认路由。",
       deprecated: true,
     }),
     inet6_route_address: listableString.optional().meta({
-      description: "Use custom routes instead of default when `auto_route` is enabled.",
+      description:
+        "Use custom routes instead of default when `auto_route` is enabled.",
       description_zh: "启用 `auto_route` 时使用自定义路由而不是默认路由。",
       deprecated: true,
     }),

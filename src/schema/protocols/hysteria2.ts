@@ -11,7 +11,8 @@ import {
 
 export const Hysteria2Obfs = z.object({
   type: z.string().optional().meta({
-    description: "QUIC traffic obfuscator type, only available with `salamander`.",
+    description:
+      "QUIC traffic obfuscator type, only available with `salamander`.",
     description_zh: "QUIC 流量混淆器类型，仅可设为 `salamander`。",
   }),
   password: z.string().optional().meta({
@@ -108,10 +109,6 @@ export const Hysteria2OutboundOptions = z
   .object({
     type: z.literal("hysteria2"),
     tag: z.string().optional(),
-    server_ports: z.union([z.string(), z.array(z.string())]).optional().meta({
-      description: "Server port range list.",
-      description_zh: "服务器端口范围列表。",
-    }),
     hop_interval: z.string().optional().meta({
       description: "Port hopping interval.",
       description_zh: "端口跳跃间隔。",
@@ -135,6 +132,4 @@ export const Hysteria2OutboundOptions = z
     title: "Hysteria2 Outbound",
     title_zh: "Hysteria2 出站",
   });
-export type Hysteria2OutboundOptions = z.infer<
-  typeof Hysteria2OutboundOptions
->;
+export type Hysteria2OutboundOptions = z.infer<typeof Hysteria2OutboundOptions>;

@@ -11,7 +11,8 @@ export const TorOutboundOptions = z
       description_zh: "Tor 可执行文件路径。",
     }),
     extra_args: z.array(z.string()).optional().meta({
-      description: "List of extra arguments passed to the Tor instance when started.",
+      description:
+        "List of extra arguments passed to the Tor instance when started.",
       description_zh: "启动 Tor 时传递的附加参数列表。",
     }),
     data_directory: z.string().optional().meta({

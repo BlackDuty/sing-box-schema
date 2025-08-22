@@ -1,10 +1,5 @@
 import { z } from "zod";
-import {
-  DomainStrategy,
-  IpVersion,
-  Network,
-  NetworkType,
-} from "@/schema/shared";
+import { IpVersion, Network, NetworkType } from "@/schema/shared";
 import { listable, listableInts, listableString } from "@/utils";
 
 // #region DNS Rule Action
@@ -18,10 +13,6 @@ const DNSRouteAction = z
     server: z.string().meta({
       description: "Tag of target server.",
       description_zh: "目标服务器的标签。",
-    }),
-    strategy: DomainStrategy.optional().meta({
-      description: "Set domain strategy for this query.",
-      description_zh: "为此查询设置域名策略。",
     }),
     disable_cache: z.boolean().optional().meta({
       description: "Disable cache and save cache in this query.",
@@ -89,44 +80,6 @@ const DNSRouteOptionsAction = z
     title: "DNS Route Options Action",
     title_zh: "DNS 路由选项动作",
   });
-
-const DNSRecord = z.string().meta({
-  description: "Text DNS record.",
-  description_zh: "文本 DNS 记录。",
-});
-
-const DNSRouteActionPredefined = z
-  .object({
-    action: z.literal("predefined").meta({
-      description: "Action type.",
-      description_zh: "动作类型。",
-    }),
-    rcode: z
-      .enum(["NOERROR", "FORMERR", "SERVFAIL", "NXDOMAIN", "NOTIMP", "REFUSED"])
-      .optional()
-      .meta({
-        description: "The response code.",
-        description_zh: "响应码。",
-      }),
-    answer: listable(DNSRecord).optional().meta({
-      description: "List of text DNS record to respond as answers.",
-      description_zh: "用于作为回答响应的文本 DNS 记录列表。",
-    }),
-    ns: listable(DNSRecord).optional().meta({
-      description: "List of text DNS record to respond as name servers.",
-      description_zh: "用于作为名称服务器响应的文本 DNS 记录列表。",
-    }),
-    extra: listable(DNSRecord).optional().meta({
-      description: "List of text DNS record to respond as extra records.",
-      description_zh: "用于作为额外记录响应的文本 DNS 记录列表。",
-    }),
-  })
-  .meta({
-    id: "DNSRouteActionPredefined",
-    title: "DNS Route Action Predefined",
-    title_zh: "DNS 路由动作预定义",
-  });
-
 // #endregion
 
 // #region DNS Rule
@@ -191,10 +144,6 @@ const BaseDNSRule = z.object({
   ip_is_private: z.boolean().optional().meta({
     description: "Match private IP with query response.",
     description_zh: "与查询响应匹配非公开 IP。",
-  }),
-  ip_accept_any: z.boolean().optional().meta({
-    description: "Match any IP with query response.",
-    description_zh: "匹配任意 IP。",
   }),
   source_port: listableInts.optional().meta({
     description: "Match source port.",
@@ -280,7 +229,6 @@ const BaseDNSRule = z.object({
   outbound: listableString.optional().meta({
     description: "Match outbound.",
     description_zh: "匹配出站。",
-    deprecated: true,
   }),
 });
 
@@ -288,7 +236,6 @@ const DefaultDNSRule = z.union([
   BaseDNSRule.extend(DNSRouteAction.shape),
   BaseDNSRule.extend(DNSRouteOptionsAction.shape),
   BaseDNSRule.extend(DNSRejectAction.shape),
-  BaseDNSRule.extend(DNSRouteActionPredefined.shape),
 ]);
 
 const LogicalDNSRule = z

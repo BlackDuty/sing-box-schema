@@ -19,6 +19,20 @@ const RuleActionRouteOptions = z
         description: "See Dial Fields for details.",
         description_zh: "详情参阅拨号字段。",
       }),
+    network_type: listable(z.enum(["wifi", "cellular", "ethernet", "other"]))
+      .optional()
+      .meta({
+        description: "See Dial Fields for details.",
+        description_zh: "详情参阅拨号字段。",
+      }),
+    fallback_network_type: listable(
+      z.enum(["wifi", "cellular", "ethernet", "other"]),
+    )
+      .optional()
+      .meta({
+        description: "See Dial Fields for details.",
+        description_zh: "详情参阅拨号字段。",
+      }),
     fallback_delay: z.string().optional().meta({
       description: "See Dial Fields for details.",
       description_zh: "详情参阅拨号字段。",
@@ -38,21 +52,6 @@ const RuleActionRouteOptions = z
     udp_timeout: z.string().optional().meta({
       description: "Timeout for UDP connections.",
       description_zh: "UDP 连接超时时间。",
-    }),
-    tls_fragment: z.boolean().optional().meta({
-      description: "Fragment TLS handshakes to bypass firewalls.",
-      description_zh: "通过分段 TLS 握手数据包来绕过防火墙检测。",
-    }),
-    tls_fragment_fallback_delay: z.string().optional().meta({
-      description:
-        "The fallback value used when TLS segmentation cannot automatically determine the wait time.",
-      description_zh: "当 TLS 分片功能无法自动判定等待时间时使用的回退值。",
-    }),
-    tls_record_fragment: z.string().optional().meta({
-      description:
-        "Fragment TLS handshake into multiple TLS records to bypass firewalls.",
-      description_zh:
-        "通过分段 TLS 握手数据包到多个 TLS 记录来绕过防火墙检测。",
     }),
   })
   .meta({
@@ -101,20 +100,6 @@ const RuleActionResolve = z
         description: "DNS resolution strategy.",
         description_zh: "DNS 解析策略。",
       }),
-    disable_cache: z.boolean().optional().meta({
-      description: "Disable cache and save cache in this query.",
-      description_zh: "在此查询中禁用缓存。",
-    }),
-    rewrite_ttl: z.number().int().optional().nullable().meta({
-      description: "Rewrite TTL in DNS responses.",
-      description_zh: "重写 DNS 回应中的 TTL。",
-    }),
-    client_subnet: z.string().optional().nullable().meta({
-      description:
-        "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default.",
-      description_zh:
-        "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。",
-    }),
   })
   .meta({
     id: "RuleActionResolve",
@@ -233,7 +218,7 @@ const BaseRouteRule = z.object({
       "ssh",
       "rdp",
       "ntp",
-    ])
+    ]),
   )
     .optional()
     .meta({
@@ -261,21 +246,6 @@ const BaseRouteRule = z.object({
   domain_regex: listableString.optional().meta({
     description: "Match domain using regular expression.",
     description_zh: "匹配域名正则表达式。",
-  }),
-  geosite: listableString.optional().meta({
-    description: "Match geosite.",
-    description_zh: "匹配 Geosite。",
-    deprecated: true,
-  }),
-  source_geoip: listableString.optional().meta({
-    description: "Match source geoip.",
-    description_zh: "匹配源 GeoIP。",
-    deprecated: true,
-  }),
-  geoip: listableString.optional().meta({
-    description: "Match geoip.",
-    description_zh: "匹配 GeoIP。",
-    deprecated: true,
   }),
   source_ip_cidr: listableString.optional().meta({
     description: "Match source IP CIDR.",
@@ -366,13 +336,6 @@ const BaseRouteRule = z.object({
   rule_set_ip_cidr_match_source: z.boolean().optional().meta({
     description: "Make `ip_cidr` in rule-sets match the source IP.",
     description_zh: "使规则集中的 `ip_cidr` 规则匹配源 IP。",
-  }),
-  rule_set_ipcidr_match_source: z.boolean().optional().meta({
-    description:
-      "Deprecated in sing-box 1.10.0. Renamed to `rule_set_ip_cidr_match_source`.",
-    description_zh:
-      "已在 sing-box 1.10.0 废弃。已重命名为 `rule_set_ip_cidr_match_source`。",
-    deprecated: true,
   }),
   invert: z.boolean().optional().meta({
     description: "Invert match result.",

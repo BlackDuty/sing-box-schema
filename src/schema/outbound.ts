@@ -1,13 +1,11 @@
 import { z } from "zod";
 import { SelectorOutbound } from "./groups/selector";
 import { URLTestOutbound } from "./groups/urltest";
-import { AnyTLSOutboundOptions } from "./protocols/anytls";
 import { DirectOutboundOptions } from "./protocols/direct";
 import { HTTPOutboundOptions } from "./protocols/http";
 import { HysteriaOutboundOptions } from "./protocols/hysteria";
 import { Hysteria2OutboundOptions } from "./protocols/hysteria2";
 import { ShadowsocksOutboundOptions } from "./protocols/shadowsocks";
-import { ShadowsocksROutboundOptions } from "./protocols/shadowsocksr";
 import { ShadowTLSOutboundOptions } from "./protocols/shadowtls";
 import { SocksOutboundOptions } from "./protocols/socks";
 import { SSHOutboundOptions } from "./protocols/ssh";
@@ -29,11 +27,9 @@ export const Outbound = z
     LegacyWireGuardOutboundOptions,
     HysteriaOutboundOptions,
     ShadowTLSOutboundOptions,
-    AnyTLSOutboundOptions,
     Hysteria2OutboundOptions,
     TUICOutboundOptions,
     VLESSOutboundOptions,
-    ShadowsocksROutboundOptions,
     SSHOutboundOptions,
     TorOutboundOptions,
     SelectorOutbound,

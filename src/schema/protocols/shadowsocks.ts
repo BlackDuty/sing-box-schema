@@ -37,7 +37,6 @@ export const ShadowsocksInboundOptions = z
     users: z.array(ShadowsocksUser).optional(),
     destinations: z.array(ShadowsocksDestination).optional(),
     multiplex: InboundMultiplexOptions.optional(),
-    managed: z.boolean().optional(),
 
     ...ListenOptions.shape,
   })

@@ -72,7 +72,8 @@ export const VMessOutboundOptions = z
       description_zh: "Alter ID。",
     }),
     global_padding: z.boolean().optional().meta({
-      description: "Protocol parameter. Will waste traffic randomly if enabled.",
+      description:
+        "Protocol parameter. Will waste traffic randomly if enabled.",
       description_zh: "协议参数。如果启用会随机浪费流量。",
     }),
     authenticated_length: z.boolean().optional().meta({

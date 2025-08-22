@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { CertificateOptions } from "./certificate";
 import { DNSOptions } from "./dns";
 import { Endpoint } from "./endpoint";
 import { ExperimentalOptions } from "./experimental";
@@ -8,7 +7,6 @@ import { LogOptions } from "./log";
 import { NTPOptions } from "./ntp";
 import { Outbound } from "./outbound";
 import { RouteOptions } from "./route";
-import { Service } from "./service";
 
 export const Configuration = z
   .object({
@@ -16,21 +14,19 @@ export const Configuration = z
     log: LogOptions.optional(),
     dns: DNSOptions.optional(),
     ntp: NTPOptions.optional(),
-    certificate: CertificateOptions.optional(),
     endpoints: z.array(Endpoint).optional(),
     inbounds: z.array(Inbound).optional(),
     outbounds: z.array(Outbound).optional(),
     route: RouteOptions.optional(),
-    services: z.array(Service).optional(),
     experimental: ExperimentalOptions.optional(),
   })
   .meta({
     id: "Configuration",
-    title: "Sing-box v1.12.2 Configuration",
-    title_zh: "Sing-box v1.12.2 配置文件",
-    description: "Sing-box v1.12.2 Configuration file schema.",
-    description_zh: "Sing-box v1.12.2 配置文件定义。",
-    version: "1.12.2",
+    title: "Sing-box v1.11.1 Configuration",
+    title_zh: "Sing-box v1.11.1 配置文件",
+    description: "Sing-box v1.11.1 Configuration file schema.",
+    description_zh: "Sing-box v1.11.1 配置文件定义。",
+    version: "1.11.1",
   });
 
 export type Configuration = z.infer<typeof Configuration>;

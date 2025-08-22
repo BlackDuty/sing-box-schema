@@ -44,10 +44,6 @@ export const ShadowTLSInboundOptions = z
       description: "ShadowTLS strict mode.",
       description_zh: "ShadowTLS 严格模式。",
     }),
-    wildcard_sni: z.enum(["off", "authed", "all"]).optional().meta({
-      description: "ShadowTLS wildcard SNI mode.",
-      description_zh: "ShadowTLS 通配符 SNI 模式。",
-    }),
 
     ...ListenOptions.shape,
   })

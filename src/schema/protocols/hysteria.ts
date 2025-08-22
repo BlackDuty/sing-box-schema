@@ -40,11 +40,13 @@ export const HysteriaInboundOptions = z
       description_zh: "Hysteria 用户",
     }),
     recv_window_conn: z.number().int().optional().meta({
-      description: "The QUIC stream-level flow control window for receiving data.",
+      description:
+        "The QUIC stream-level flow control window for receiving data.",
       description_zh: "用于接收数据的 QUIC 流级流控制窗口。",
     }),
     recv_window_client: z.number().int().optional().meta({
-      description: "The QUIC connection-level flow control window for receiving data.",
+      description:
+        "The QUIC connection-level flow control window for receiving data.",
       description_zh: "用于接收数据的 QUIC 连接级流控制窗口。",
     }),
     max_conn_client: z.number().int().optional().meta({
@@ -73,10 +75,6 @@ export const HysteriaOutboundOptions = z
   .object({
     type: z.literal("hysteria"),
     tag: z.string().optional(),
-    server_ports: z.union([z.string(), z.array(z.string())]).optional().meta({
-      description: "Server port range list.",
-      description_zh: "服务器端口范围列表。",
-    }),
     hop_interval: z.string().optional().meta({
       description: "Port hopping interval.",
       description_zh: "端口跳跃间隔。",
@@ -98,11 +96,13 @@ export const HysteriaOutboundOptions = z
       description_zh: "认证密码。",
     }),
     recv_window_conn: z.number().int().optional().meta({
-      description: "The QUIC stream-level flow control window for receiving data.",
+      description:
+        "The QUIC stream-level flow control window for receiving data.",
       description_zh: "用于接收数据的 QUIC 流级流控制窗口。",
     }),
     recv_window: z.number().int().optional().meta({
-      description: "The QUIC connection-level flow control window for receiving data.",
+      description:
+        "The QUIC connection-level flow control window for receiving data.",
       description_zh: "用于接收数据的 QUIC 连接级流控制窗口。",
     }),
     disable_mtu_discovery: z.boolean().optional().meta({

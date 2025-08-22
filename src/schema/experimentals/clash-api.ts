@@ -28,7 +28,8 @@ export const ClashAPIOptions = z
     external_ui_download_url: z.string().optional().meta({
       description:
         "ZIP download URL for the external UI, will be used if the specified `external_ui` directory is empty.",
-      description_zh: "静态网页资源的 ZIP 下载 URL，如果指定的 `external_ui` 目录为空，将使用。",
+      description_zh:
+        "静态网页资源的 ZIP 下载 URL，如果指定的 `external_ui` 目录为空，将使用。",
     }),
     /**
      * The tag of the outbound to download the external UI.

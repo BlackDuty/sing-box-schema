@@ -90,22 +90,6 @@ export const ListenOptions = z
       description: "Listen port.",
       description_zh: "监听端口。",
     }),
-    bind_interface: z.string().optional().meta({
-      description: "The network interface to bind to.",
-      description_zh: "要绑定到的网络接口。",
-    }),
-    routing_mark: FwMark.optional().meta({
-      description: "Set netfilter routing mark.",
-      description_zh: "设置 netfilter 路由标记。",
-    }),
-    reuse_addr: z.boolean().optional().meta({
-      description: "Reuse listener address.",
-      description_zh: "重用监听地址。",
-    }),
-    netns: z.string().optional().meta({
-      description: "Set network namespace, name or path.",
-      description_zh: "设置网络命名空间，名称或路径。",
-    }),
     tcp_keep_alive: z.string().optional().meta({
       description: "TCP keep alive interval.",
       description_zh: "TCP keep alive 间隔。",
@@ -173,40 +157,6 @@ export const NetworkStrategy = z
   });
 export type NetworkStrategy = z.infer<typeof NetworkStrategy>;
 
-export const DomainResolverOptions = z
-  .object({
-    server: z.string().meta({
-      description:
-        "Tag of a another server to resolve the domain name in the address.",
-      description_zh: "用于解析本 DNS 服务器的域名的另一个 DNS 服务器的标签。",
-    }),
-    strategy: DomainStrategy.optional().meta({
-      description:
-        "The domain strategy for resolving the domain name in the address.",
-      description_zh: "用于解析本 DNS 服务器的域名的策略。",
-    }),
-    disable_cache: z.boolean().optional().meta({
-      description: "Disable cache and save cache in this query.",
-      description_zh: "在此查询中禁用缓存。",
-    }),
-    rewrite_ttl: z.number().int().optional().meta({
-      description: "Rewrite TTL in DNS responses.",
-      description_zh: "重写 DNS 回应中的 TTL。",
-    }),
-    client_subnet: z.string().optional().meta({
-      description:
-        "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default.",
-      description_zh:
-        "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。",
-    }),
-  })
-  .meta({
-    id: "DomainResolverOptions",
-    title: "Domain Resolver Options",
-    title_zh: "域名解析器选项",
-  });
-export type DomainResolverOptions = z.infer<typeof DomainResolverOptions>;
-
 export const DialerOptions = z
   .object({
     detour: z.string().optional().meta({
@@ -233,10 +183,6 @@ export const DialerOptions = z
       description: "Reuse listener address.",
       description_zh: "重用监听地址。",
     }),
-    netns: z.string().optional().meta({
-      description: "Set network namespace, name or path.",
-      description_zh: "设置网络命名空间，名称或路径。",
-    }),
     connect_timeout: z.string().optional().meta({
       description: "Connect timeout, in golang's Duration format.",
       description_zh: "连接超时，采用 golang 的 Duration 格式。",
@@ -253,13 +199,6 @@ export const DialerOptions = z
       description: "Enable UDP fragmentation.",
       description_zh: "启用 UDP 分段。",
     }),
-    domain_resolver: z
-      .union([z.string(), DomainResolverOptions])
-      .optional()
-      .meta({
-        description: "Set domain resolver to use for resolving domain names.",
-        description_zh: "用于设置解析域名的域名解析器。",
-      }),
     network_strategy: z.union([z.string(), NetworkStrategy]).optional().meta({
       description: "Strategy for selecting network interfaces.",
       description_zh: "用于选择网络接口的策略。",
@@ -280,7 +219,6 @@ export const DialerOptions = z
     domain_strategy: DomainStrategy.optional().meta({
       description: "Default domain strategy for resolving the domain names.",
       description_zh: "默认解析域名策略。",
-      deprecated: true,
     }),
   })
   .meta({
@@ -664,21 +602,6 @@ export const OutboundTLSOptions = z
     certificate_path: z.string().optional().meta({
       description: "The path to the server certificate, in PEM format.",
       description_zh: "服务器 PEM 证书路径。",
-    }),
-    fragment: z.boolean().optional().meta({
-      description: "Fragment TLS handshakes to bypass firewalls.",
-      description_zh: "通过分段 TLS 握手数据包来绕过防火墙检测。",
-    }),
-    fragment_fallback_delay: z.string().optional().meta({
-      description:
-        "The fallback value used when TLS segmentation cannot automatically determine the wait time.",
-      description_zh: "当 TLS 分片功能无法自动判定等待时间时使用的回退值。",
-    }),
-    record_fragment: z.boolean().optional().meta({
-      description:
-        "Fragment TLS handshake into multiple TLS records to bypass firewalls.",
-      description_zh:
-        "通过分段 TLS 握手数据包到多个 TLS 记录来绕过防火墙检测。",
     }),
     ech: OutboundECHOptions.optional().meta({
       description: "ECH (Encrypted Client Hello) options.",

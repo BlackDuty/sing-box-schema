@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { AnyTLSInboundOptions } from "./protocols/anytls";
 import { DirectInboundOptions } from "./protocols/direct";
 import { HTTPInboundOptions } from "./protocols/http";
 import { HysteriaInboundOptions } from "./protocols/hysteria";
@@ -30,7 +29,6 @@ export const Inbound = z
     HysteriaInboundOptions,
     ShadowTLSInboundOptions,
     Hysteria2InboundOptions,
-    AnyTLSInboundOptions,
     VLESSInboundOptions,
     TUICInboundOptions,
     TunInboundOptions,
