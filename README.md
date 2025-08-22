@@ -36,9 +36,10 @@ Or use the Chinese version:
 }
 ```
 
-In addition to Unpkg's npm mirror, you can also directly use links from the GitHub repository or GitHub Releases:
+In addition to Unpkg's npm mirror, you can use:
 
-- GitHub Repository (raw.githubusercontent.com):
+<details>
+<summary>GitHub Repository</summary>
 
 ```json
 {
@@ -46,13 +47,31 @@ In addition to Unpkg's npm mirror, you can also directly use links from the GitH
 }
 ```
 
-- GitHub Releases (for specific versions):
+Or use the Chinese version:
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.2/schema.zh.json"
+}
+```
+</details>
+<details>
+<summary>Github Release</summary>
 
 ```json
 {
   "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.json"
 }
 ```
+
+Or use the Chinese version:
+
+```json
+{
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.zh.json"
+}
+```
+</details>
 
 ### Zod Schema / For Developers
 

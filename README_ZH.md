@@ -36,9 +36,10 @@ Sing-box v1.12.x
 }
 ```
 
-除了 Unpkg 的 npm 镜像之外，你还可以直接使用 GitHub 仓库链接或 GitHub Release 链接：
+除了 Unpkg 的 npm 镜像之外，你还可以使用：
 
-- GitHub 仓库 (raw.githubusercontent.com):
+<details>
+<summary>Github 仓库直链</summary>
 
 ```json
 {
@@ -46,13 +47,31 @@ Sing-box v1.12.x
 }
 ```
 
-- GitHub Release (针对特定版本):
+或使用中文版本
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.2/schema.zh.json"
+}
+```
+</details>
+<details>
+<summary>Github Release</summary>
 
 ```json
 {
   "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.json"
 }
 ```
+
+或使用中文版本
+
+```json
+{
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.zh.json"
+}
+```
+</details>
 
 ### Zod Schema / 面向开发者
 
