@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "id": "Configuration",
-  "title": "Sing-box v1.12.2 配置文件",
-  "description": "Sing-box v1.12.2 配置文件定义。",
-  "version": "1.12.2",
+  "title": "Sing-box v1.12.3 配置文件",
+  "description": "Sing-box v1.12.3 配置文件定义。",
+  "version": "1.12.3",
   "type": "object",
   "properties": {
     "$schema": {
@@ -187,6 +187,9 @@
         },
         {
           "$ref": "#/$defs/ResolvedDNSServerOptions"
+        },
+        {
+          "$ref": "#/$defs/LegacyDNSServer"
         }
       ]
     },
@@ -1373,6 +1376,143 @@
         "type",
         "tag",
         "service"
+      ],
+      "additionalProperties": false
+    },
+    "LegacyDNSServer": {
+      "id": "LegacyDNSServer",
+      "title": "旧式 DNS 服务器",
+      "description": "旧的 DNS 服务器配置已废弃且将在 sing-box 1.14.0 中被移除，参阅 迁移指南。",
+      "deprecated": true,
+      "type": "object",
+      "properties": {
+        "tag": {
+          "description": "DNS 服务器的标签。",
+          "type": "string"
+        },
+        "address": {
+          "description": "DNS 服务器的地址。",
+          "anyOf": [
+            {
+              "description": "系统默认",
+              "type": "string",
+              "const": "local"
+            },
+            {
+              "description": "FakeIP",
+              "type": "string",
+              "const": "fakeip"
+            },
+            {
+              "description": "TCP",
+              "type": "string",
+              "pattern": "^tcp:\\/\\/.*"
+            },
+            {
+              "description": "UDP",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "ipv4",
+                  "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+                },
+                {
+                  "type": "string",
+                  "format": "ipv6",
+                  "pattern": "^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|::|([0-9a-fA-F]{1,4})?::([0-9a-fA-F]{1,4}:?){0,6})$"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^udp:\\/\\/.*"
+                }
+              ]
+            },
+            {
+              "description": "TLS",
+              "type": "string",
+              "pattern": "^tls:\\/\\/.*"
+            },
+            {
+              "description": "HTTP",
+              "type": "string",
+              "pattern": "^http:\\/\\/.*"
+            },
+            {
+              "description": "QUIC",
+              "type": "string",
+              "pattern": "^quic:\\/\\/.*"
+            },
+            {
+              "description": "HTTP3",
+              "type": "string",
+              "pattern": "^h3:\\/\\/.*"
+            },
+            {
+              "description": "RCode",
+              "anyOf": [
+                {
+                  "description": "无错误",
+                  "type": "string",
+                  "const": "rcode://success"
+                },
+                {
+                  "description": "请求格式错误",
+                  "type": "string",
+                  "const": "rcode://format_error"
+                },
+                {
+                  "description": "服务器出错",
+                  "type": "string",
+                  "const": "rcode://server_failure"
+                },
+                {
+                  "description": "域名不存在",
+                  "type": "string",
+                  "const": "rcode://name_error"
+                },
+                {
+                  "description": "功能未实现",
+                  "type": "string",
+                  "const": "rcode://not_implemented"
+                },
+                {
+                  "description": "请求被拒绝",
+                  "type": "string",
+                  "const": "rcode://refused"
+                }
+              ]
+            },
+            {
+              "description": "DHCP",
+              "type": "string",
+              "pattern": "^dhcp:\\/\\/.*"
+            }
+          ]
+        },
+        "address_resolver": {
+          "description": "用于解析本 DNS 服务器的域名的另一个 DNS 服务器的标签。",
+          "type": "string"
+        },
+        "address_strategy": {
+          "description": "用于解析本 DNS 服务器的域名的策略。",
+          "$ref": "#/$defs/__schema13"
+        },
+        "strategy": {
+          "description": "默认解析策略。",
+          "$ref": "#/$defs/__schema13"
+        },
+        "detour": {
+          "description": "用于连接到 DNS 服务器的出站的标签。",
+          "type": "string"
+        },
+        "client_subnet": {
+          "description": "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tag",
+        "address"
       ],
       "additionalProperties": false
     },
@@ -7490,9 +7630,6 @@
         "final": {
           "description": "默认出站标签。如果为空，将使用第一个可用于对应协议的出站。",
           "type": "string"
-        },
-        "find_process": {
-          "type": "boolean"
         },
         "auto_detect_interface": {
           "description": "默认将出站连接绑定到默认网卡，以防止在 tun 下出现路由环路。",

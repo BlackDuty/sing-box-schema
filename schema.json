@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "id": "Configuration",
-  "title": "Sing-box v1.12.2 Configuration",
-  "description": "Sing-box v1.12.2 Configuration file schema.",
-  "version": "1.12.2",
+  "title": "Sing-box v1.12.3 Configuration",
+  "description": "Sing-box v1.12.3 Configuration file schema.",
+  "version": "1.12.3",
   "type": "object",
   "properties": {
     "$schema": {
@@ -187,6 +187,9 @@
         },
         {
           "$ref": "#/$defs/ResolvedDNSServerOptions"
+        },
+        {
+          "$ref": "#/$defs/LegacyDNSServer"
         }
       ]
     },
@@ -1373,6 +1376,143 @@
         "type",
         "tag",
         "service"
+      ],
+      "additionalProperties": false
+    },
+    "LegacyDNSServer": {
+      "id": "LegacyDNSServer",
+      "title": "Legacy DNS Server",
+      "description": "Legacy DNS servers is deprecated and will be removed in sing-box 1.14.0, check Migration.",
+      "deprecated": true,
+      "type": "object",
+      "properties": {
+        "tag": {
+          "description": "The tag of the dns server.",
+          "type": "string"
+        },
+        "address": {
+          "description": "The address of the dns server.",
+          "anyOf": [
+            {
+              "description": "System",
+              "type": "string",
+              "const": "local"
+            },
+            {
+              "description": "FakeIP",
+              "type": "string",
+              "const": "fakeip"
+            },
+            {
+              "description": "TCP",
+              "type": "string",
+              "pattern": "^tcp:\\/\\/.*"
+            },
+            {
+              "description": "UDP",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "ipv4",
+                  "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\\.){3}(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])$"
+                },
+                {
+                  "type": "string",
+                  "format": "ipv6",
+                  "pattern": "^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|::|([0-9a-fA-F]{1,4})?::([0-9a-fA-F]{1,4}:?){0,6})$"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^udp:\\/\\/.*"
+                }
+              ]
+            },
+            {
+              "description": "TLS",
+              "type": "string",
+              "pattern": "^tls:\\/\\/.*"
+            },
+            {
+              "description": "HTTP",
+              "type": "string",
+              "pattern": "^http:\\/\\/.*"
+            },
+            {
+              "description": "QUIC",
+              "type": "string",
+              "pattern": "^quic:\\/\\/.*"
+            },
+            {
+              "description": "HTTP3",
+              "type": "string",
+              "pattern": "^h3:\\/\\/.*"
+            },
+            {
+              "description": "RCode",
+              "anyOf": [
+                {
+                  "description": "No error",
+                  "type": "string",
+                  "const": "rcode://success"
+                },
+                {
+                  "description": "Format error",
+                  "type": "string",
+                  "const": "rcode://format_error"
+                },
+                {
+                  "description": "Server failure",
+                  "type": "string",
+                  "const": "rcode://server_failure"
+                },
+                {
+                  "description": "Non-existent domain",
+                  "type": "string",
+                  "const": "rcode://name_error"
+                },
+                {
+                  "description": "Not implemented",
+                  "type": "string",
+                  "const": "rcode://not_implemented"
+                },
+                {
+                  "description": "Query refused",
+                  "type": "string",
+                  "const": "rcode://refused"
+                }
+              ]
+            },
+            {
+              "description": "DHCP",
+              "type": "string",
+              "pattern": "^dhcp:\\/\\/.*"
+            }
+          ]
+        },
+        "address_resolver": {
+          "description": "Tag of a another server to resolve the domain name in the address.",
+          "type": "string"
+        },
+        "address_strategy": {
+          "description": "The domain strategy for resolving the domain name in the address.",
+          "$ref": "#/$defs/__schema13"
+        },
+        "strategy": {
+          "description": "Default domain strategy for resolving the domain names.",
+          "$ref": "#/$defs/__schema13"
+        },
+        "detour": {
+          "description": "Tag of an outbound for connecting to the dns server.",
+          "type": "string"
+        },
+        "client_subnet": {
+          "description": "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tag",
+        "address"
       ],
       "additionalProperties": false
     },
@@ -7490,9 +7630,6 @@
         "final": {
           "description": "Default outbound tag. the first outbound will be used if empty.",
           "type": "string"
-        },
-        "find_process": {
-          "type": "boolean"
         },
         "auto_detect_interface": {
           "description": "Bind outbound connections to the default NIC by default to prevent routing loops under tun.",

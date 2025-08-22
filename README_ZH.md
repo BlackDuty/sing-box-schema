@@ -4,7 +4,7 @@
 
 > 为代码编辑器 / TypeScript 项目提供类型安全的 [**sing-box**](https://sing-box.sagernet.org/) 配置语法支持
 
-[![Version - v1.12.2](https://img.shields.io/badge/Version-v1.12.2-yellow?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.12.2) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)]([https://](https://www.typescriptlang.org/)) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
+[![Version - v1.12.3](https://img.shields.io/badge/Version-v1.12.3-yellow?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.12.3) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)]([https://](https://www.typescriptlang.org/)) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
 
 [**English**](/README.md) | **中文**
 
@@ -35,7 +35,7 @@ Sing-box v1.12.x
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.3/schema.json"
 }
 ```
 
@@ -43,7 +43,7 @@ Sing-box v1.12.x
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.2/schema.zh.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.12.3/schema.zh.json"
 }
 ```
 
@@ -54,7 +54,7 @@ Sing-box v1.12.x
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.2/schema.json"
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.3/schema.json"
 }
 ```
 
@@ -62,7 +62,7 @@ Sing-box v1.12.x
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.2/schema.zh.json"
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.12.3/schema.zh.json"
 }
 ```
 </details>
@@ -71,7 +71,7 @@ Sing-box v1.12.x
 
 ```json
 {
-  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.json"
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.3/schema.json"
 }
 ```
 
@@ -79,7 +79,7 @@ Sing-box v1.12.x
 
 ```json
 {
-  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.2/schema.zh.json"
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.12.3/schema.zh.json"
 }
 ```
 </details>
