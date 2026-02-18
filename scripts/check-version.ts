@@ -39,13 +39,16 @@ function checkVersion(expectedVersion: string | undefined) {
   }
 
   const versionPatterns = [
-    /Version-v(\d+\.\d+\.\d+)/g, // Markdown badge
-    /Sing-box v(\d+\.\d+\.\d+|\d+\.\d+\.x)/g, // Adapted Version
-    /@black-duty\/sing-box-schema@(\d+\.\d+\.\d+)/g, // Unpkg JSON Schema link
-    /sing-box-schema\/refs\/tags\/v(\d+\.\d+\.\d+)/g, // GitHub raw JSON Schema link
-    /sing-box-schema\/releases\/download\/v(\d+\.\d+\.\d+)/g, // GitHub Release JSON Schema link
-    /version: "(\d+\.\d+\.\d+)"/g, // Zod Schema Meta
+    /Version-v(\d+\.\d+\.\d+(?:--[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)(?=-[0-9A-Za-z]+(?:\?|$))/g, // Markdown badge (shields URL: prerelease '-' escaped as '--', followed by color)
+    /Sing-box v(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?|\d+\.\d+\.x)/g, // Adapted Version
+    /@black-duty\/sing-box-schema@(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)/g, // Unpkg JSON Schema link
+    /sing-box-schema\/refs\/tags\/v(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)/g, // GitHub raw JSON Schema link
+    /sing-box-schema\/releases\/download\/v(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)/g, // GitHub Release JSON Schema link
+    /version: "(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)"/g, // Zod Schema Meta
   ];
+
+  const normalizeBadgeVersion = (version: string) =>
+    version.replaceAll("--", "-");
 
   for (const file of filesToCheck) {
     console.log(`👀 Checking versions in ${file.name}...`);
@@ -60,25 +63,31 @@ function checkVersion(expectedVersion: string | undefined) {
           allVersionsMatch = false;
           continue;
         }
+        const normalizedFoundVersion = pattern.source.startsWith("Version-v(")
+          ? normalizeBadgeVersion(foundVersion)
+          : foundVersion;
         // For 'Sing-box vX.Y.x', we only check X.Y part
         if (
           pattern.source.includes("Sing-box v") &&
-          foundVersion.endsWith(".x")
+          normalizedFoundVersion.endsWith(".x")
         ) {
           const expectedMajorMinor = expectedVersion
             .split(".")
             .slice(0, 2)
             .join(".");
-          const foundMajorMinor = foundVersion.split(".").slice(0, 2).join(".");
+          const foundMajorMinor = normalizedFoundVersion
+            .split(".")
+            .slice(0, 2)
+            .join(".");
           if (expectedMajorMinor !== foundMajorMinor) {
             console.error(
-              `❌ Mismatch in ${file.name}: Expected major.minor ${expectedMajorMinor}, found ${foundMajorMinor} (from ${foundVersion})`,
+              `❌ Mismatch in ${file.name}: Expected major.minor ${expectedMajorMinor}, found ${foundMajorMinor} (from ${normalizedFoundVersion})`,
             );
             allVersionsMatch = false;
           }
-        } else if (foundVersion !== expectedVersion) {
+        } else if (normalizedFoundVersion !== expectedVersion) {
           console.error(
-            `❌ Mismatch in ${file.name}: Expected ${expectedVersion}, found ${foundVersion}`,
+            `❌ Mismatch in ${file.name}: Expected ${expectedVersion}, found ${normalizedFoundVersion}`,
           );
           allVersionsMatch = false;
         }
