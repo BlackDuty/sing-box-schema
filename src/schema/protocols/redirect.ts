@@ -12,6 +12,8 @@ export const RedirectInboundOptions = z
     id: "RedirectInboundOptions",
     title: "Redirect Inbound",
     title_zh: "Redirect 入站",
+    description: "Redirect inbound is only supported on Linux and macOS.",
+    description_zh: "Redirect 入站仅支持 Linux 和 macOS。",
   });
 
 export type RedirectInboundOptions = z.infer<typeof RedirectInboundOptions>;

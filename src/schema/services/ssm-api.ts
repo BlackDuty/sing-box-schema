@@ -7,6 +7,10 @@ import { InboundTLSOptions, ListenOptions } from "@/schema/shared";
 export const SSMAPIServiceOptions = z
   .object({
     type: z.literal("ssm-api"),
+    tag: z.string().optional().meta({
+      description: "Tag of the SSM API service.",
+      description_zh: "SSM API 服务的标签。",
+    }),
     /**
      * A mapping Object from HTTP endpoints to Shadowsocks Inbound tags.
      */

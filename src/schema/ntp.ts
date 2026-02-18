@@ -13,6 +13,7 @@ export const NTPOptions = z
     }),
     write_to_system: z.boolean().optional().meta({
       description: "Write the updated time to the system.",
+      description_zh: "将更新后的时间写入系统。",
     }),
 
     ...ServerOptions.shape,
@@ -22,8 +23,10 @@ export const NTPOptions = z
     id: "NTPOptions",
     title: "NTP",
     title_zh: "NTP",
-    description: "Built-in NTP client service.",
-    description_zh: "内建的 NTP 客户端服务。",
+    description:
+      "Built-in NTP client service that provides time for TLS, Shadowsocks, and VMess when time synchronization is unavailable.",
+    description_zh:
+      "内建的 NTP 客户端服务，在无法同步时间的环境中为 TLS、Shadowsocks 与 VMess 等提供时间。",
   });
 
 export type NTPOptions = z.infer<typeof NTPOptions>;

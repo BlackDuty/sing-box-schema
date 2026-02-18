@@ -54,7 +54,9 @@ function checkVersion(expectedVersion: string | undefined) {
       for (const match of matches) {
         const foundVersion = match[1];
         if (!foundVersion) {
-          console.error(`⚠️ No version found in ${file.name} for pattern ${pattern}`);
+          console.error(
+            `⚠️ No version found in ${file.name} for pattern ${pattern}`,
+          );
           allVersionsMatch = false;
           continue;
         }
@@ -87,7 +89,9 @@ function checkVersion(expectedVersion: string | undefined) {
   if (allVersionsMatch) {
     console.log(`✅ All version numbers match ${expectedVersion}.`);
   } else {
-    console.error("❌ Version check failed. Please update the version numbers in the files.");
+    console.error(
+      "❌ Version check failed. Please update the version numbers in the files.",
+    );
     process.exit(1);
   }
 }

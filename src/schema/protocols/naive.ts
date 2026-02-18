@@ -15,22 +15,25 @@ export const NaiveInboundOptions = z
      * Listen network.
      */
     network: Network.optional().meta({
-      description: "Listen network.",
-      description_zh: "监听的网络协议。",
+      description:
+        "Listen network, one of `tcp` `udp`. Both networks are enabled when empty.",
+      description_zh: "监听的网络协议，`tcp` `udp` 之一。默认所有。",
     }),
     /**
      * Naive users.
      */
-    users: z.array(NaiveUser).meta({
-      description: "Naive users.",
-      description_zh: "Naive 用户。",
+    users: z.array(NaiveUser).optional().meta({
+      description: "Naive users. Required.",
+      description_zh: "Naive 用户。必填。",
     }),
     /**
      * TLS configuration.
      */
     tls: InboundTLSOptions.optional().meta({
-      description: "TLS configuration.",
-      description_zh: "TLS 配置。",
+      description:
+        "TLS configuration, see [TLS](/configuration/shared/tls/#inbound).",
+      description_zh:
+        "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
     }),
 
     /**

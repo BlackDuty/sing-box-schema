@@ -13,6 +13,10 @@ export const Service = z
     id: "Service",
     title: "Service",
     title_zh: "服务",
+    description:
+      "Service entries configure supplemental services such as DERP, Resolved, and SSM API introduced in sing-box 1.12.0.",
+    description_zh:
+      "服务条目配置如 DERP、Resolved 与 SSM API 等补充服务，自 sing-box 1.12.0 起提供。",
   });
 
 export type Service = z.infer<typeof Service>;

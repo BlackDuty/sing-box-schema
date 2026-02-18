@@ -54,6 +54,10 @@ export const CacheFileOptions = z
     id: "CacheFileOptions",
     title: "Cache File",
     title_zh: "缓存文件",
+    description:
+      "Cache file settings control enabling the cache, file path, cache id, fakeip storage, rejected DNS response cache, and rdrc timeout.",
+    description_zh:
+      "缓存文件设置控制启用、文件路径、缓存 ID、fakeip 存储、拒绝的 DNS 响应缓存以及 rdrc 超时。",
   });
 
 export type CacheFileOptions = z.infer<typeof CacheFileOptions>;

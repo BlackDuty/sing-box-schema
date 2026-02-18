@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DialerOptions, NetworkType } from "@/schema/shared";
 import { listable, listableInts, listableString } from "../../utils";
 
 // #region Route Actions
@@ -16,12 +17,28 @@ const RuleActionRouteOptions = z
       .enum(["prefer_ipv4", "prefer_ipv6", "ipv4_only", "ipv6_only"])
       .optional()
       .meta({
-        description: "See Dial Fields for details.",
-        description_zh: "详情参阅拨号字段。",
+        description:
+          "See Dial Fields (/configuration/shared/dial/#network_strategy) for details. Only take effect if outbound is direct without `outbound.bind_interface`, `outbound.inet4_bind_address` and `outbound.inet6_bind_address` set.",
+        description_zh:
+          "详情参阅 [拨号字段](/configuration/shared/dial/#network_strategy)。仅当出站为 direct 且 `outbound.bind_interface`、`outbound.inet4_bind_address` 与 `outbound.inet6_bind_address` 均未设置时生效。",
       }),
+    network_type: listable(NetworkType).optional().meta({
+      description:
+        "See Dial Fields (/configuration/shared/dial/#network_type) for details.",
+      description_zh:
+        "详情参阅 [拨号字段](/configuration/shared/dial/#network_type)。",
+    }),
+    fallback_network_type: listable(NetworkType).optional().meta({
+      description:
+        "See Dial Fields (/configuration/shared/dial/#fallback_network_type) for details.",
+      description_zh:
+        "详情参阅 [拨号字段](/configuration/shared/dial/#fallback_network_type)。",
+    }),
     fallback_delay: z.string().optional().meta({
-      description: "See Dial Fields for details.",
-      description_zh: "详情参阅拨号字段。",
+      description:
+        "See Dial Fields (/configuration/shared/dial/#fallback_delay) for details.",
+      description_zh:
+        "详情参阅 [拨号字段](/configuration/shared/dial/#fallback_delay)。",
     }),
     udp_disable_domain_unmapping: z.boolean().optional().meta({
       description:
@@ -36,19 +53,24 @@ const RuleActionRouteOptions = z
         "如果启用，将尝试将 UDP 连接 connect 到目标而不是 listen。",
     }),
     udp_timeout: z.string().optional().meta({
-      description: "Timeout for UDP connections.",
-      description_zh: "UDP 连接超时时间。",
+      description:
+        "Timeout for UDP connections. Setting a larger value than the UDP timeout in inbounds will have no effect. Default values for sniffed connections: `10s` for `dns`, `ntp`, `stun`; `30s` for `quic`, `dtls`. If no protocol is sniffed, ports `53`, `123`, `443`, and `3478` will be recognized as `dns`, `ntp`, `quic`, and `stun`, respectively.",
+      description_zh:
+        "UDP 连接超时时间。设置比入站 UDP 超时更大的值将无效。已探测协议连接的默认值：`dns`、`ntp`、`stun` 为 `10s`，`quic`、`dtls` 为 `30s`。如果没有探测到协议，端口 `53`、`123`、`443` 与 `3478` 将分别被识别为 `dns`、`ntp`、`quic` 与 `stun`。",
     }),
     tls_fragment: z.boolean().optional().meta({
-      description: "Fragment TLS handshakes to bypass firewalls.",
-      description_zh: "通过分段 TLS 握手数据包来绕过防火墙检测。",
+      description:
+        "Fragment TLS handshakes to bypass firewalls. This feature is intended to circumvent simple firewalls based on plaintext packet matching, and should not be used to circumvent real censorship. Due to poor performance, try `tls_record_fragment` first, and only apply to server names known to be blocked. On Linux, Apple platforms, (administrator privileges required) Windows, the wait time can be automatically detected. Otherwise, it will fall back to waiting for a fixed time specified by `tls_fragment_fallback_delay`. In addition, if the actual wait time is less than 20ms, it will also fall back to waiting for a fixed time because the target is considered to be local or behind a transparent proxy.",
+      description_zh:
+        "通过分段 TLS 握手数据包来绕过防火墙检测。此功能旨在规避基于明文数据包匹配的简单防火墙，不应被用于规避真正的审查。由于性能不佳，请优先尝试 `tls_record_fragment`，且仅应用于已知被阻止的服务器名称。在 Linux、Apple 平台和需要管理员权限的 Windows 上可自动检测等待时间，否则将回退到 `tls_fragment_fallback_delay` 指定的固定等待时间。此外，若实际等待时间小于 20 毫秒，也会回退至固定等待时间模式，因为目标被判定为本地或透明代理。",
     }),
     tls_fragment_fallback_delay: z.string().optional().meta({
       description:
-        "The fallback value used when TLS segmentation cannot automatically determine the wait time.",
-      description_zh: "当 TLS 分片功能无法自动判定等待时间时使用的回退值。",
+        "The fallback value used when TLS segmentation cannot automatically determine the wait time. `500ms` is used by default.",
+      description_zh:
+        "当 TLS 分片功能无法自动判定等待时间时使用的回退值。默认使用 `500ms`。",
     }),
-    tls_record_fragment: z.string().optional().meta({
+    tls_record_fragment: z.boolean().optional().meta({
       description:
         "Fragment TLS handshake into multiple TLS records to bypass firewalls.",
       description_zh:
@@ -68,12 +90,14 @@ const RuleActionSniff = z
       description_zh: "对连接执行协议嗅探。",
     }),
     sniffer: listableString.optional().meta({
-      description: "Enabled sniffers. All sniffers enabled by default.",
-      description_zh: "启用的探测器。默认启用所有探测器。",
+      description:
+        "Enabled sniffers. All sniffers enabled by default. Available protocol values can be found in Protocol Sniff (/configuration/route/sniff/).",
+      description_zh:
+        "启用的探测器。默认启用所有探测器。可用的协议值可在 [协议嗅探](/configuration/route/sniff/) 中找到。",
     }),
     timeout: z.string().optional().meta({
-      description: "Timeout for sniffing.",
-      description_zh: "探测超时时间。",
+      description: "Timeout for sniffing. `300ms` is used by default.",
+      description_zh: "探测超时时间。默认使用 300ms。",
     }),
   })
   .meta({
@@ -98,8 +122,10 @@ const RuleActionResolve = z
       .enum(["prefer_ipv4", "prefer_ipv6", "ipv4_only", "ipv6_only"])
       .optional()
       .meta({
-        description: "DNS resolution strategy.",
-        description_zh: "DNS 解析策略。",
+        description:
+          "DNS resolution strategy, available values are: `prefer_ipv4`, `prefer_ipv6`, `ipv4_only`, `ipv6_only`. `dns.strategy` will be used by default.",
+        description_zh:
+          "DNS 解析策略，可选值为 `prefer_ipv4`、`prefer_ipv6`、`ipv4_only`、`ipv6_only`。默认使用 `dns.strategy`。",
       }),
     disable_cache: z.boolean().optional().meta({
       description: "Disable cache and save cache in this query.",
@@ -111,9 +137,9 @@ const RuleActionResolve = z
     }),
     client_subnet: z.string().optional().nullable().meta({
       description:
-        "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default.",
+        "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default. If the value is an IP address instead of a prefix, `/32` or `/128` will be appended automatically. Will override `dns.client_subnet`.",
       description_zh:
-        "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。",
+        "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。如果值是 IP 地址而不是前缀，则会自动附加 `/32` 或 `/128`。将覆盖 `dns.client_subnet`。",
     }),
   })
   .meta({
@@ -167,6 +193,20 @@ const RuleActionReject = z
     id: "RuleActionReject",
     title: "Rule Action Reject",
     title_zh: "规则动作拒绝",
+  });
+
+const RuleActionDirect = z
+  .object({
+    action: z.literal("direct").meta({
+      description: "Action type.",
+      description_zh: "动作类型。",
+    }),
+    ...DialerOptions.shape,
+  })
+  .meta({
+    id: "RuleActionDirect",
+    title: "Rule Action Direct",
+    title_zh: "规则动作直连",
   });
 
 const RuleActionHijackDNS = z
@@ -233,7 +273,7 @@ const BaseRouteRule = z.object({
       "ssh",
       "rdp",
       "ntp",
-    ])
+    ]),
   )
     .optional()
     .meta({
@@ -388,6 +428,7 @@ const DefaultRouteRule = z.union([
   BaseRouteRule.extend(RuleActionRouteOptionsWithAction.shape),
   BaseRouteRule.extend(RuleActionSniff.shape),
   BaseRouteRule.extend(RuleActionResolve.shape),
+  BaseRouteRule.extend(RuleActionDirect.shape),
 ]);
 
 const LogicalRouteRule = z

@@ -26,11 +26,11 @@ export const Configuration = z
   })
   .meta({
     id: "Configuration",
-    title: "Sing-box v1.12.3 Configuration",
-    title_zh: "Sing-box v1.12.3 配置文件",
-    description: "Sing-box v1.12.3 Configuration file schema.",
-    description_zh: "Sing-box v1.12.3 配置文件定义。",
-    version: "1.12.3",
+    title: "Sing-box v1.12.22 Configuration",
+    title_zh: "Sing-box v1.12.22 配置文件",
+    description: "Sing-box v1.12.22 Configuration file schema.",
+    description_zh: "Sing-box v1.12.22 配置文件定义。",
+    version: "1.12.22",
   });
 
 export type Configuration = z.infer<typeof Configuration>;

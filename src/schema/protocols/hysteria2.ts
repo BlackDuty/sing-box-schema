@@ -11,8 +11,9 @@ import {
 
 export const Hysteria2Obfs = z.object({
   type: z.string().optional().meta({
-    description: "QUIC traffic obfuscator type, only available with `salamander`.",
-    description_zh: "QUIC 流量混淆器类型，仅可设为 `salamander`。",
+    description:
+      "QUIC traffic obfuscator type, only available with `salamander`. Disabled if empty.",
+    description_zh: "QUIC 流量混淆器类型，仅可设为 `salamander`。为空则禁用。",
   }),
   password: z.string().optional().meta({
     description: "QUIC traffic obfuscator password.",
@@ -72,24 +73,50 @@ export const Hysteria2Masquerade = z
   ])
   .meta({
     description:
-      "HTTP3 server behavior (Object configuration) when authentication fails.",
-    description_zh: "HTTP3 服务器认证失败时的行为 （对象配置）。",
+      "HTTP3 server behavior (Object configuration) when authentication fails. Types: `file` (directory), `proxy` (url, rewrite_host), `string` (status_code, headers, content). Conflicts with `masquerade`. A 404 page will be returned if not configured.",
+    description_zh:
+      "HTTP3 服务器认证失败时的行为（对象配置）。类型：`file`（directory）、`proxy`（url, rewrite_host）、`string`（status_code, headers, content）。与 `masquerade` 冲突，若未配置则返回 404 页。",
   });
 
 export const Hysteria2InboundOptions = z
   .object({
     type: z.literal("hysteria2"),
     tag: z.string().optional(),
-    up_mbps: z.number().int().optional(),
-    down_mbps: z.number().int().optional(),
-    obfs: Hysteria2Obfs.optional(),
-    users: z.array(Hysteria2User).optional(),
-    ignore_client_bandwidth: z.boolean().optional().meta({
-      description: "Commands clients to use the BBR CC instead of Hysteria CC.",
-      description_zh: "命令客户端使用 BBR 拥塞控制算法而不是 Hysteria CC。",
+    up_mbps: z.number().int().optional().meta({
+      description:
+        "Max bandwidth, in Mbps. Not limited if empty. Conflicts with `ignore_client_bandwidth`.",
+      description_zh:
+        "最大带宽，单位 Mbps。为空则不限制。与 `ignore_client_bandwidth` 冲突。",
     }),
-    tls: InboundTLSOptions.optional(),
-    masquerade: Hysteria2Masquerade.optional(),
+    down_mbps: z.number().int().optional().meta({
+      description:
+        "Max bandwidth, in Mbps. Not limited if empty. Conflicts with `ignore_client_bandwidth`.",
+      description_zh:
+        "最大带宽，单位 Mbps。为空则不限制。与 `ignore_client_bandwidth` 冲突。",
+    }),
+    obfs: Hysteria2Obfs.optional(),
+    users: z.array(Hysteria2User).optional().meta({
+      description: "Hysteria2 users.",
+      description_zh: "Hysteria2 用户。",
+    }),
+    ignore_client_bandwidth: z.boolean().optional().meta({
+      description:
+        "*When `up_mbps` and `down_mbps` are not set*: Commands clients to use the BBR CC instead of Hysteria CC.\n*When `up_mbps` and `down_mbps` are set*: Deny clients to use the BBR CC.",
+      description_zh:
+        "*当 `up_mbps` 和 `down_mbps` 未设定时*: 命令客户端使用 BBR 拥塞控制算法而不是 Hysteria CC。\n*当 `up_mbps` 和 `down_mbps` 已设定时*: 禁止客户端使用 BBR 拥塞控制算法。",
+    }),
+    tls: InboundTLSOptions.optional().meta({
+      description:
+        "TLS configuration, see [TLS](/configuration/shared/tls/#inbound).",
+      description_zh:
+        "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
+    }),
+    masquerade: z.union([z.string(), Hysteria2Masquerade]).optional().meta({
+      description:
+        "HTTP3 server behavior when authentication fails. Accepts a URL string shorthand (file:// or http(s)://) or a full masquerade object. Conflicts with `masquerade.type`. A 404 page will be returned if masquerade is not configured.",
+      description_zh:
+        "HTTP3 服务器认证失败时的行为。接受 URL 字符串简写（file:// 或 http(s)://）或完整的伪装对象。与 `masquerade.type` 冲突，若未配置则返回 404 页。",
+    }),
     brutal_debug: z.boolean().optional().meta({
       description: "Enable debug information logging for Hysteria Brutal CC.",
       description_zh: "启用 Hysteria Brutal CC 的调试信息日志记录。",
@@ -108,20 +135,48 @@ export const Hysteria2OutboundOptions = z
   .object({
     type: z.literal("hysteria2"),
     tag: z.string().optional(),
-    server_ports: z.union([z.string(), z.array(z.string())]).optional().meta({
-      description: "Server port range list.",
-      description_zh: "服务器端口范围列表。",
-    }),
+    server_ports: z
+      .union([z.string(), z.array(z.string())])
+      .optional()
+      .meta({
+        description:
+          "Server port range list. Conflicts with `server_port`. Since sing-box 1.11.0.",
+        description_zh:
+          "服务器端口范围列表。与 `server_port` 冲突。自 sing-box 1.11.0 起可用。",
+      }),
     hop_interval: z.string().optional().meta({
-      description: "Port hopping interval.",
-      description_zh: "端口跳跃间隔。",
+      description:
+        "Port hopping interval. `30s` is used by default. Since sing-box 1.11.0.",
+      description_zh: "端口跳跃间隔。默认值 `30s`。自 sing-box 1.11.0 起可用。",
     }),
-    up_mbps: z.number().int().optional(),
-    down_mbps: z.number().int().optional(),
+    up_mbps: z.number().int().optional().meta({
+      description:
+        "Max bandwidth, in Mbps. If empty, the BBR congestion control algorithm is used instead of Hysteria CC.",
+      description_zh:
+        "最大带宽，单位 Mbps。为空时将使用 BBR 拥塞控制算法而不是 Hysteria CC。",
+    }),
+    down_mbps: z.number().int().optional().meta({
+      description:
+        "Max bandwidth, in Mbps. If empty, the BBR congestion control algorithm is used instead of Hysteria CC.",
+      description_zh:
+        "最大带宽，单位 Mbps。为空时将使用 BBR 拥塞控制算法而不是 Hysteria CC。",
+    }),
     obfs: Hysteria2Obfs.optional(),
-    password: z.string().optional(),
-    network: Network.optional(),
-    tls: OutboundTLSOptions.optional(),
+    password: z.string().optional().meta({
+      description: "Authentication password.",
+      description_zh: "认证密码。",
+    }),
+    network: Network.optional().meta({
+      description:
+        "Enabled network. One of `tcp` `udp`. Both are enabled by default.",
+      description_zh: "启用的网络协议，可为 `tcp` 或 `udp`。默认同时启用。",
+    }),
+    tls: OutboundTLSOptions.optional().meta({
+      description:
+        "TLS configuration, see [TLS](/configuration/shared/tls/#outbound).",
+      description_zh:
+        "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#outbound)。",
+    }),
     brutal_debug: z.boolean().optional().meta({
       description: "Enable debug information logging for Hysteria Brutal CC.",
       description_zh: "启用 Hysteria Brutal CC 的调试信息日志记录。",
@@ -135,6 +190,4 @@ export const Hysteria2OutboundOptions = z
     title: "Hysteria2 Outbound",
     title_zh: "Hysteria2 出站",
   });
-export type Hysteria2OutboundOptions = z.infer<
-  typeof Hysteria2OutboundOptions
->;
+export type Hysteria2OutboundOptions = z.infer<typeof Hysteria2OutboundOptions>;

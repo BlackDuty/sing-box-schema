@@ -44,38 +44,45 @@ export type HttpHeader = z.infer<typeof HttpHeader>;
 // #region Listen
 export const InboundOptions = z.object({
   sniff: z.boolean().optional().meta({
-    description: "Enable sniffing.",
-    description_zh: "启用协议探测。",
+    description:
+      "Enable sniffing. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
+    description_zh:
+      "启用协议探测。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
     deprecated: true,
   }),
   sniff_override_destination: z.boolean().optional().meta({
     description:
-      "Override the connection destination address with the sniffed domain.",
-    description_zh: "用探测出的域名覆盖连接目标地址。",
+      "Override the connection destination address with the sniffed domain. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
+    description_zh:
+      "用探测出的域名覆盖连接目标地址。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
     deprecated: true,
   }),
   sniff_timeout: z.string().optional().meta({
-    description: "Timeout for sniffing.",
-    description_zh: "探测超时时间。",
+    description:
+      "Timeout for sniffing (default `300ms`). Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
+    description_zh:
+      "探测超时时间（默认 `300ms`）。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
     deprecated: true,
   }),
   domain_strategy: DomainStrategy.optional().meta({
     description:
-      "If set, the requested domain name will be resolved to IP before routing.",
-    description_zh: "如果设置，请求的域名将在路由之前解析为 IP。",
+      "If set, the requested domain name will be resolved to IP before routing. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
+    description_zh:
+      "如果设置，请求的域名将在路由之前解析为 IP。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
     deprecated: true,
   }),
   udp_disable_domain_unmapping: z.boolean().optional().meta({
     description:
-      "If enabled, for UDP proxy requests addressed to a domain, the original packet address will be sent in the response instead of the mapped domain.",
+      "If enabled, for UDP proxy requests addressed to a domain, the original packet address will be sent in the response instead of the mapped domain. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
     description_zh:
-      "如果启用，对于地址为域的 UDP 代理请求，将在响应中发送原始包地址而不是映射的域。",
+      "如果启用，对于地址为域的 UDP 代理请求，将在响应中发送原始包地址而不是映射的域。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
     deprecated: true,
   }),
   detour: z.string().optional().meta({
     description:
-      "If set, connections will be forwarded to the specified inbound.",
-    description_zh: "如果设置，连接将被转发到指定的入站。",
+      "If set, connections will be forwarded to the specified inbound; the inbound must support the injected detour.",
+    description_zh:
+      "如果设置，连接将被转发到指定的入站；目标入站必须支持注入的 detour。",
   }),
 });
 export type InboundOptions = z.infer<typeof InboundOptions>;
@@ -95,16 +102,19 @@ export const ListenOptions = z
       description_zh: "要绑定到的网络接口。",
     }),
     routing_mark: FwMark.optional().meta({
-      description: "Set netfilter routing mark.",
-      description_zh: "设置 netfilter 路由标记。",
+      description:
+        'Set netfilter routing mark. Only supported on Linux; accepts integers (e.g. `1234`) or hexadecimal strings (e.g. `"0x1234").',
+      description_zh:
+        '设置 netfilter 路由标记，仅在 Linux 上支持；可接受整数（例如 `1234`）或十六进制字符串（例如 `"0x1234"`）。',
     }),
     reuse_addr: z.boolean().optional().meta({
       description: "Reuse listener address.",
       description_zh: "重用监听地址。",
     }),
     netns: z.string().optional().meta({
-      description: "Set network namespace, name or path.",
-      description_zh: "设置网络命名空间，名称或路径。",
+      description:
+        "Set network namespace, name or path. Only supported on Linux.",
+      description_zh: "设置网络命名空间、名称或路径，仅在 Linux 上支持。",
     }),
     tcp_keep_alive: z.string().optional().meta({
       description: "TCP keep alive interval.",
@@ -119,16 +129,16 @@ export const ListenOptions = z
       description_zh: "启用 TCP Fast Open。",
     }),
     tcp_multi_path: z.boolean().optional().meta({
-      description: "Enable TCP Multi Path.",
-      description_zh: "启用 TCP Multi Path。",
+      description: "Enable TCP Multi Path (requires Go 1.21+).",
+      description_zh: "启用 TCP Multi Path（需要 Go 1.21+）。",
     }),
     udp_fragment: z.boolean().optional().meta({
       description: "Enable UDP fragmentation.",
       description_zh: "启用 UDP 分段。",
     }),
     udp_timeout: z.union([z.string(), z.number()]).optional().meta({
-      description: "UDP NAT expiration time.",
-      description_zh: "UDP NAT 过期时间。",
+      description: "UDP NAT expiration time (default `5m`).",
+      description_zh: "UDP NAT 过期时间（默认 `5m`）。",
     }),
 
     ...InboundOptions.shape,
@@ -153,23 +163,32 @@ export type NetworkType = z.infer<typeof NetworkType>;
 export const NetworkStrategy = z
   .object({
     network_type: listable(NetworkType).optional().meta({
-      description: "Network types to use.",
-      description_zh: "要使用的网络类型。",
+      description:
+        "Network types to use when `default` or `hybrid` strategies are selected, or preferred types when `fallback` is used. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled.",
+      description_zh:
+        "在使用 `default` 或 `hybrid` 策略时指定要使用的网络，在 `fallback` 策略下指定优选网络类型；仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。",
     }),
     fallback_network_type: listable(NetworkType).optional().meta({
-      description: "Fallback network types.",
-      description_zh: "备用网络类型。",
+      description:
+        "Fallback network types used when preferred networks fail or timeout in the `fallback` strategy. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled.",
+      description_zh:
+        "在 `fallback` 策略中优选网络不可用或超时时使用的备用网络类型；仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。",
     }),
     fallback_delay: z.string().optional().meta({
       description:
-        "The length of time to wait before spawning a RFC 6555 Fast Fallback connection.",
-      description_zh: "在生成 RFC 6555 快速回退连接之前等待的时间长度。",
+        "The length of time to wait before spawning a RFC 6555 Fast Fallback connection or falling back to another interface when `domain_strategy` or `network_strategy` is in use. Defaults to `300ms`.",
+      description_zh:
+        "在使用 `domain_strategy` 或 `network_strategy` 时，在生成 RFC 6555 快速回退连接或切换到其他接口之前等待的时间长度。默认 `300ms`。",
     }),
   })
   .meta({
     id: "NetworkStrategy",
     title: "Network Strategy",
     title_zh: "网络策略",
+    description:
+      "Strategy for selecting network interfaces. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled. `default` connects to default or `network_type` sequentially, `hybrid` connects concurrently, and `fallback` probes preferred/fallback networks (entering a 15s fast fallback). Conflicts with `bind_interface`, `inet4_bind_address` and `inet6_bind_address`.",
+    description_zh:
+      "选择网络接口的策略，仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。`default` 按顺序连接默认或 `network_type` 指定的网络，`hybrid` 并发连接，`fallback` 在 15s 快速回退期间同时连接优选和备用网络。与 `bind_interface`、`inet4_bind_address`、`inet6_bind_address` 冲突。",
   });
 export type NetworkStrategy = z.infer<typeof NetworkStrategy>;
 
@@ -204,14 +223,19 @@ export const DomainResolverOptions = z
     id: "DomainResolverOptions",
     title: "Domain Resolver Options",
     title_zh: "域名解析器选项",
+    description:
+      "Domain resolver configuration used by dialers; follows the same format as the route DNS rule action without the `action` field, and setting a string is equivalent to specifying `server`.",
+    description_zh:
+      "拨号器使用的域名解析器配置，与路由 DNS 规则动作（不含 `action`）保持相同格式；直接写字符串等价于配置 `server`。",
   });
 export type DomainResolverOptions = z.infer<typeof DomainResolverOptions>;
 
 export const DialerOptions = z
   .object({
     detour: z.string().optional().meta({
-      description: "The tag of the upstream outbound.",
-      description_zh: "上游出站的标签。",
+      description:
+        "The tag of the upstream outbound. If set, all other dialer fields will be ignored.",
+      description_zh: "上游出站的标签。如果设置，将忽略其他拨号字段。",
     }),
     bind_interface: z.string().optional().meta({
       description: "The network interface to bind to.",
@@ -226,28 +250,33 @@ export const DialerOptions = z
       description_zh: "要绑定的 IPv6 地址。",
     }),
     routing_mark: FwMark.optional().meta({
-      description: "Set netfilter routing mark.",
-      description_zh: "设置 netfilter 路由标记。",
+      description:
+        'Set netfilter routing mark. Only supported on Linux; accepts integers (e.g. `1234`) or hexadecimal strings (e.g. `"0x1234").',
+      description_zh:
+        '设置 netfilter 路由标记，仅在 Linux 上支持；可接受整数（例如 `1234`）或十六进制字符串（例如 `"0x1234"`）。',
     }),
     reuse_addr: z.boolean().optional().meta({
       description: "Reuse listener address.",
       description_zh: "重用监听地址。",
     }),
     netns: z.string().optional().meta({
-      description: "Set network namespace, name or path.",
-      description_zh: "设置网络命名空间，名称或路径。",
+      description:
+        "Set network namespace, name or path. Only supported on Linux.",
+      description_zh: "设置网络命名空间、名称或路径，仅在 Linux 上支持。",
     }),
     connect_timeout: z.string().optional().meta({
-      description: "Connect timeout, in golang's Duration format.",
-      description_zh: "连接超时，采用 golang 的 Duration 格式。",
+      description:
+        "Connect timeout, in golang's Duration format (e.g. `300ms`, `-1.5h`, `2h45m`).",
+      description_zh:
+        "连接超时，采用 golang 的 Duration 格式（例如 `300ms`、`-1.5h`、`2h45m`）。",
     }),
     tcp_fast_open: z.boolean().optional().meta({
       description: "Enable TCP Fast Open.",
       description_zh: "启用 TCP Fast Open。",
     }),
     tcp_multi_path: z.boolean().optional().meta({
-      description: "Enable TCP Multi Path.",
-      description_zh: "启用 TCP Multi Path。",
+      description: "Enable TCP Multi Path (requires Go 1.21+).",
+      description_zh: "启用 TCP Multi Path（需要 Go 1.21+）。",
     }),
     udp_fragment: z.boolean().optional().meta({
       description: "Enable UDP fragmentation.",
@@ -257,29 +286,40 @@ export const DialerOptions = z
       .union([z.string(), DomainResolverOptions])
       .optional()
       .meta({
-        description: "Set domain resolver to use for resolving domain names.",
-        description_zh: "用于设置解析域名的域名解析器。",
+        description:
+          "Set domain resolver to use for resolving domain names. Follows the same format as the route DNS rule action without the `action` field, and specifying a string is equivalent to filling its `server`.",
+        description_zh:
+          "设置用于解析域名的域名解析器，格式与路由 DNS 规则动作（不含 `action`）一致；直接写字符串等价于配置其 `server`。",
       }),
     network_strategy: z.union([z.string(), NetworkStrategy]).optional().meta({
-      description: "Strategy for selecting network interfaces.",
-      description_zh: "用于选择网络接口的策略。",
+      description:
+        "Strategy for selecting network interfaces. Only supported on graphical clients on Android and Apple platforms with `auto_detect_interface` enabled. Conflicts with `bind_interface`, `inet4_bind_address`, and `inet6_bind_address`.",
+      description_zh:
+        "选择网络接口的策略，仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。与 `bind_interface`、`inet4_bind_address` 和 `inet6_bind_address` 冲突。",
     }),
     network_type: listable(NetworkType).optional().meta({
-      description: "Network types to use.",
-      description_zh: "要使用的网络类型。",
+      description:
+        "Network types to use when `default` or `hybrid` strategies are selected, or preferred types when `fallback` is enabled. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled.",
+      description_zh:
+        "在 `default` 或 `hybrid` 策略下指定要使用的网络，在启用 `fallback` 时指定优选网络类型；仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。",
     }),
     fallback_network_type: listable(NetworkType).optional().meta({
-      description: "Fallback network types.",
-      description_zh: "备用网络类型。",
+      description:
+        "Fallback network types used when preferred networks fail or timeout in the `fallback` strategy. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled.",
+      description_zh:
+        "在 `fallback` 策略中优选网络不可用或超时时使用的备用网络类型；仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。",
     }),
     fallback_delay: z.string().optional().meta({
       description:
-        "The length of time to wait before spawning a RFC 6555 Fast Fallback connection.",
-      description_zh: "在生成 RFC 6555 快速回退连接之前等待的时间长度。",
+        "The length of time to wait before spawning a RFC 6555 Fast Fallback connection or falling back to another interface when `domain_strategy` or `network_strategy` is enabled. Defaults to `300ms`.",
+      description_zh:
+        "在启用 `domain_strategy` 或 `network_strategy` 时，在生成 RFC 6555 快速回退连接或切换到其他接口之前等待的时间长度。默认 `300ms`。",
     }),
     domain_strategy: DomainStrategy.optional().meta({
-      description: "Default domain strategy for resolving the domain names.",
-      description_zh: "默认解析域名策略。",
+      description:
+        "Default domain strategy for resolving the domain names. Deprecated in sing-box 1.12.0 and removed in 1.14.0. Available values: `prefer_ipv4`, `prefer_ipv6`, `ipv4_only`, `ipv6_only`. `direct` falls back to `inbound.domain_strategy` when unset while other types only affect server addresses.",
+      description_zh:
+        "默认解析域名策略。已在 sing-box 1.12.0 弃用，并将在 1.14.0 移除。可用值：`prefer_ipv4`、`prefer_ipv6`、`ipv4_only`、`ipv6_only`。`direct` 未设置时回退到 `inbound.domain_strategy`，其他类型仅影响服务器地址。",
       deprecated: true,
     }),
   })
@@ -504,8 +544,13 @@ export const InboundTLSOptions = z
     }),
     server_name: z.string().optional().meta({
       description:
-        "Used to verify the hostname on the returned certificates unless insecure is given.",
-      description_zh: "用于验证返回证书上的主机名，除非设置不安全。",
+        "Used to verify the hostname on the returned certificates unless `insecure` is given. Also included in the client's handshake to support virtual hosting unless it is an IP address.",
+      description_zh:
+        "用于验证返回证书上的主机名，除非设置了 `insecure`。还会作为客户端握手的一部分发送，以支持虚拟主机，除非该值是 IP 地址。",
+    }),
+    insecure: z.boolean().optional().meta({
+      description: "Accepts any server certificate (client only).",
+      description_zh: "接受任何服务器证书（仅客户端）。",
     }),
     alpn: listableString.optional().meta({
       description:
@@ -529,16 +574,18 @@ export const InboundTLSOptions = z
       description_zh: "服务器 PEM 证书行数组。",
     }),
     certificate_path: z.string().optional().meta({
-      description: "The path to the server certificate, in PEM format.",
-      description_zh: "服务器 PEM 证书路径。",
+      description:
+        "The path to the server certificate, in PEM format. Will be automatically reloaded if the file is modified.",
+      description_zh: "服务器 PEM 证书路径。文件修改后会自动重新加载。",
     }),
     key: listableString.optional().meta({
       description: "The server private key line array, in PEM format.",
       description_zh: "服务器 PEM 私钥行数组。",
     }),
     key_path: z.string().optional().meta({
-      description: "The path to the server private key, in PEM format.",
-      description_zh: "服务器 PEM 私钥路径。",
+      description:
+        "The path to the server private key, in PEM format. Will be automatically reloaded if the file is modified.",
+      description_zh: "服务器 PEM 私钥路径。文件修改后会自动重新加载。",
     }),
     acme: InboundACMEOptions.optional().meta({
       description:
@@ -568,12 +615,14 @@ const OutboundECHOptions = z
       description_zh: "启用 ECH。",
     }),
     config: listableString.optional().meta({
-      description: "ECH configuration line array, in PEM format.",
-      description_zh: "ECH PEM 配置行数组。",
+      description:
+        "ECH configuration line array, in PEM format. If empty, sing-box will attempt to load the configuration from DNS.",
+      description_zh: "ECH PEM 配置行数组。为空时将尝试从 DNS 加载配置。",
     }),
     config_path: z.string().optional().meta({
-      description: "The path to ECH configuration, in PEM format.",
-      description_zh: "ECH PEM 配置路径。",
+      description:
+        "The path to ECH configuration, in PEM format. If empty, sing-box will attempt to load the configuration from DNS.",
+      description_zh: "ECH PEM 配置路径。为空时将尝试从 DNS 加载配置。",
     }),
   })
   .meta({
@@ -585,12 +634,14 @@ const OutboundECHOptions = z
 const OutboundUTLSOptions = z
   .object({
     enabled: z.boolean().optional().meta({
-      description: "Enable uTLS.",
-      description_zh: "启用 uTLS。",
+      description:
+        "Enable uTLS (not recommended; uTLS has known fingerprinting vulnerabilities).",
+      description_zh: "启用 uTLS（不推荐；uTLS 存在已知的指纹识别漏洞）。",
     }),
     fingerprint: z.string().optional().meta({
-      description: "uTLS fingerprint.",
-      description_zh: "uTLS 指纹。",
+      description:
+        "uTLS fingerprint used by the ClientHello (not recommended).",
+      description_zh: "uTLS 指纹（不推荐）。",
     }),
   })
   .meta({
@@ -628,8 +679,8 @@ export const OutboundTLSOptions = z
       description_zh: "启用 TLS。",
     }),
     disable_sni: z.boolean().optional().meta({
-      description: "Do not send server name in ClientHello.",
-      description_zh: "不在 ClientHello 中发送服务器名称。",
+      description: "Do not send server name in ClientHello (client only).",
+      description_zh: "不在 ClientHello 中发送服务器名称（仅客户端）。",
     }),
     server_name: z.string().optional().meta({
       description:
@@ -662,23 +713,27 @@ export const OutboundTLSOptions = z
       description_zh: "服务器 PEM 证书行数组。",
     }),
     certificate_path: z.string().optional().meta({
-      description: "The path to the server certificate, in PEM format.",
-      description_zh: "服务器 PEM 证书路径。",
+      description:
+        "The path to the server certificate, in PEM format. Will be automatically reloaded if the file is modified.",
+      description_zh: "服务器 PEM 证书路径。文件修改后会自动重新加载。",
     }),
     fragment: z.boolean().optional().meta({
-      description: "Fragment TLS handshakes to bypass firewalls.",
-      description_zh: "通过分段 TLS 握手数据包来绕过防火墙检测。",
+      description:
+        "Fragment TLS handshakes to bypass plain-text based firewalls. Poor performance means `record_fragment` should be tried first. On Linux, Apple platforms, and Windows (with admin privileges) the wait time is auto detected; otherwise it falls back to `fragment_fallback_delay`, and values below 20ms also defer to the fallback delay.",
+      description_zh:
+        "通过分段 TLS 握手数据包来绕过基于明文匹配的防火墙。性能较差，应先尝试 `record_fragment`。在 Linux、Apple 平台和（需要管理员权限的）Windows 上会自动检测等待时间，其他平台或侦测时间低于 20ms 时会退回到 `fragment_fallback_delay`。",
     }),
     fragment_fallback_delay: z.string().optional().meta({
       description:
-        "The fallback value used when TLS segmentation cannot automatically determine the wait time.",
-      description_zh: "当 TLS 分片功能无法自动判定等待时间时使用的回退值。",
+        "The fallback value used when TLS segmentation cannot automatically determine the wait time. Defaults to `500ms`.",
+      description_zh:
+        "当 TLS 分片功能无法自动判定等待时间时使用的回退值。默认 `500ms`。",
     }),
     record_fragment: z.boolean().optional().meta({
       description:
-        "Fragment TLS handshake into multiple TLS records to bypass firewalls.",
+        "Fragment TLS handshake into multiple TLS records to bypass firewalls. Preferred over `fragment` when performance is a concern.",
       description_zh:
-        "通过分段 TLS 握手数据包到多个 TLS 记录来绕过防火墙检测。",
+        "通过将 TLS 握手分割为多个 TLS 记录来绕过防火墙。在关注性能时优先使用 `record_fragment`。",
     }),
     ech: OutboundECHOptions.optional().meta({
       description: "ECH (Encrypted Client Hello) options.",
@@ -705,8 +760,10 @@ export type OutboundTLSOptions = z.infer<typeof OutboundTLSOptions>;
 const BrutalOptions = z
   .object({
     enabled: z.boolean().optional().meta({
-      description: "Enable TCP Brutal congestion control algorithm.",
-      description_zh: "启用 TCP Brutal 拥塞控制算法。",
+      description:
+        "Enable TCP Brutal congestion control algorithm. Requires Linux with the brutal kernel module installed.",
+      description_zh:
+        "启用 TCP Brutal 拥塞控制算法。需要 Linux 并安装 brutal 内核模块。",
     }),
     up_mbps: z.number().int().optional().meta({
       description: "Upload bandwidth, in Mbps.",
@@ -721,6 +778,10 @@ const BrutalOptions = z
     id: "BrutalOptions",
     title: "Brutal Options",
     title_zh: "Brutal 选项",
+    description:
+      "Options for the TCP Brutal congestion control algorithm. Linux with the brutal kernel module is required.",
+    description_zh:
+      "TCP Brutal 拥塞控制算法的选项。需要 Linux 并安装 brutal 内核模块。",
   });
 
 export const InboundMultiplexOptions = z
@@ -933,12 +994,13 @@ export type V2RayTransportOptions = z.infer<typeof V2RayTransportOptions>;
 export const UDPOverTCPOptions = z
   .object({
     enabled: z.boolean().optional().meta({
-      description: "Enable the UDP over TCP protocol.",
-      description_zh: "启用 UDP over TCP 协议。",
+      description:
+        "Enable the UDP over TCP protocol (proprietary SagerNet extension).",
+      description_zh: "启用 UDP over TCP 协议（SagerNet 专有扩展）。",
     }),
     version: z.number().int().optional().meta({
-      description: "The protocol version, `1` or `2`.",
-      description_zh: "协议版本，`1` 或 `2`。",
+      description: "The protocol version, `1` or `2` (defaults to `2`).",
+      description_zh: "协议版本，`1` 或 `2`（默认 `2`）。",
     }),
   })
   .meta({

@@ -42,6 +42,10 @@ export const Inbound = z
     id: "Inbound",
     title: "Inbound",
     title_zh: "入站",
+    description:
+      "Inbound configuration entries represent listeners for supported transport protocols. Each entry selects a protocol via `type` and can be labeled with `tag` for routing.",
+    description_zh:
+      "入站配置项表示支持的传输协议的监听器，`type` 用于选择协议，`tag` 可用于路由标记。",
   });
 
 export type Inbound = z.infer<typeof Inbound>;

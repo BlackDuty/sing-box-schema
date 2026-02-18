@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   DialerOptions,
+  DomainResolverOptions,
   HttpHeader,
   InboundTLSOptions,
   ListenOptions,
@@ -18,16 +19,27 @@ export const HTTPInboundOptions = z
     type: z.literal("http"),
     tag: z.string().optional(),
     users: z.array(HTTPUser).optional().meta({
-      description: "HTTP users.",
-      description_zh: "HTTP 用户。",
+      description: "HTTP users. No authentication required if empty.",
+      description_zh: "HTTP 用户。如果为空则不需要验证。",
     }),
     tls: InboundTLSOptions.optional().meta({
-      description: "TLS configuration.",
-      description_zh: "TLS 配置。",
+      description:
+        "TLS configuration, see [TLS](/configuration/shared/tls/#inbound).",
+      description_zh:
+        "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
     }),
+    domain_resolver: z
+      .union([z.string(), DomainResolverOptions])
+      .optional()
+      .meta({
+        description: "Set domain resolver to use for resolving domain names.",
+        description_zh: "用于设置解析域名的域名解析器。",
+      }),
     set_system_proxy: z.boolean().optional().meta({
-      description: "Automatically set system proxy configuration.",
-      description_zh: "启动时自动设置系统代理，停止时自动清理。",
+      description:
+        "Automatically set system proxy configuration when start and clean up when stop. Only supported on Linux, Android, Windows, and macOS. To work on Android and Apple platforms without privileges, use tun.platform.http_proxy instead.",
+      description_zh:
+        "启动时自动设置系统代理，停止时自动清理。仅支持 Linux、Android、Windows 和 macOS。要在无特权的 Android 和 iOS 上工作，请改用 tun.platform.http_proxy。",
     }),
 
     ...ListenOptions.shape,
@@ -60,8 +72,10 @@ export const HTTPOutboundOptions = z
       description_zh: "HTTP 请求的额外标头。",
     }),
     tls: OutboundTLSOptions.optional().meta({
-      description: "TLS configuration.",
-      description_zh: "TLS 配置。",
+      description:
+        "TLS configuration, see [TLS](/configuration/shared/tls/#outbound).",
+      description_zh:
+        "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#outbound)。",
     }),
 
     ...ServerOptions.shape,

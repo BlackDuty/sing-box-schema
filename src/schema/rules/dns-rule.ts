@@ -16,12 +16,14 @@ const DNSRouteAction = z
       description_zh: "动作类型。",
     }),
     server: z.string().meta({
-      description: "Tag of target server.",
-      description_zh: "目标服务器的标签。",
+      description: "Tag of target server. Required.",
+      description_zh: "目标服务器的标签。必填。",
     }),
     strategy: DomainStrategy.optional().meta({
-      description: "Set domain strategy for this query.",
-      description_zh: "为此查询设置域名策略。",
+      description:
+        "Set domain strategy for this query. One of `prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`.",
+      description_zh:
+        "为此查询设置域名策略。可选项：`prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`。",
     }),
     disable_cache: z.boolean().optional().meta({
       description: "Disable cache and save cache in this query.",
@@ -32,8 +34,10 @@ const DNSRouteAction = z
       description_zh: "重写 DNS 回应中的 TTL。",
     }),
     client_subnet: z.string().optional().meta({
-      description: "Append a `edns0-subnet` OPT extra record.",
-      description_zh: "附加 `edns0-subnet` OPT 附加记录。",
+      description:
+        "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default. If the value is an IP address instead of a prefix, `/32` or `/128` will be appended automatically. Will override `dns.client_subnet`.",
+      description_zh:
+        "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。如果值是 IP 地址而不是前缀，则会自动附加 `/32` 或 `/128`。将覆盖 `dns.client_subnet`。",
     }),
   })
   .meta({
@@ -49,8 +53,10 @@ const DNSRejectAction = z
       description_zh: "动作类型。",
     }),
     method: z.enum(["default", "drop"]).optional().meta({
-      description: "Reply with REFUSED or drop the request.",
-      description_zh: "返回 REFUSED 或丢弃请求。",
+      description:
+        "`default`: Reply with REFUSED. `drop`: Drop the request. `default` will be used by default.",
+      description_zh:
+        "`default`: 返回 REFUSED。`drop`: 丢弃请求。默认使用 `default`。",
     }),
     no_drop: z.boolean().optional().meta({
       description:
@@ -71,6 +77,12 @@ const DNSRouteOptionsAction = z
       description: "Action type.",
       description_zh: "动作类型。",
     }),
+    strategy: DomainStrategy.optional().meta({
+      description:
+        "Set domain strategy for this query. One of `prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`.",
+      description_zh:
+        "为此查询设置域名策略。可选项：`prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`。",
+    }),
     disable_cache: z.boolean().optional().meta({
       description: "Disable cache and save cache in this query.",
       description_zh: "在此查询中禁用缓存。",
@@ -80,8 +92,10 @@ const DNSRouteOptionsAction = z
       description_zh: "重写 DNS 回应中的 TTL。",
     }),
     client_subnet: z.string().optional().meta({
-      description: "Append a `edns0-subnet` OPT extra record.",
-      description_zh: "附加 `edns0-subnet` OPT 附加记录。",
+      description:
+        "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default. If the value is an IP address instead of a prefix, `/32` or `/128` will be appended automatically. Will override `dns.client_subnet`.",
+      description_zh:
+        "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。如果值是 IP 地址而不是前缀，则会自动附加 `/32` 或 `/128`。将覆盖 `dns.client_subnet`。",
     }),
   })
   .meta({
@@ -157,9 +171,19 @@ const BaseDNSRule = z.object({
     description_zh: "用户名。",
   }),
   protocol: listableString.optional().meta({
-    description: "Sniffed protocol.",
-    description_zh: "探测到的协议。",
+    description:
+      "Sniffed protocol, see Protocol Sniff (/configuration/route/sniff/) for details.",
+    description_zh:
+      "探测到的协议，参阅 [协议嗅探](/configuration/route/sniff/) 以获取详细信息。",
   }),
+  client: listable(z.enum(["chromium", "safari", "firefox", "quic-go"]))
+    .optional()
+    .meta({
+      description:
+        "Sniffed client type, see Protocol Sniff (/configuration/route/sniff/) for details.",
+      description_zh:
+        "探测到的客户端类型，参阅 [协议嗅探](/configuration/route/sniff/) 以获取详细信息。",
+    }),
   domain: listableString.optional().meta({
     description: "Match full domain.",
     description_zh: "匹配完整域名。",
@@ -176,6 +200,27 @@ const BaseDNSRule = z.object({
     description: "Match domain using regular expression.",
     description_zh: "匹配域名正则表达式。",
   }),
+  geosite: listableString.optional().meta({
+    description:
+      "Match geosite. Geosite is deprecated and will be removed in sing-box 1.12.0, check Migration (/migration/#migrate-geosite-to-rule-sets).",
+    description_zh:
+      "匹配 Geosite。Geosite 已在 sing-box 1.8.0 废弃并将在 sing-box 1.12.0 中移除，参阅 [迁移指南](/migration/#migrate-geosite-to-rule-sets)。",
+    deprecated: true,
+  }),
+  source_geoip: listableString.optional().meta({
+    description:
+      "Match source geoip. GeoIP is deprecated and will be removed in sing-box 1.12.0, check Migration (/migration/#migrate-geoip-to-rule-sets).",
+    description_zh:
+      "匹配源 GeoIP。GeoIP 已在 sing-box 1.8.0 废弃并将在 sing-box 1.12.0 中移除，参阅 [迁移指南](/migration/#migrate-geoip-to-rule-sets)。",
+    deprecated: true,
+  }),
+  geoip: listableString.optional().meta({
+    description:
+      "Match geoip. GeoIP is deprecated and will be removed in sing-box 1.12.0, check Migration (/migration/#migrate-geoip-to-rule-sets).",
+    description_zh:
+      "匹配 GeoIP。GeoIP 已在 sing-box 1.8.0 废弃并将在 sing-box 1.12.0 中移除，参阅 [迁移指南](/migration/#migrate-geoip-to-rule-sets)。",
+    deprecated: true,
+  }),
   source_ip_cidr: listableString.optional().meta({
     description: "Match source IP CIDR.",
     description_zh: "匹配源 IP CIDR。",
@@ -185,16 +230,21 @@ const BaseDNSRule = z.object({
     description_zh: "匹配非公开源 IP。",
   }),
   ip_cidr: listableString.optional().meta({
-    description: "Match IP CIDR with query response.",
-    description_zh: "与查询响应匹配 IP CIDR。",
+    description:
+      "Match IP CIDR with query response. Only takes effect for address requests (A/AAAA/HTTPS).",
+    description_zh:
+      "与查询响应匹配 IP CIDR。仅对地址请求（A/AAAA/HTTPS）生效。",
   }),
   ip_is_private: z.boolean().optional().meta({
-    description: "Match private IP with query response.",
-    description_zh: "与查询响应匹配非公开 IP。",
+    description:
+      "Match private IP with query response. Only takes effect for address requests (A/AAAA/HTTPS).",
+    description_zh:
+      "与查询响应匹配非公开 IP。仅对地址请求（A/AAAA/HTTPS）生效。",
   }),
   ip_accept_any: z.boolean().optional().meta({
-    description: "Match any IP with query response.",
-    description_zh: "匹配任意 IP。",
+    description:
+      "Match any IP with query response. Only takes effect for address requests (A/AAAA/HTTPS).",
+    description_zh: "匹配任意 IP。仅对地址请求（A/AAAA/HTTPS）生效。",
   }),
   source_port: listableInts.optional().meta({
     description: "Match source port.",
@@ -213,52 +263,66 @@ const BaseDNSRule = z.object({
     description_zh: "匹配端口范围。",
   }),
   process_name: listableString.optional().meta({
-    description: "Match process name.",
-    description_zh: "匹配进程名称。",
+    description:
+      "Match process name. Only supported on Linux, Windows, and macOS.",
+    description_zh: "匹配进程名称。仅支持 Linux、Windows 和 macOS。",
   }),
   process_path: listableString.optional().meta({
-    description: "Match process path.",
-    description_zh: "匹配进程路径。",
+    description:
+      "Match process path. Only supported on Linux, Windows, and macOS.",
+    description_zh: "匹配进程路径。仅支持 Linux、Windows 和 macOS。",
   }),
   process_path_regex: listableString.optional().meta({
-    description: "Match process path using regular expression.",
-    description_zh: "使用正则表达式匹配进程路径。",
+    description:
+      "Match process path using regular expression. Only supported on Linux, Windows, and macOS.",
+    description_zh:
+      "使用正则表达式匹配进程路径。仅支持 Linux、Windows 和 macOS。",
   }),
   package_name: listableString.optional().meta({
     description: "Match android package name.",
     description_zh: "匹配 Android 应用包名。",
   }),
   user: listableString.optional().meta({
-    description: "Match user name.",
-    description_zh: "匹配用户名。",
+    description: "Match user name. Only supported on Linux.",
+    description_zh: "匹配用户名。仅支持 Linux。",
   }),
   user_id: listableInts.optional().meta({
-    description: "Match user id.",
-    description_zh: "匹配用户 ID。",
+    description: "Match user id. Only supported on Linux.",
+    description_zh: "匹配用户 ID。仅支持 Linux。",
   }),
   clash_mode: z.string().optional().meta({
     description: "Match Clash mode.",
     description_zh: "匹配 Clash 模式。",
   }),
   network_type: listable(NetworkType).optional().meta({
-    description: "Match network type.",
-    description_zh: "匹配网络类型。",
+    description:
+      "Match network type. Only supported in graphical clients on Android and Apple platforms. Available values: `wifi`, `cellular`, `ethernet` and `other`.",
+    description_zh:
+      "匹配网络类型。仅在 Android 与 Apple 平台图形客户端中支持。可用值：`wifi`、`cellular`、`ethernet` 与 `other`。",
   }),
   network_is_expensive: z.boolean().optional().meta({
-    description: "Match if network is considered Metered.",
-    description_zh: "匹配如果网络被视为计费。",
+    description:
+      "Match if network is considered Metered (on Android) or considered expensive, such as Cellular or a Personal Hotspot (on Apple platforms). Only supported in graphical clients on Android and Apple platforms.",
+    description_zh:
+      "匹配如果网络被视为计费（在 Android）或视为昂贵，例如蜂窝或个人热点（在 Apple 平台）。仅在 Android 与 Apple 平台图形客户端中支持。",
   }),
   network_is_constrained: z.boolean().optional().meta({
-    description: "Match if network is in Low Data Mode.",
-    description_zh: "匹配如果网络在低数据模式下。",
+    description:
+      "Match if network is in Low Data Mode. Only supported in graphical clients on Apple platforms.",
+    description_zh:
+      "匹配如果网络在低数据模式下。仅在 Apple 平台图形客户端中支持。",
   }),
   wifi_ssid: listableString.optional().meta({
-    description: "Match WiFi SSID.",
-    description_zh: "匹配 WiFi SSID。",
+    description:
+      "Match WiFi SSID. Only supported in graphical clients on Android and Apple platforms.",
+    description_zh:
+      "匹配 WiFi SSID。仅在 Android 与 Apple 平台图形客户端中支持。",
   }),
   wifi_bssid: listableString.optional().meta({
-    description: "Match WiFi BSSID.",
-    description_zh: "匹配 WiFi BSSID。",
+    description:
+      "Match WiFi BSSID. Only supported in graphical clients on Android and Apple platforms.",
+    description_zh:
+      "匹配 WiFi BSSID。仅在 Android 与 Apple 平台图形客户端中支持。",
   }),
   rule_set: listableString.optional().meta({
     description: "Match rule-set.",
@@ -270,16 +334,19 @@ const BaseDNSRule = z.object({
   }),
   rule_set_ip_cidr_accept_empty: z.boolean().optional().meta({
     description:
-      "Make `ip_cidr` rules in rule-sets accept empty query response.",
-    description_zh: "使规则集中的 `ip_cidr` 规则接受空查询响应。",
+      "Make `ip_cidr` rules in rule-sets accept empty query response. Only takes effect for address requests (A/AAAA/HTTPS).",
+    description_zh:
+      "使规则集中的 `ip_cidr` 规则接受空查询响应。仅对地址请求（A/AAAA/HTTPS）生效。",
   }),
   invert: z.boolean().optional().meta({
     description: "Invert match result.",
     description_zh: "反选匹配结果。",
   }),
   outbound: listableString.optional().meta({
-    description: "Match outbound.",
-    description_zh: "匹配出站。",
+    description:
+      "Match outbound. Deprecated in sing-box 1.12.0; moved to DNS Rule Action (/configuration/dns/rule_action#route). `any` can be used as a value to match any outbound.",
+    description_zh:
+      "匹配出站。已在 sing-box 1.12.0 废弃，已移动到 [DNS 规则动作](/configuration/dns/rule_action#route)。`any` 可用于匹配任意出站。",
     deprecated: true,
   }),
 });

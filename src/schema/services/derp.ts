@@ -90,7 +90,7 @@ export const DERPServiceOptions = z
      * URL to verify clients.
      */
     verify_client_url: listable(
-      z.union([z.string(), DERPVerifyClientURLOptions])
+      z.union([z.string(), DERPVerifyClientURLOptions]),
     )
       .optional()
       .meta({
@@ -141,7 +141,8 @@ export const DERPServiceOptions = z
     id: "DERPServiceOptions",
     title: "DERP",
     title_zh: "DERP",
-    description: "DERP service is a Tailscale DERP server.",
+    description:
+      "DERP service is a Tailscale DERP server, similar to derper, for Tailscale mesh functionality.",
     description_zh: "DERP 服务是 Tailscale DERP 服务器。",
   });
 

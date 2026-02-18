@@ -57,6 +57,10 @@ export const V2RayAPIOptions = z
     id: "V2RayAPIOptions",
     title: "V2Ray API",
     title_zh: "V2Ray API",
+    description:
+      "V2Ray API settings control the optional gRPC API and its traffic statistics service for inbounds, outbounds, and users.",
+    description_zh:
+      "V2Ray API 设置控制可选的 gRPC API 及其针对入站、出站与用户的流量统计服务。",
   });
 
 export type V2RayAPIOptions = z.infer<typeof V2RayAPIOptions>;

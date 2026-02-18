@@ -44,6 +44,10 @@ export const Outbound = z
     id: "Outbound",
     title: "Outbound",
     title_zh: "出站",
+    description:
+      "Outbound configuration entries define available transport protocols for upstream connections, identified by `type` and optionally tagged for route matching.",
+    description_zh:
+      "出站配置项定义上游连接所使用的传输协议，`type` 表示协议类型，`tag` 可用于路由选择。",
   });
 
 export type Outbound = z.infer<typeof Outbound>;

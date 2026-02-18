@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { DebugOptions } from "./debug";
 import { CacheFileOptions } from "./experimentals/cache-file";
 import { ClashAPIOptions } from "./experimentals/clash-api";
 import { V2RayAPIOptions } from "./experimentals/v2ray-api";
@@ -29,11 +30,19 @@ export const ExperimentalOptions = z
       description: "V2Ray API settings.",
       description_zh: "V2Ray API 设置。",
     }),
+    debug: DebugOptions.optional().meta({
+      description: "Debug settings.",
+      description_zh: "调试设置。",
+    }),
   })
   .meta({
     id: "ExperimentalOptions",
     title: "Experimental",
     title_zh: "实验性选项",
+    description:
+      "Experimental features such as cache_file, Clash API, V2Ray API, and debug options.",
+    description_zh:
+      "实验性功能设置，如 cache_file、Clash API、V2Ray API 与 debug 选项。",
   });
 
 export type ExperimentalOptions = z.infer<typeof ExperimentalOptions>;

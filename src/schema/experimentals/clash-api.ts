@@ -28,7 +28,8 @@ export const ClashAPIOptions = z
     external_ui_download_url: z.string().optional().meta({
       description:
         "ZIP download URL for the external UI, will be used if the specified `external_ui` directory is empty.",
-      description_zh: "静态网页资源的 ZIP 下载 URL，如果指定的 `external_ui` 目录为空，将使用。",
+      description_zh:
+        "静态网页资源的 ZIP 下载 URL，如果指定的 `external_ui` 目录为空，将使用。",
     }),
     /**
      * The tag of the outbound to download the external UI.
@@ -70,6 +71,10 @@ export const ClashAPIOptions = z
     id: "ClashAPIOptions",
     title: "Clash API",
     title_zh: "Clash API",
+    description:
+      "Clash API settings configure the RESTful controller, optional external UI, secret, default mode, CORS origins, and private network access.",
+    description_zh:
+      "Clash API 设置用于配置 RESTful 控制器、可选外部 UI、密钥、默认模式、CORS 来源与私有网络访问。",
   });
 
 export type ClashAPIOptions = z.infer<typeof ClashAPIOptions>;
