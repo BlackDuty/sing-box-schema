@@ -33,4 +33,10 @@ jobs:
       - name: Publish to npm
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: bun publish -p --access public
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          if [[ "$VERSION" == *-* ]]; then
+            bun publish -p --access public --tag next
+          else
+            bun publish -p --access public --tag latest
+          fi
