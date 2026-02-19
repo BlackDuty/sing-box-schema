@@ -1,6 +1,6 @@
 {
   "name": "@black-duty/sing-box-schema",
-  "version": "1.12.22",
+  "version": "1.13.0-rc.4",
   "description": "A comprehensive Zod & JSON schema for sing-box configuration files, built with TypeScript.",
   "keywords": [
     "sing-box",

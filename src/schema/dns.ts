@@ -144,6 +144,13 @@ export const LocalDNSServerOptions = z
     type: z.literal("local"),
     tag: z.string(),
 
+    prefer_go: z.boolean().optional().meta({
+      description:
+        "When enabled, `local` DNS server will resolve DNS by dialing itself whenever possible.",
+      description_zh:
+        "启用后，`local` DNS 服务器将尽可能通过拨号自身来解析 DNS。",
+    }),
+
     ...DialerOptions.shape,
   })
   .meta({
@@ -465,8 +472,10 @@ export type DNSServer = z.infer<typeof DNSServer>;
 // #region DNS
 export const DNSClientOptions = z.object({
   strategy: DomainStrategy.optional().meta({
-    description: "Default domain strategy for resolving the domain names.",
-    description_zh: "默认解析域名策略。",
+    description:
+      "Default domain strategy for resolving the domain names. One of `prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`.",
+    description_zh:
+      "默认解析域名策略。可选值：`prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`。",
   }),
   disable_cache: z.boolean().optional().meta({
     description: "Disable dns cache.",
@@ -521,12 +530,12 @@ export const LegacyDNSFakeIPOptions = z
 export const DNSOptions = z
   .object({
     servers: z.array(DNSServer).optional().meta({
-      description: "List of DNS Servers",
-      description_zh: "一组 DNS 服务器",
+      description: "List of [DNS Server](./server/)",
+      description_zh: "一组 [DNS 服务器](./server/)",
     }),
     rules: z.array(DNSRule).optional().meta({
-      description: "List of DNS Rules",
-      description_zh: "一组 DNS 规则",
+      description: "List of [DNS Rule](./rule/)",
+      description_zh: "一组 [DNS 规则](./rule/)",
     }),
     final: z.string().optional().meta({
       description:
@@ -535,13 +544,13 @@ export const DNSOptions = z
     }),
     reverse_mapping: z.boolean().optional().meta({
       description:
-        "Stores a reverse mapping of IP addresses after responding to a DNS query in order to provide domain names when routing.",
+        "Stores a reverse mapping of IP addresses after responding to a DNS query in order to provide domain names when routing. Since this process relies on the act of resolving domain names by an application before making a request, it can be problematic in environments such as macOS, where DNS is proxied and cached by the system.",
       description_zh:
-        "在响应 DNS 查询后存储 IP 地址的反向映射以为路由目的提供域名。",
+        "在响应 DNS 查询后存储 IP 地址的反向映射以为路由目的提供域名。由于此过程依赖于应用程序在发出请求之前解析域名的行为，因此在 macOS 等 DNS 由系统代理和缓存的环境中可能会出现问题。",
     }),
     fakeip: LegacyDNSFakeIPOptions.optional().meta({
-      description: "FakeIP settings.",
-      description_zh: "FakeIP 设置。",
+      description: "[FakeIP](./fakeip/) settings.",
+      description_zh: "[FakeIP](./fakeip/) 设置。",
     }),
 
     ...DNSClientOptions.shape,

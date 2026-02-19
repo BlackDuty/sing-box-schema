@@ -22,23 +22,25 @@ export const ShadowTLSInboundOptions = z
     tag: z.string().optional(),
     version: z.number().int().min(1).max(3).optional().meta({
       description:
-        "ShadowTLS protocol version (`1` default, `2`, and `3`). See the official docs for version-specific features.",
+        "ShadowTLS protocol version.\n\n| Value         | Protocol Version                                                                        |\n|---------------|-----------------------------------------------------------------------------------------|\n| `1` (default) | [ShadowTLS v1](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v1) |\n| `2`           | [ShadowTLS v2](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v2) |\n| `3`           | [ShadowTLS v3](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-v3-en.md) |",
       description_zh:
-        "ShadowTLS 协议版本（`1` 默认，`2` 和 `3`）。详见官方文档获取版本特性。",
+        "ShadowTLS 协议版本。\n\n| 值             | 协议版本                                                                                    |\n|---------------|-----------------------------------------------------------------------------------------|\n| `1` (default) | [ShadowTLS v1](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v1) |\n| `2`           | [ShadowTLS v2](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v2) |\n| `3`           | [ShadowTLS v3](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-v3-en.md) |",
     }),
     password: z.string().optional().meta({
-      description: "ShadowTLS password. Only available in protocol 2.",
-      description_zh: "ShadowTLS 密码。仅在协议 2 中可用。",
+      description:
+        "ShadowTLS password. Only available in the ShadowTLS protocol 2.",
+      description_zh: "ShadowTLS 密码。仅在 ShadowTLS 协议版本 2 中可用。",
     }),
     users: z.array(ShadowTLSUser).optional().meta({
-      description: "ShadowTLS users. Only available in protocol 3.",
-      description_zh: "ShadowTLS 用户。仅在协议 3 中可用。",
+      description:
+        "ShadowTLS users. Only available in the ShadowTLS protocol 3.",
+      description_zh: "ShadowTLS 用户。仅在 ShadowTLS 协议版本 3 中可用。",
     }),
     handshake: ShadowTLSHandshakeOptions.meta({
       description:
-        "Handshake server address and [Dial Fields](/configuration/shared/dial/). Required unless `wildcard_sni` is `all`, in which case the server address is optional.",
+        "When `wildcard_sni` is configured to `all`, the server address is optional. Handshake server address and [Dial Fields](/configuration/shared/dial/).",
       description_zh:
-        "握手服务器地址和 [拨号字段](/zh/configuration/shared/dial/)。当 `wildcard_sni` 为 `all` 时服务器地址可选。",
+        "当 `wildcard_sni` 被配置为 `all` 时，服务器地址可选。握手服务器地址和 [拨号字段](/zh/configuration/shared/dial/)。",
     }),
     handshake_for_server_name: z
       .record(z.string(), ShadowTLSHandshakeOptions)
@@ -50,8 +52,9 @@ export const ShadowTLSInboundOptions = z
           "对于特定服务器名称的握手服务器地址和 [拨号字段](/zh/configuration/shared/dial/)。仅在 ShadowTLS 协议 2/3 中可用。",
       }),
     strict_mode: z.boolean().optional().meta({
-      description: "ShadowTLS strict mode. Only available in protocol 3.",
-      description_zh: "ShadowTLS 严格模式。仅在协议 3 中可用。",
+      description:
+        "ShadowTLS strict mode. Only available in the ShadowTLS protocol 3.",
+      description_zh: "ShadowTLS 严格模式。仅在 ShadowTLS 协议版本 3 中可用。",
     }),
     wildcard_sni: z.enum(["off", "authed", "all"]).optional().meta({
       description:
@@ -75,13 +78,14 @@ export const ShadowTLSOutboundOptions = z
     tag: z.string().optional(),
     version: z.number().int().min(1).max(3).optional().meta({
       description:
-        "ShadowTLS protocol version (`1` default, `2`, and `3`). See the official docs for version-specific features.",
+        "ShadowTLS protocol version.\n\n| Value         | Protocol Version                                                                        |\n|---------------|-----------------------------------------------------------------------------------------|\n| `1` (default) | [ShadowTLS v1](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v1) |\n| `2`           | [ShadowTLS v2](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v2) |\n| `3`           | [ShadowTLS v3](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-v3-en.md) |",
       description_zh:
-        "ShadowTLS 协议版本（`1` 默认，`2` 和 `3`）。详见官方文档获取版本特性。",
+        "ShadowTLS 协议版本。\n\n| 值             | 协议版本                                                                                    |\n|---------------|-----------------------------------------------------------------------------------------|\n| `1` (default) | [ShadowTLS v1](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v1) |\n| `2`           | [ShadowTLS v2](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-en.md#v2) |\n| `3`           | [ShadowTLS v3](https://github.com/ihciah/shadow-tls/blob/master/docs/protocol-v3-en.md) |",
     }),
     password: z.string().optional().meta({
-      description: "ShadowTLS password. Only available in protocol 2.",
-      description_zh: "ShadowTLS 密码。仅在协议 2 中可用。",
+      description:
+        "Set password. Only available in the ShadowTLS v2/v3 protocol.",
+      description_zh: "设置密码。仅在 ShadowTLS 协议版本 2/3 中可用。",
     }),
     tls: OutboundTLSOptions.meta({
       description:

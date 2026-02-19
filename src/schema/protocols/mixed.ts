@@ -42,7 +42,9 @@ export const MixedInboundOptions = z
     id: "MixedInboundOptions",
     title: "Mixed Inbound",
     title_zh: "Mixed 入站",
-    description: "Mixed inbound is a socks4, socks4a, socks5 and http server.",
-    description_zh: "Mixed 入站是一个 socks4, socks4a, socks5 和 http 服务器。",
+    description:
+      "`mixed` inbound is a socks4, socks4a, socks5 and http server.",
+    description_zh:
+      "`mixed` 入站是一个 socks4, socks4a, socks5 和 http 服务器。",
   });
 export type MixedInboundOptions = z.infer<typeof MixedInboundOptions>;

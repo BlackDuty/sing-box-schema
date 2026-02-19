@@ -17,9 +17,9 @@ export const VMessUser = z.object({
   uuid: z.uuid(),
   alterId: z.number().int().optional().meta({
     description:
-      "Alter ID. 0 disables the legacy protocol, >0 enables it, and >1 is unused (same as 1).",
+      "Alter ID. 0 disables the legacy protocol, >0 enables the legacy protocol, and legacy protocol support is for compatibility only (alterId > 1 is not recommended).",
     description_zh:
-      "Alter ID。0 禁用旧协议，>0 启用旧协议，>1 未使用（行为同 1）。",
+      "Alter ID。0 禁用旧协议，>0 启用旧协议。旧协议支持仅用于兼容性，alterId > 1 不建议使用。",
   }),
 });
 // #endregion

@@ -1,11 +1,15 @@
 import { z } from "zod";
+import { CCMServiceOptions } from "./services/ccm";
 import { DERPServiceOptions } from "./services/derp";
+import { OCMServiceOptions } from "./services/ocm";
 import { ResolvedServiceOptions } from "./services/resolved";
 import { SSMAPIServiceOptions } from "./services/ssm-api";
 
 export const Service = z
   .discriminatedUnion("type", [
+    CCMServiceOptions,
     DERPServiceOptions,
+    OCMServiceOptions,
     ResolvedServiceOptions,
     SSMAPIServiceOptions,
   ])

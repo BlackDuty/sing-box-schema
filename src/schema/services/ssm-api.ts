@@ -16,8 +16,9 @@ export const SSMAPIServiceOptions = z
      */
     servers: z.record(z.string(), z.string()).meta({
       description:
-        "A mapping Object from HTTP endpoints to Shadowsocks Inbound tags.",
-      description_zh: "从 HTTP 端点到 Shadowsocks 入站标签的映射对象。",
+        "A mapping Object from HTTP endpoints to [Shadowsocks Inbound](/configuration/inbound/shadowsocks) tags. Selected Shadowsocks inbounds must be configured with [managed](/configuration/inbound/shadowsocks#managed) enabled.",
+      description_zh:
+        "从 HTTP 端点到 [Shadowsocks 入站](/zh/configuration/inbound/shadowsocks) 标签的映射对象。选定的 Shadowsocks 入站必须配置启用 [managed](/zh/configuration/inbound/shadowsocks#managed)。",
     }),
     /**
      * If set, when the server is about to stop, traffic and user state will be saved to the specified JSON file.
@@ -32,8 +33,10 @@ export const SSMAPIServiceOptions = z
      * TLS configuration.
      */
     tls: InboundTLSOptions.optional().meta({
-      description: "TLS configuration.",
-      description_zh: "TLS 配置。",
+      description:
+        "TLS configuration, see [TLS](/configuration/shared/tls/#inbound).",
+      description_zh:
+        "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
     }),
 
     ...ListenOptions.shape,

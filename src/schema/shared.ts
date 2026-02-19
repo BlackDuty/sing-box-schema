@@ -80,9 +80,8 @@ export const InboundOptions = z.object({
   }),
   detour: z.string().optional().meta({
     description:
-      "If set, connections will be forwarded to the specified inbound; the inbound must support the injected detour.",
-    description_zh:
-      "如果设置，连接将被转发到指定的入站；目标入站必须支持注入的 detour。",
+      "If set, connections will be forwarded to the specified inbound. Requires target inbound support.",
+    description_zh: "如果设置，连接将被转发到指定的入站。需要目标入站支持。",
   }),
 });
 export type InboundOptions = z.infer<typeof InboundOptions>;
@@ -116,13 +115,18 @@ export const ListenOptions = z
         "Set network namespace, name or path. Only supported on Linux.",
       description_zh: "设置网络命名空间、名称或路径，仅在 Linux 上支持。",
     }),
+    disable_tcp_keep_alive: z.boolean().optional().meta({
+      description: "Disable TCP keep alive.",
+      description_zh: "禁用 TCP keep alive。",
+    }),
     tcp_keep_alive: z.string().optional().meta({
-      description: "TCP keep alive interval.",
-      description_zh: "TCP keep alive 间隔。",
+      description:
+        "TCP keep alive initial period. `5m` will be used by default.",
+      description_zh: "TCP keep alive 初始周期。默认使用 `5m`。",
     }),
     tcp_keep_alive_interval: z.string().optional().meta({
-      description: "TCP keep alive interval.",
-      description_zh: "TCP keep alive 间隔。",
+      description: "TCP keep alive interval. `75s` will be used by default.",
+      description_zh: "TCP keep alive 间隔。默认使用 `75s`。",
     }),
     tcp_fast_open: z.boolean().optional().meta({
       description: "Enable TCP Fast Open.",
@@ -137,8 +141,19 @@ export const ListenOptions = z
       description_zh: "启用 UDP 分段。",
     }),
     udp_timeout: z.union([z.string(), z.number()]).optional().meta({
-      description: "UDP NAT expiration time (default `5m`).",
-      description_zh: "UDP NAT 过期时间（默认 `5m`）。",
+      description: "UDP NAT expiration time. `5m` will be used by default.",
+      description_zh: "UDP NAT 过期时间。默认使用 `5m`。",
+    }),
+
+    proxy_protocol: z.boolean().optional().meta({
+      description: "Accept proxy protocol.",
+      description_zh: "接受代理协议。",
+      deprecated: true,
+    }),
+    proxy_protocol_accept_no_header: z.boolean().optional().meta({
+      description: "Accept connections without proxy protocol header.",
+      description_zh: "接受没有代理协议头的连接。",
+      deprecated: true,
     }),
 
     ...InboundOptions.shape,
@@ -234,8 +249,8 @@ export const DialerOptions = z
   .object({
     detour: z.string().optional().meta({
       description:
-        "The tag of the upstream outbound. If set, all other dialer fields will be ignored.",
-      description_zh: "上游出站的标签。如果设置，将忽略其他拨号字段。",
+        "The tag of the upstream outbound. If enabled, all other dialer fields will be ignored.",
+      description_zh: "上游出站的标签。启用时，其他拨号字段将被忽略。",
     }),
     bind_interface: z.string().optional().meta({
       description: "The network interface to bind to.",
@@ -258,6 +273,16 @@ export const DialerOptions = z
     reuse_addr: z.boolean().optional().meta({
       description: "Reuse listener address.",
       description_zh: "重用监听地址。",
+    }),
+    bind_address_no_port: z.boolean().optional().meta({
+      description:
+        "Do not reserve a port when binding to a source address. This allows reusing the same source port for multiple connections if the full 4-tuple (source IP, source port, destination IP, destination port) remains unique.",
+      description_zh:
+        "绑定到源地址时不保留端口。如果源 IP、源端口、目标 IP、目标端口构成的四元组保持唯一，这允许多个连接复用同一源端口。",
+    }),
+    protect_path: z.string().optional().meta({
+      description: "Path to send protect file descriptor to on Android.",
+      description_zh: "在 Android 上发送保护文件描述符的路径。",
     }),
     netns: z.string().optional().meta({
       description:
@@ -282,38 +307,51 @@ export const DialerOptions = z
       description: "Enable UDP fragmentation.",
       description_zh: "启用 UDP 分段。",
     }),
+    disable_tcp_keep_alive: z.boolean().optional().meta({
+      description: "Disable TCP keep alive.",
+      description_zh: "禁用 TCP keep alive。",
+    }),
+    tcp_keep_alive: z.string().optional().meta({
+      description:
+        "TCP keep alive initial period. `5m` will be used by default.",
+      description_zh: "TCP keep alive 初始周期。默认使用 `5m`。",
+    }),
+    tcp_keep_alive_interval: z.string().optional().meta({
+      description: "TCP keep alive interval. `75s` will be used by default.",
+      description_zh: "TCP keep alive 间隔。默认使用 `75s`。",
+    }),
     domain_resolver: z
       .union([z.string(), DomainResolverOptions])
       .optional()
       .meta({
         description:
-          "Set domain resolver to use for resolving domain names. Follows the same format as the route DNS rule action without the `action` field, and specifying a string is equivalent to filling its `server`.",
+          "Set domain resolver to use for resolving domain names. This option uses the same format as the route DNS rule action without the `action` field, and specifying a string is equivalent to filling its `server`. Optional when only one DNS server is configured. For `direct`, it resolves domains in the request; other outbound types resolve domains in the server address.",
         description_zh:
-          "设置用于解析域名的域名解析器，格式与路由 DNS 规则动作（不含 `action`）一致；直接写字符串等价于配置其 `server`。",
+          "用于设置解析域名的域名解析器。此选项格式与路由 DNS 规则动作（不含 `action`）一致；直接写字符串等价于配置其 `server`。当只有一个 DNS 服务器配置时可选。`direct` 作用于请求中的域名，其他类型作用于服务器地址中的域名。",
       }),
     network_strategy: z.union([z.string(), NetworkStrategy]).optional().meta({
       description:
-        "Strategy for selecting network interfaces. Only supported on graphical clients on Android and Apple platforms with `auto_detect_interface` enabled. Conflicts with `bind_interface`, `inet4_bind_address`, and `inet6_bind_address`.",
+        "Strategy for selecting network interfaces. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled. Available values: `default` (default) connects to the default network or the networks specified in `network_type` sequentially, `hybrid` connects to all networks or the networks specified in `network_type` concurrently, and `fallback` connects to the default network or preferred networks specified in `network_type` concurrently and tries fallback networks when they are unavailable or timeout, entering a 15s fast fallback state that exits immediately if preferred networks recover. Conflicts with `bind_interface`, `inet4_bind_address`, and `inet6_bind_address`.",
       description_zh:
-        "选择网络接口的策略，仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。与 `bind_interface`、`inet4_bind_address` 和 `inet6_bind_address` 冲突。",
+        "用于选择网络接口的策略。仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。可用值：`default`（默认值）按顺序连接默认网络或 `network_type` 中指定的网络，`hybrid` 同时连接所有网络或 `network_type` 中指定的网络，`fallback` 同时连接默认网络或 `network_type` 中指定的优选网络，并在不可用或超时时尝试回退网络。当首选接口故障或超时时，会进入 15 秒快速回退状态（同时连接所有优选和回退网络），首选网络恢复后立即退出。与 `bind_interface`、`inet4_bind_address` 和 `inet6_bind_address` 冲突。",
     }),
     network_type: listable(NetworkType).optional().meta({
       description:
-        "Network types to use when `default` or `hybrid` strategies are selected, or preferred types when `fallback` is enabled. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled.",
+        "Network types to use when `default` or `hybrid` strategies are selected, or preferred types when `fallback` is enabled. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled. Available values: `wifi`, `cellular`, `ethernet`, `other`. Device's default network is used by default.",
       description_zh:
-        "在 `default` 或 `hybrid` 策略下指定要使用的网络，在启用 `fallback` 时指定优选网络类型；仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。",
+        "在 `default` 或 `hybrid` 策略下指定要使用的网络，在启用 `fallback` 时指定首选网络类型；仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。可用值：`wifi`、`cellular`、`ethernet`、`other`。默认使用设备默认网络。",
     }),
     fallback_network_type: listable(NetworkType).optional().meta({
       description:
-        "Fallback network types used when preferred networks fail or timeout in the `fallback` strategy. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled.",
+        "Fallback network types when preferred networks are unavailable or timeout while using the `fallback` strategy. Only supported in graphical clients on Android and Apple platforms with `auto_detect_interface` enabled. All other networks except preferred are used by default.",
       description_zh:
-        "在 `fallback` 策略中优选网络不可用或超时时使用的备用网络类型；仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。",
+        "当使用 `fallback` 策略时，在首选网络不可用或超时时要使用的回退网络类型。仅在启用 `auto_detect_interface` 的 Android/Apple 图形客户端支持。默认使用除首选网络外的所有其他网络。",
     }),
     fallback_delay: z.string().optional().meta({
       description:
-        "The length of time to wait before spawning a RFC 6555 Fast Fallback connection or falling back to another interface when `domain_strategy` or `network_strategy` is enabled. Defaults to `300ms`.",
+        "The length of time to wait before spawning a RFC 6555 Fast Fallback connection. For `domain_strategy`, it is the amount of time to wait for a connection to succeed before assuming the preferred address is misconfigured and falling back. For `network_strategy`, it is the amount of time to wait before falling back to other interfaces. Only takes effect when `domain_strategy` or `network_strategy` is set. `300ms` is used by default.",
       description_zh:
-        "在启用 `domain_strategy` 或 `network_strategy` 时，在生成 RFC 6555 快速回退连接或切换到其他接口之前等待的时间长度。默认 `300ms`。",
+        "在生成 RFC 6555 快速回退连接之前等待的时间长度。对于 `domain_strategy`，是在假设首选地址配置错误并回退到其他类型地址之前等待连接成功的时间。对于 `network_strategy`，是在回退到其他接口之前等待连接成功的时间。仅当 `domain_strategy` 或 `network_strategy` 已设置时生效。默认使用 `300ms`。",
     }),
     domain_strategy: DomainStrategy.optional().meta({
       description:
@@ -377,6 +415,13 @@ const TLSCipherSuite = z
   .meta({
     description: "TLS cipher suite.",
     description_zh: "TLS 密码套件。",
+  });
+
+const TLSCurvePreference = z
+  .enum(["P256", "P384", "P521", "X25519", "X25519MLKEM768"])
+  .meta({
+    description: "TLS curve preference.",
+    description_zh: "TLS 曲线偏好。",
   });
 
 const DNS01Challenge = z
@@ -492,6 +537,16 @@ const InboundECHOptions = z
       description: "The path to ECH key, in PEM format.",
       description_zh: "ECH PEM 密钥路径。",
     }),
+    pq_signature_schemes_enabled: z.boolean().optional().meta({
+      description: "Enable post-quantum signature schemes.",
+      description_zh: "启用后量子签名方案。",
+      deprecated: true,
+    }),
+    dynamic_record_sizing_disabled: z.boolean().optional().meta({
+      description: "Disable dynamic record sizing.",
+      description_zh: "禁用动态记录大小。",
+      deprecated: true,
+    }),
   })
   .meta({
     id: "InboundECHOptions",
@@ -569,6 +624,10 @@ export const InboundTLSOptions = z
       description: "A list of enabled TLS 1.0–1.2 cipher suites.",
       description_zh: "启用的 TLS 1.0-1.2 密码套件的列表。",
     }),
+    curve_preferences: listable(TLSCurvePreference).optional().meta({
+      description: "Set of supported key exchange mechanisms.",
+      description_zh: "支持的密钥交换机制集合。",
+    }),
     certificate: listableString.optional().meta({
       description: "The server certificate line array, in PEM format.",
       description_zh: "服务器 PEM 证书行数组。",
@@ -578,6 +637,32 @@ export const InboundTLSOptions = z
         "The path to the server certificate, in PEM format. Will be automatically reloaded if the file is modified.",
       description_zh: "服务器 PEM 证书路径。文件修改后会自动重新加载。",
     }),
+    client_authentication: z
+      .enum([
+        "no",
+        "request",
+        "require-any",
+        "verify-if-given",
+        "require-and-verify",
+      ])
+      .optional()
+      .meta({
+        description: "The type of client authentication to use.",
+        description_zh: "要使用的客户端身份验证类型。",
+      }),
+    client_certificate: listableString.optional().meta({
+      description: "Client certificate line array to trust, in PEM format.",
+      description_zh: "信任的客户端 PEM 证书行数组。",
+    }),
+    client_certificate_path: listableString.optional().meta({
+      description: "Paths to client certificates to trust, in PEM format.",
+      description_zh: "信任的客户端 PEM 证书路径列表。",
+    }),
+    client_certificate_public_key_sha256: listableString.optional().meta({
+      description:
+        "SHA-256 fingerprints of trusted client certificate public keys.",
+      description_zh: "信任的客户端证书公钥的 SHA-256 指纹。",
+    }),
     key: listableString.optional().meta({
       description: "The server private key line array, in PEM format.",
       description_zh: "服务器 PEM 私钥行数组。",
@@ -586,6 +671,14 @@ export const InboundTLSOptions = z
       description:
         "The path to the server private key, in PEM format. Will be automatically reloaded if the file is modified.",
       description_zh: "服务器 PEM 私钥路径。文件修改后会自动重新加载。",
+    }),
+    kernel_tx: z.boolean().optional().meta({
+      description: "Enable kernel TLS transmit support.",
+      description_zh: "启用内核 TLS 发送支持。",
+    }),
+    kernel_rx: z.boolean().optional().meta({
+      description: "Enable kernel TLS receive support.",
+      description_zh: "启用内核 TLS 接收支持。",
     }),
     acme: InboundACMEOptions.optional().meta({
       description:
@@ -623,6 +716,21 @@ const OutboundECHOptions = z
       description:
         "The path to ECH configuration, in PEM format. If empty, sing-box will attempt to load the configuration from DNS.",
       description_zh: "ECH PEM 配置路径。为空时将尝试从 DNS 加载配置。",
+    }),
+    query_server_name: z.string().optional().meta({
+      description:
+        "Overrides the domain name used for ECH HTTPS record queries.",
+      description_zh: "覆盖用于 ECH HTTPS 记录查询的域名。",
+    }),
+    pq_signature_schemes_enabled: z.boolean().optional().meta({
+      description: "Enable post-quantum signature schemes.",
+      description_zh: "启用后量子签名方案。",
+      deprecated: true,
+    }),
+    dynamic_record_sizing_disabled: z.boolean().optional().meta({
+      description: "Disable dynamic record sizing.",
+      description_zh: "禁用动态记录大小。",
+      deprecated: true,
     }),
   })
   .meta({
@@ -708,6 +816,10 @@ export const OutboundTLSOptions = z
       description: "A list of enabled TLS 1.0–1.2 cipher suites.",
       description_zh: "启用的 TLS 1.0-1.2 密码套件的列表。",
     }),
+    curve_preferences: listable(TLSCurvePreference).optional().meta({
+      description: "Set of supported key exchange mechanisms.",
+      description_zh: "支持的密钥交换机制集合。",
+    }),
     certificate: listableString.optional().meta({
       description: "The server certificate line array, in PEM format.",
       description_zh: "服务器 PEM 证书行数组。",
@@ -716,6 +828,27 @@ export const OutboundTLSOptions = z
       description:
         "The path to the server certificate, in PEM format. Will be automatically reloaded if the file is modified.",
       description_zh: "服务器 PEM 证书路径。文件修改后会自动重新加载。",
+    }),
+    certificate_public_key_sha256: listableString.optional().meta({
+      description:
+        "SHA-256 fingerprints of trusted server certificate public keys.",
+      description_zh: "信任的服务器证书公钥的 SHA-256 指纹。",
+    }),
+    client_certificate: listableString.optional().meta({
+      description: "Client certificate line array, in PEM format.",
+      description_zh: "客户端 PEM 证书行数组。",
+    }),
+    client_certificate_path: z.string().optional().meta({
+      description: "Path to the client certificate, in PEM format.",
+      description_zh: "客户端 PEM 证书路径。",
+    }),
+    client_key: listableString.optional().meta({
+      description: "Client private key line array, in PEM format.",
+      description_zh: "客户端 PEM 私钥行数组。",
+    }),
+    client_key_path: z.string().optional().meta({
+      description: "Path to the client private key, in PEM format.",
+      description_zh: "客户端 PEM 私钥路径。",
     }),
     fragment: z.boolean().optional().meta({
       description:
@@ -734,6 +867,14 @@ export const OutboundTLSOptions = z
         "Fragment TLS handshake into multiple TLS records to bypass firewalls. Preferred over `fragment` when performance is a concern.",
       description_zh:
         "通过将 TLS 握手分割为多个 TLS 记录来绕过防火墙。在关注性能时优先使用 `record_fragment`。",
+    }),
+    kernel_tx: z.boolean().optional().meta({
+      description: "Enable kernel TLS transmit support.",
+      description_zh: "启用内核 TLS 发送支持。",
+    }),
+    kernel_rx: z.boolean().optional().meta({
+      description: "Enable kernel TLS receive support.",
+      description_zh: "启用内核 TLS 接收支持。",
     }),
     ech: OutboundECHOptions.optional().meta({
       description: "ECH (Encrypted Client Hello) options.",

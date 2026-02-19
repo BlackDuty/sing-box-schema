@@ -12,7 +12,7 @@ export const Endpoint = z
     title: "Endpoint",
     title_zh: "端点",
     description:
-      "An endpoint is a protocol that exposes both inbound and outbound behavior.",
+      "An endpoint is a protocol with inbound and outbound behavior.",
     description_zh: "端点是具有入站和出站行为的协议。",
   });
 

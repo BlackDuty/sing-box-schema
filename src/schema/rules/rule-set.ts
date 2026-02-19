@@ -107,6 +107,18 @@ const DefaultHeadlessRule = z.object({
     description_zh:
       "匹配 WiFi BSSID。仅在 Android 与 Apple 平台图形客户端中支持。",
   }),
+  network_interface_address: z
+    .record(z.enum(["wifi", "cellular", "ethernet", "other"]), listableString)
+    .optional()
+    .meta({
+      description:
+        "Matches network interface (same values as `network_type`) address.",
+      description_zh: "匹配网络接口（可用值同 `network_type`）地址。",
+    }),
+  default_interface_address: listableString.optional().meta({
+    description: "Match default interface address.",
+    description_zh: "匹配默认接口地址。",
+  }),
   invert: z.boolean().optional().meta({
     description: "Invert match result.",
     description_zh: "反选匹配结果。",
@@ -161,8 +173,8 @@ const InlineRuleSetOptions = z
       description_zh: "规则集的标签。",
     }),
     rules: z.array(HeadlessRule).meta({
-      description: "List of Headless Rules.",
-      description_zh: "无头规则列表。",
+      description: "List of [Headless Rule](./headless-rule/)",
+      description_zh: "一组 [无头规则](./headless-rule/)。",
     }),
   })
   .meta({

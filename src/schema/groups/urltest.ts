@@ -6,8 +6,8 @@ export const URLTestOutbound = z
     type: z.literal("urltest"),
     tag: z.string(),
     outbounds: z.array(z.string()).meta({
-      description: "List of outbound tags to test. Required.",
-      description_zh: "用于测试的出站标签列表（必填）。",
+      description: "List of outbound tags to test.",
+      description_zh: "用于测试的出站标签列表。",
     }),
     url: z.string().url().optional().meta({
       description:

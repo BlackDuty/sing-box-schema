@@ -85,7 +85,7 @@ export const HTTPOutboundOptions = z
     id: "HTTPOutboundOptions",
     title: "HTTP Outbound",
     title_zh: "HTTP 出站",
-    description: "HTTP outbound is a HTTP CONNECT proxy client.",
-    description_zh: "HTTP 出站是一个 HTTP CONNECT 代理客户端。",
+    description: "`http` outbound is a HTTP CONNECT proxy client.",
+    description_zh: "`http` 出站是一个 HTTP CONNECT 代理客户端。",
   });
 export type HTTPOutboundOptions = z.infer<typeof HTTPOutboundOptions>;

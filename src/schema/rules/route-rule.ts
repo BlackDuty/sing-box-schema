@@ -87,13 +87,13 @@ const RuleActionSniff = z
   .object({
     action: z.literal("sniff").meta({
       description: "Performs protocol sniffing on connections.",
-      description_zh: "对连接执行协议嗅探。",
+      description_zh: "对连接执行协议探测。",
     }),
     sniffer: listableString.optional().meta({
       description:
         "Enabled sniffers. All sniffers enabled by default. Available protocol values can be found in Protocol Sniff (/configuration/route/sniff/).",
       description_zh:
-        "启用的探测器。默认启用所有探测器。可用的协议值可在 [协议嗅探](/configuration/route/sniff/) 中找到。",
+        "启用的探测器。默认启用所有探测器。可用的协议值可在 [协议探测](/configuration/route/sniff/) 中找到。",
     }),
     timeout: z.string().optional().meta({
       description: "Timeout for sniffing. `300ms` is used by default.",
@@ -241,8 +241,8 @@ const RuleActionRouteOptionsWithAction = z
 // #region Route Rule
 const BaseRouteRule = z.object({
   inbound: listableString.optional().meta({
-    description: "Tags of Inbound.",
-    description_zh: "入站标签。",
+    description: "Tags of [Inbound](/configuration/inbound/).",
+    description_zh: "[入站](/zh/configuration/inbound/) 标签。",
   }),
   ip_version: z
     .union([z.literal(4), z.literal(6)])
@@ -254,8 +254,10 @@ const BaseRouteRule = z.object({
   network: listable(z.enum(["tcp", "udp"]))
     .optional()
     .meta({
-      description: "`tcp` or `udp`.",
-      description_zh: "`tcp` 或 `udp`。",
+      description:
+        "Since sing-box 1.13.0, you can match ICMP echo (ping) requests via the new `icmp` network. Such traffic originates from `TUN`, `WireGuard`, and `Tailscale` inbounds and can be routed to `Direct`, `WireGuard`, and `Tailscale` outbounds. Match network type. `tcp`, `udp` or `icmp`.",
+      description_zh:
+        "自 sing-box 1.13.0 起，您可以通过新的 `icmp` 网络匹配 ICMP 回显（ping）请求。此类流量源自 `TUN`、`WireGuard` 和 `Tailscale` 入站，并可路由至 `Direct`、`WireGuard` 和 `Tailscale` 出站。匹配网络类型。`tcp`、`udp` 或 `icmp`。",
     }),
   auth_user: listableString.optional().meta({
     description: "Username, see each inbound for details.",
@@ -277,14 +279,18 @@ const BaseRouteRule = z.object({
   )
     .optional()
     .meta({
-      description: "Sniffed protocol.",
-      description_zh: "探测到的协议。",
+      description:
+        "Sniffed protocol, see [Protocol Sniff](/configuration/route/sniff/) for details.",
+      description_zh:
+        "探测到的协议, 参阅 [协议探测](/zh/configuration/route/sniff/)。",
     }),
   client: listable(z.enum(["chromium", "safari", "firefox", "quic-go"]))
     .optional()
     .meta({
-      description: "Sniffed client type.",
-      description_zh: "探测到的客户端类型。",
+      description:
+        "Sniffed client type, see [Protocol Sniff](/configuration/route/sniff/) for details.",
+      description_zh:
+        "探测到的客户端类型, 参阅 [协议探测](/zh/configuration/route/sniff/)。",
     }),
   domain: listableString.optional().meta({
     description: "Match full domain.",
@@ -380,28 +386,63 @@ const BaseRouteRule = z.object({
   network_type: listable(z.enum(["wifi", "cellular", "ethernet", "other"]))
     .optional()
     .meta({
-      description: "Match network type.",
-      description_zh: "匹配网络类型。",
+      description:
+        "Only supported in graphical clients on Android and Apple platforms. Match network type. Available values: `wifi`, `cellular`, `ethernet` and `other`.",
+      description_zh:
+        "仅在 Android 与 Apple 平台图形客户端中支持。匹配网络类型。可用值: `wifi`, `cellular`, `ethernet` 与 `other`。",
     }),
   network_is_expensive: z.boolean().optional().meta({
-    description: "Match if network is considered Metered.",
-    description_zh: "匹配如果网络被视为计费。",
+    description:
+      "Only supported in graphical clients on Android and Apple platforms. Match if network is considered Metered (on Android) or considered expensive, such as Cellular or a Personal Hotspot (on Apple platforms).",
+    description_zh:
+      "仅在 Android 与 Apple 平台图形客户端中支持。匹配如果网络被视为计费（在 Android）或被视为昂贵，例如蜂窝或个人热点（在 Apple 平台）。",
   }),
   network_is_constrained: z.boolean().optional().meta({
-    description: "Match if network is in Low Data Mode.",
-    description_zh: "匹配如果网络在低数据模式下。",
+    description:
+      "Only supported in graphical clients on Apple platforms. Match if network is in Low Data Mode.",
+    description_zh:
+      "仅在 Apple 平台图形客户端中支持。匹配如果网络在低数据模式下。",
   }),
   wifi_ssid: listableString.optional().meta({
-    description: "Match WiFi SSID.",
-    description_zh: "匹配 WiFi SSID。",
+    description:
+      "Only supported in graphical clients on Android and Apple platforms, or on Linux. Match WiFi SSID. See [Wi-Fi State](/configuration/shared/wifi-state/) for details.",
+    description_zh:
+      "仅在 Android 与 Apple 平台图形客户端中支持，或在 Linux 上支持。匹配 WiFi SSID。参阅 [Wi-Fi 状态](/zh/configuration/shared/wifi-state/)。",
   }),
   wifi_bssid: listableString.optional().meta({
-    description: "Match WiFi BSSID.",
-    description_zh: "匹配 WiFi BSSID。",
+    description:
+      "Only supported in graphical clients on Android and Apple platforms, or on Linux. Match WiFi BSSID. See [Wi-Fi State](/configuration/shared/wifi-state/) for details.",
+    description_zh:
+      "仅在 Android 与 Apple 平台图形客户端中支持，或在 Linux 上支持。匹配 WiFi BSSID。参阅 [Wi-Fi 状态](/zh/configuration/shared/wifi-state/)。",
+  }),
+  interface_address: z.record(z.string(), listableString).optional().meta({
+    description:
+      "Only supported on Linux, Windows, and macOS. Match interface address.",
+    description_zh: "仅支持 Linux、Windows 和 macOS。匹配接口地址。",
+  }),
+  network_interface_address: z
+    .record(z.enum(["wifi", "cellular", "ethernet", "other"]), listableString)
+    .optional()
+    .meta({
+      description:
+        "Only supported in graphical clients on Android and Apple platforms. Matches network interface (same values as `network_type`) address.",
+      description_zh:
+        "仅在 Android 与 Apple 平台图形客户端中支持。匹配网络接口（可用值同 `network_type`）地址。",
+    }),
+  default_interface_address: listableString.optional().meta({
+    description:
+      "Only supported on Linux, Windows, and macOS. Match default interface address.",
+    description_zh: "仅支持 Linux、Windows 和 macOS。匹配默认接口地址。",
+  }),
+  preferred_by: listableString.optional().meta({
+    description:
+      "Match specified outbounds' preferred routes. `tailscale` matches MagicDNS domains and peers' allowed IPs. `wireguard` matches peers' allowed IPs.",
+    description_zh:
+      "匹配制定出站的首选路由。`tailscale` 匹配 MagicDNS 域名以及对端的 allowed IPs。`wireguard` 匹配对端的 allowed IPs。",
   }),
   rule_set: listableString.optional().meta({
-    description: "Match rule-set.",
-    description_zh: "匹配规则集。",
+    description: "Match [rule-set](/configuration/route/#rule_set).",
+    description_zh: "匹配 [规则集](/zh/configuration/route/#rule_set)。",
   }),
   rule_set_ip_cidr_match_source: z.boolean().optional().meta({
     description: "Make `ip_cidr` in rule-sets match the source IP.",
@@ -409,9 +450,9 @@ const BaseRouteRule = z.object({
   }),
   rule_set_ipcidr_match_source: z.boolean().optional().meta({
     description:
-      "Deprecated in sing-box 1.10.0. Renamed to `rule_set_ip_cidr_match_source`.",
+      "Deprecated in sing-box 1.10.0. `rule_set_ipcidr_match_source` is renamed to `rule_set_ip_cidr_match_source` and will be remove in sing-box 1.11.0. Make `ip_cidr` in rule-sets match the source IP.",
     description_zh:
-      "已在 sing-box 1.10.0 废弃。已重命名为 `rule_set_ip_cidr_match_source`。",
+      "已在 sing-box 1.10.0 废弃。`rule_set_ipcidr_match_source` 已重命名为 `rule_set_ip_cidr_match_source` 且将在 sing-box 1.11.0 中被移除。使规则集中的 `ip_cidr` 规则匹配源 IP。",
     deprecated: true,
   }),
   invert: z.boolean().optional().meta({

@@ -17,15 +17,17 @@ export const CacheFileOptions = z
      * @default 'cache.db'
      */
     path: z.string().optional().meta({
-      description: "Path to the cache file.",
-      description_zh: "缓存文件路径。",
+      description: "Path to the cache file. `cache.db` will be used if empty.",
+      description_zh: "缓存文件路径，默认使用 `cache.db`。",
     }),
     /**
      * Identifier in the cache file.
      */
     cache_id: z.string().optional().meta({
-      description: "Identifier in the cache file.",
-      description_zh: "缓存文件中的标识符。",
+      description:
+        "Identifier in the cache file. If not empty, configuration specified data will use a separate store keyed by it.",
+      description_zh:
+        "缓存文件中的标识符。如果不为空，配置特定的数据将使用由其键控的单独存储。",
     }),
     /**
      * Store fakeip in the cache file.
@@ -38,16 +40,19 @@ export const CacheFileOptions = z
      * Store rejected DNS response cache in the cache file.
      */
     store_rdrc: z.boolean().optional().meta({
-      description: "Store rejected DNS response cache in the cache file.",
-      description_zh: "将拒绝的 DNS 响应缓存存储在缓存文件中。",
+      description:
+        "Store rejected DNS response cache in the cache file. The check results of [Address filter DNS rule items](/configuration/dns/rule/#address-filter-fields) will be cached until expiration.",
+      description_zh:
+        "将拒绝的 DNS 响应缓存存储在缓存文件中。[地址筛选 DNS 规则项](/zh/configuration/dns/rule/#_3) 的检查结果将被缓存至过期。",
     }),
     /**
      * Timeout of rejected DNS response cache.
      * @default '7d'
      */
     rdrc_timeout: z.string().optional().meta({
-      description: "Timeout of rejected DNS response cache.",
-      description_zh: "拒绝的 DNS 响应缓存超时。",
+      description:
+        "Timeout of rejected DNS response cache. `7d` is used by default.",
+      description_zh: "拒绝的 DNS 响应缓存超时。默认使用 `7d`。",
     }),
   })
   .meta({

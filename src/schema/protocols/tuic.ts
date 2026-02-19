@@ -49,9 +49,9 @@ export const TUICInboundOptions = z
     }),
     tls: InboundTLSOptions.optional().meta({
       description:
-        "TLS configuration, see [TLS](/configuration/shared/tls/#inbound).",
+        "TLS configuration (required), see [TLS](/configuration/shared/tls/#inbound).",
       description_zh:
-        "TLS 配置, 参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
+        "TLS 配置（必填），参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
     }),
 
     ...ListenOptions.shape,
@@ -83,9 +83,9 @@ export const TUICOutboundOptions = z
     }),
     udp_relay_mode: z.string().optional().meta({
       description:
-        "UDP packet relay mode. `native` is used by default. Conflict with `udp_over_stream`.",
+        "UDP packet relay mode. `native` is used by default. `native` provides native UDP characteristics, while `quic` provides lossless UDP relay using QUIC streams at the cost of additional overhead. Conflict with `udp_over_stream`.",
       description_zh:
-        "UDP 包中继模式。默认使用 `native`。与 `udp_over_stream` 冲突。",
+        "UDP 包中继模式。默认使用 `native`。`native` 保持原生 UDP 特性，`quic` 使用 QUIC 流实现无损 UDP 中继，但会引入额外开销。与 `udp_over_stream` 冲突。",
     }),
     udp_over_stream: z.boolean().optional().meta({
       description:
@@ -111,9 +111,9 @@ export const TUICOutboundOptions = z
     }),
     tls: OutboundTLSOptions.optional().meta({
       description:
-        "TLS configuration, see [TLS](/configuration/shared/tls/#outbound).",
+        "TLS configuration (required), see [TLS](/configuration/shared/tls/#outbound).",
       description_zh:
-        "TLS 配置, 参阅 [TLS](/zh/configuration/shared/tls/#outbound)。",
+        "TLS 配置（必填），参阅 [TLS](/zh/configuration/shared/tls/#outbound)。",
     }),
 
     ...ServerOptions.shape,

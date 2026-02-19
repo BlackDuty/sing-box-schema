@@ -151,8 +151,8 @@ const DNSQueryType = z.union([z.string(), z.number().int()]).meta({
 
 const BaseDNSRule = z.object({
   inbound: listableString.optional().meta({
-    description: "Tags of Inbound.",
-    description_zh: "入站标签。",
+    description: "Tags of [Inbound](/configuration/inbound/).",
+    description_zh: "[入站](/zh/configuration/inbound/) 标签。",
   }),
   ip_version: IpVersion.optional().meta({
     description: "4 (A DNS query) or 6 (AAAA DNS query).",
@@ -174,16 +174,8 @@ const BaseDNSRule = z.object({
     description:
       "Sniffed protocol, see Protocol Sniff (/configuration/route/sniff/) for details.",
     description_zh:
-      "探测到的协议，参阅 [协议嗅探](/configuration/route/sniff/) 以获取详细信息。",
+      "探测到的协议，参阅 [协议探测](/zh/configuration/route/sniff/) 以获取详细信息。",
   }),
-  client: listable(z.enum(["chromium", "safari", "firefox", "quic-go"]))
-    .optional()
-    .meta({
-      description:
-        "Sniffed client type, see Protocol Sniff (/configuration/route/sniff/) for details.",
-      description_zh:
-        "探测到的客户端类型，参阅 [协议嗅探](/configuration/route/sniff/) 以获取详细信息。",
-    }),
   domain: listableString.optional().meta({
     description: "Match full domain.",
     description_zh: "匹配完整域名。",
@@ -314,19 +306,38 @@ const BaseDNSRule = z.object({
   }),
   wifi_ssid: listableString.optional().meta({
     description:
-      "Match WiFi SSID. Only supported in graphical clients on Android and Apple platforms.",
+      "Only supported in graphical clients on Android and Apple platforms, or on Linux. Match WiFi SSID. See [Wi-Fi State](/configuration/shared/wifi-state/) for details.",
     description_zh:
-      "匹配 WiFi SSID。仅在 Android 与 Apple 平台图形客户端中支持。",
+      "仅在 Android 与 Apple 平台图形客户端中支持，也支持 Linux。匹配 WiFi SSID。参阅 [Wi-Fi 状态](/zh/configuration/shared/wifi-state/)。",
   }),
   wifi_bssid: listableString.optional().meta({
     description:
-      "Match WiFi BSSID. Only supported in graphical clients on Android and Apple platforms.",
+      "Only supported in graphical clients on Android and Apple platforms, or on Linux. Match WiFi BSSID. See [Wi-Fi State](/configuration/shared/wifi-state/) for details.",
     description_zh:
-      "匹配 WiFi BSSID。仅在 Android 与 Apple 平台图形客户端中支持。",
+      "仅在 Android 与 Apple 平台图形客户端中支持，也支持 Linux。匹配 WiFi BSSID。参阅 [Wi-Fi 状态](/zh/configuration/shared/wifi-state/)。",
+  }),
+  interface_address: z.record(z.string(), listableString).optional().meta({
+    description:
+      "Only supported on Linux, Windows, and macOS. Match interface address.",
+    description_zh: "仅支持 Linux、Windows 和 macOS。匹配接口地址。",
+  }),
+  network_interface_address: z
+    .record(z.enum(["wifi", "cellular", "ethernet", "other"]), listableString)
+    .optional()
+    .meta({
+      description:
+        "Only supported in graphical clients on Android and Apple platforms. Matches network interface (same values as `network_type`) address.",
+      description_zh:
+        "仅在 Android 与 Apple 平台图形客户端中支持。匹配网络接口（可用值同 `network_type`）地址。",
+    }),
+  default_interface_address: listableString.optional().meta({
+    description:
+      "Only supported on Linux, Windows, and macOS. Match default interface address.",
+    description_zh: "仅支持 Linux、Windows 和 macOS。匹配默认接口地址。",
   }),
   rule_set: listableString.optional().meta({
-    description: "Match rule-set.",
-    description_zh: "匹配规则集。",
+    description: "Match [rule-set](/configuration/route/#rule_set).",
+    description_zh: "匹配 [规则集](/zh/configuration/route/#rule_set)。",
   }),
   rule_set_ip_cidr_match_source: z.boolean().optional().meta({
     description: "Make `ip_cidr` rule items in rule-sets match the source IP.",

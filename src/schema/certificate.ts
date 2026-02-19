@@ -9,8 +9,10 @@ export const CertificateOptions = z
      * The default X509 trusted CA certificate list.
      */
     store: z.enum(["system", "mozilla", "none"]).optional().meta({
-      description: "The default X509 trusted CA certificate list.",
-      description_zh: "默认的 X509 受信任 CA 证书列表。",
+      description:
+        "The default X509 trusted CA certificate list. Options: `system` (System trusted CA certificates), `mozilla` (Mozilla Included List with China CA certificates removed), `none` (Empty list).",
+      description_zh:
+        "默认的 X509 受信任 CA 证书列表。可选项：`system`（系统受信任的 CA 证书）、`mozilla`（移除中国 CA 证书的 Mozilla 包含列表）、`none`（空列表）。",
     }),
 
     /**
@@ -25,17 +27,20 @@ export const CertificateOptions = z
      * The paths to certificates to trust, in PEM format.
      */
     certificate_path: listableString.optional().meta({
-      description: "The paths to certificates to trust, in PEM format.",
-      description_zh: "以 PEM 格式提供的受信任证书路径。",
+      description:
+        "The paths to certificates to trust, in PEM format. Will be automatically reloaded if file modified.",
+      description_zh:
+        "以 PEM 格式提供的受信任证书路径。文件修改时将自动重新加载。",
     }),
 
     /**
-     * The directory path to search for certificates to trust,in PEM format.
+     * The directory path to search for certificates to trust, in PEM format.
      */
     certificate_directory_path: listableString.optional().meta({
       description:
-        "The directory path to search for certificates to trust,in PEM format.",
-      description_zh: "以 PEM 格式提供的受信任证书目录路径，用于批量搜索。",
+        "The directory path to search for certificates to trust, in PEM format. Will be automatically reloaded if file modified.",
+      description_zh:
+        "以 PEM 格式提供的受信任证书目录路径，用于批量搜索。文件修改时将自动重新加载。",
     }),
   })
   .meta({

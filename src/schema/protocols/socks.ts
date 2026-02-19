@@ -35,8 +35,8 @@ export const SocksInboundOptions = z
     id: "SocksInboundOptions",
     title: "SOCKS Inbound",
     title_zh: "SOCKS 入站",
-    description: "SOCKS inbound is a socks4, socks4a, socks5 server.",
-    description_zh: "SOCKS 入站是一个 socks4, socks4a 和 socks5 服务器。",
+    description: "`socks` inbound is a socks4, socks4a, socks5 server.",
+    description_zh: "`socks` 入站是一个 socks4, socks4a 和 socks5 服务器。",
   });
 export type SocksInboundOptions = z.infer<typeof SocksInboundOptions>;
 
@@ -76,7 +76,7 @@ export const SocksOutboundOptions = z
     id: "SocksOutboundOptions",
     title: "SOCKS Outbound",
     title_zh: "SOCKS 出站",
-    description: "SOCKS outbound is a socks4/socks4a/socks5 client.",
-    description_zh: "SOCKS 出站是 socks4/socks4a/socks5 客户端。",
+    description: "`socks` outbound is a socks4/socks4a/socks5 client.",
+    description_zh: "`socks` 出站是 socks4/socks4a/socks5 客户端。",
   });
 export type SocksOutboundOptions = z.infer<typeof SocksOutboundOptions>;

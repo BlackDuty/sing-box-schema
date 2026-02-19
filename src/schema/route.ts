@@ -64,12 +64,12 @@ export const GeositeOptions = z
 export const RouteOptions = z
   .object({
     rules: listable(RouteRule).optional().meta({
-      description: "List of Route Rule",
-      description_zh: "一组路由规则",
+      description: "List of [Route Rule](./rule/)",
+      description_zh: "一组 [路由规则](./rule/)。",
     }),
     rule_set: listable(RuleSet).optional().meta({
-      description: "List of rule-set",
-      description_zh: "一组规则集",
+      description: "List of [rule-set](/configuration/rule-set/)",
+      description_zh: "一组 [规则集](/zh/configuration/rule-set/)。",
     }),
     final: z.string().optional().meta({
       description:
@@ -83,34 +83,34 @@ export const RouteOptions = z
     }),
     auto_detect_interface: z.boolean().optional().meta({
       description:
-        "Bind outbound connections to the default NIC by default to prevent routing loops under tun. Only supported on Linux, Windows and macOS. Takes no effect if `outbound.bind_interface` is set.",
+        "Only supported on Linux, Windows and macOS. Bind outbound connections to the default NIC by default to prevent routing loops under tun. Takes no effect if `outbound.bind_interface` is set.",
       description_zh:
-        "默认将出站连接绑定到默认网卡，以防止在 tun 下出现路由环路。仅支持 Linux、Windows 和 macOS。如果设置了 `outbound.bind_interface`，则不生效。",
+        "仅支持 Linux、Windows 和 macOS。默认将出站连接绑定到默认网卡，以防止在 tun 下出现路由环路。如果设置了 `outbound.bind_interface`，则不生效。",
     }),
     override_android_vpn: z.boolean().optional().meta({
       description:
-        "Accept Android VPN as upstream NIC when `auto_detect_interface` enabled. Only supported on Android.",
+        "Only supported on Android. Accept Android VPN as upstream NIC when `auto_detect_interface` enabled.",
       description_zh:
-        "启用 `auto_detect_interface` 时接受 Android VPN 作为上游网卡。仅支持 Android。",
+        "仅支持 Android。启用 `auto_detect_interface` 时接受 Android VPN 作为上游网卡。",
     }),
     default_interface: z.string().optional().meta({
       description:
-        "Bind outbound connections to the specified NIC by default to prevent routing loops under tun. Only supported on Linux, Windows and macOS. Takes no effect if `auto_detect_interface` is set.",
+        "Only supported on Linux, Windows and macOS. Bind outbound connections to the specified NIC by default to prevent routing loops under tun. Takes no effect if `auto_detect_interface` is set.",
       description_zh:
-        "默认将出站连接绑定到指定网卡，以防止在 tun 下出现路由环路。仅支持 Linux、Windows 和 macOS。如果设置了 `auto_detect_interface`，则不生效。",
+        "仅支持 Linux、Windows 和 macOS。默认将出站连接绑定到指定网卡，以防止在 tun 下出现路由环路。如果设置了 `auto_detect_interface`，则不生效。",
     }),
     default_mark: FwMark.optional().meta({
       description:
-        "Set routing mark by default. Only supported on Linux. Takes no effect if `outbound.routing_mark` is set.",
+        "Only supported on Linux. Set routing mark by default. Takes no effect if `outbound.routing_mark` is set.",
       description_zh:
-        "默认为出站连接设置路由标记。仅支持 Linux。如果设置了 `outbound.routing_mark`，则不生效。",
+        "仅支持 Linux。默认为出站连接设置路由标记。如果设置了 `outbound.routing_mark`，则不生效。",
     }),
     default_domain_resolver: z
       .union([z.string(), DomainResolverOptions])
       .optional()
       .meta({
         description:
-          "See Dial Fields (/configuration/shared/dial/#domain_resolver) for details. Can be overridden by `outbound.domain_resolver`.",
+          "See [Dial Fields](/configuration/shared/dial/#domain_resolver) for details. Can be overrides by `outbound.domain_resolver`.",
         description_zh:
           "详情参阅 [拨号字段](/configuration/shared/dial/#domain_resolver)。可以被 `outbound.domain_resolver` 覆盖。",
       }),
@@ -119,25 +119,25 @@ export const RouteOptions = z
       .optional()
       .meta({
         description:
-          "See Dial Fields (/configuration/shared/dial/#network_strategy) for details. Only take effect if `outbound.bind_interface`, `outbound.inet4_bind_address` and `outbound.inet6_bind_address` are unset. Can be overridden by `outbound.network_strategy`. Conflicts with `default_interface`.",
+          "See [Dial Fields](/configuration/shared/dial/#network_strategy) for details. Takes no effect if `outbound.bind_interface`, `outbound.inet4_bind_address` or `outbound.inet6_bind_address` is set. Can be overrides by `outbound.network_strategy`. Conflicts with `default_interface`.",
         description_zh:
-          "详情参阅 [拨号字段](/configuration/shared/dial/#network_strategy)。仅当 `outbound.bind_interface`、`outbound.inet4_bind_address` 与 `outbound.inet6_bind_address` 均未设置时生效。可以被 `outbound.network_strategy` 覆盖。与 `default_interface` 冲突。",
+          "详情参阅 [拨号字段](/configuration/shared/dial/#network_strategy)。当 `outbound.bind_interface`、`outbound.inet4_bind_address` 或 `outbound.inet6_bind_address` 已设置时不生效。可以被 `outbound.network_strategy` 覆盖。与 `default_interface` 冲突。",
       }),
     default_network_type: listable(NetworkType).optional().meta({
       description:
-        "See Dial Fields (/configuration/shared/dial/#network_type) for details.",
+        "See [Dial Fields](/configuration/shared/dial/#network_type) for details.",
       description_zh:
         "详情参阅 [拨号字段](/configuration/shared/dial/#network_type)。",
     }),
     default_fallback_network_type: listable(NetworkType).optional().meta({
       description:
-        "See Dial Fields (/configuration/shared/dial/#fallback_network_type) for details.",
+        "See [Dial Fields](/configuration/shared/dial/#fallback_network_type) for details.",
       description_zh:
         "详情参阅 [拨号字段](/configuration/shared/dial/#fallback_network_type)。",
     }),
     default_fallback_delay: z.string().optional().meta({
       description:
-        "See Dial Fields (/configuration/shared/dial/#fallback_delay) for details.",
+        "See [Dial Fields](/configuration/shared/dial/#fallback_delay) for details.",
       description_zh:
         "详情参阅 [拨号字段](/configuration/shared/dial/#fallback_delay)。",
     }),

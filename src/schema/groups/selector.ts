@@ -6,8 +6,8 @@ export const SelectorOutbound = z
     type: z.literal("selector"),
     tag: z.string(),
     outbounds: z.array(z.string()).meta({
-      description: "List of outbound tags to select. Required.",
-      description_zh: "用于选择的出站标签列表（必填）。",
+      description: "List of outbound tags to select.",
+      description_zh: "用于选择的出站标签列表。",
     }),
     default: z.string().optional().meta({
       description:
