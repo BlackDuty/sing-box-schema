@@ -4,7 +4,7 @@
 
 > Provides type-safe [**sing-box**](https://sing-box.sagernet.org/) configuration syntax support for code editors / TypeScript projects
 
-[![Version - v1.12.22](https://img.shields.io/badge/Version-v1.12.22-yellow?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.12.22) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)](<[https://](https://www.typescriptlang.org/)>) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
+[![Version - v1.12.22](https://img.shields.io/badge/Version-v1.12.22-grey?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.12.22) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)](<[https://](https://www.typescriptlang.org/)>) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
 
 **English** | [**中文**](/README_ZH.md)
 
@@ -20,10 +20,11 @@ This project's tags correspond to the `sing-box` project's versions. Switch to d
 
 This project has the following branches, each adapted to different versions of `sing-box`:
 
-- **main**: The main branch with the latest commits.
-- **stable**: Adapts to the stable version of `sing-box` (currently v1.12.x).
-- **legacy**: Adapts to older versions of `sing-box` (e.g., older versions in the Play Store / App Store that cannot be updated), currently v1.11.x.
-- ** next**: Adapts to the actively developed version of `sing-box` (currently v1.13.x).
+- **main**: The main branch with the latest stable commits, currently v1.13.x.
+- **stable**: Adapts to the stable version of `sing-box` (currently v1.13.x).
+- **next**: Adapts to the next preview version of `sing-box` (no new preview version currently; mirrors stable v1.13.x).
+- **legacy/v1.12**: Adapts to the final v1.12.x release of `sing-box`.
+- **legacy/v1.11**: Adapts to older versions of `sing-box` (v1.11.x, e.g., older versions in the Play Store / App Store that cannot be updated).
 
 Developers can switch between different branches to adapt to their progress. For regular users, it is recommended to use tags to locate specific versions.
 
