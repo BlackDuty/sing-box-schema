@@ -1,18 +1,27 @@
 import { readFileSync } from "node:fs";
 
-function checkVersion(expectedVersion: string | undefined) {
-  if (!expectedVersion) {
-    console.error("Usage: bun run check-version.ts <expected-version>");
-    process.exit(1);
-  }
-  // Strip 'v' prefix if present
-  if (expectedVersion.startsWith("v")) {
-    expectedVersion = expectedVersion.substring(1);
-  }
+const packageJsonPath = "./package.json";
 
+/**
+ * Resolve the expected version:
+ * - If an argument is provided (e.g. from CI: `bun run check-version.ts v1.13.0`), use it.
+ * - Otherwise, fall back to the version declared in package.json so the script
+ *   can be run locally without arguments to verify all files are in sync.
+ */
+function resolveExpectedVersion(arg: string | undefined): string {
+  if (arg) {
+    return arg.startsWith("v") ? arg.substring(1) : arg;
+  }
+  const pkg = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+  console.log(
+    `ℹ️  No version argument supplied – using version from ${packageJsonPath}: ${pkg.version}`,
+  );
+  return pkg.version as string;
+}
+
+function checkVersion(expectedVersion: string) {
   const readmeMdPath = "./README.md";
   const readmeZhMdPath = "./README_ZH.md";
-  const packageJsonPath = "./package.json";
   const configSchemaPath = "./src/schema/configuration.ts";
 
   const readmeMdContent = readFileSync(readmeMdPath, "utf8");
@@ -40,11 +49,11 @@ function checkVersion(expectedVersion: string | undefined) {
 
   const versionPatterns = [
     /Version-v(\d+\.\d+\.\d+(?:--[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)(?=-[0-9A-Za-z]+(?:\?|$))/g, // Markdown badge (shields URL: prerelease '-' escaped as '--', followed by color)
-    /Sing-box v(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?|\d+\.\d+\.x)/g, // Adapted Version
+    /Sing-box v(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?|\d+\.\d+\.x)/g, // Adapted Version / title / description
     /@black-duty\/sing-box-schema@(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)/g, // Unpkg JSON Schema link
     /sing-box-schema\/refs\/tags\/v(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)/g, // GitHub raw JSON Schema link
     /sing-box-schema\/releases\/download\/v(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)/g, // GitHub Release JSON Schema link
-    /version: "(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)"/g, // Zod Schema Meta
+    /version: "(\d+\.\d+\.\d+(?:-[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?)"/g, // Zod Schema Meta version field
   ];
 
   const normalizeBadgeVersion = (version: string) =>
@@ -66,7 +75,7 @@ function checkVersion(expectedVersion: string | undefined) {
         const normalizedFoundVersion = pattern.source.startsWith("Version-v(")
           ? normalizeBadgeVersion(foundVersion)
           : foundVersion;
-        // For 'Sing-box vX.Y.x', we only check X.Y part
+        // For 'Sing-box vX.Y.x', we only check the X.Y major.minor part
         if (
           pattern.source.includes("Sing-box v") &&
           normalizedFoundVersion.endsWith(".x")
@@ -106,10 +115,4 @@ function checkVersion(expectedVersion: string | undefined) {
 }
 
 const args = process.argv.slice(2);
-if (args.length === 0) {
-  console.error("🔨 Usage: bun run check-version.ts <expected-version>");
-  process.exit(1);
-}
-
-const expectedVersion = args[0];
-checkVersion(expectedVersion);
+checkVersion(resolveExpectedVersion(args[0]));

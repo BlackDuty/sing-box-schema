@@ -31,6 +31,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "biome check --write",
     "generate": "bun run scripts/gen-json-schema.ts",
+    "check-version": "bun run scripts/check-version.ts",
     "prepublishOnly": "bun run build"
   },
   "main": "./dist/index.js",

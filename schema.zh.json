@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "id": "Configuration",
-  "title": "Sing-box v1.13.0-rc.4 配置文件",
-  "description": "Sing-box v1.13.0-rc.4 配置文件定义。sing-box 使用 JSON 作为配置文件格式，包含 log、dns、ntp、certificate、endpoints、inbounds、outbounds、route、services 与 experimental 字段。",
-  "version": "1.13.0-rc.4",
+  "title": "Sing-box v1.13.0 配置文件",
+  "description": "Sing-box v1.13.0 配置文件定义。sing-box 使用 JSON 作为配置文件格式，包含 log、dns、ntp、certificate、endpoints、inbounds、outbounds、route、services 与 experimental 字段。",
+  "version": "1.13.0",
   "type": "object",
   "properties": {
     "$schema": {

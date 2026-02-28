@@ -26,13 +26,13 @@ export const Configuration = z
   })
   .meta({
     id: "Configuration",
-    title: "Sing-box v1.13.0-rc.4 Configuration",
-    title_zh: "Sing-box v1.13.0-rc.4 配置文件",
+    title: "Sing-box v1.13.0 Configuration",
+    title_zh: "Sing-box v1.13.0 配置文件",
     description:
-      "Sing-box v1.13.0-rc.4 configuration file schema. Sing-box uses JSON for configuration files with log, dns, ntp, certificate, endpoints, inbounds, outbounds, route, services, and experimental sections.",
+      "Sing-box v1.13.0 configuration file schema. Sing-box uses JSON for configuration files with log, dns, ntp, certificate, endpoints, inbounds, outbounds, route, services, and experimental sections.",
     description_zh:
-      "Sing-box v1.13.0-rc.4 配置文件定义。sing-box 使用 JSON 作为配置文件格式，包含 log、dns、ntp、certificate、endpoints、inbounds、outbounds、route、services 与 experimental 字段。",
-    version: "1.13.0-rc.4",
+      "Sing-box v1.13.0 配置文件定义。sing-box 使用 JSON 作为配置文件格式，包含 log、dns、ntp、certificate、endpoints、inbounds、outbounds、route、services 与 experimental 字段。",
+    version: "1.13.0",
   });
 
 export type Configuration = z.infer<typeof Configuration>;

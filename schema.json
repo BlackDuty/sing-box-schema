@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "id": "Configuration",
-  "title": "Sing-box v1.13.0-rc.4 Configuration",
-  "description": "Sing-box v1.13.0-rc.4 configuration file schema. Sing-box uses JSON for configuration files with log, dns, ntp, certificate, endpoints, inbounds, outbounds, route, services, and experimental sections.",
-  "version": "1.13.0-rc.4",
+  "title": "Sing-box v1.13.0 Configuration",
+  "description": "Sing-box v1.13.0 configuration file schema. Sing-box uses JSON for configuration files with log, dns, ntp, certificate, endpoints, inbounds, outbounds, route, services, and experimental sections.",
+  "version": "1.13.0",
   "type": "object",
   "properties": {
     "$schema": {
