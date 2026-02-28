@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { DialerOptions } from "@/schema/shared";
+import { listableString } from "@/utils";
 
 export const TailscaleEndpointOptions = z
   .object({
@@ -58,6 +59,12 @@ export const TailscaleEndpointOptions = z
       description:
         "Indicates whether the node should advertise itself as an exit node.",
       description_zh: "指示节点是否应将自己通告为出口节点。",
+    }),
+    advertise_tags: listableString.optional().meta({
+      description:
+        'ACL tags to request when registering the node. Tags must be pre-authorized in the Tailscale ACL policy. Example: `["tag:server", "tag:prod"]`.',
+      description_zh:
+        '注册节点时请求的 ACL 标签。标签必须在 Tailscale ACL 策略中预先授权。示例：`["tag:server", "tag:prod"]`。',
     }),
     relay_server_port: z.number().int().optional().meta({
       description:

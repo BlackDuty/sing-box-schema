@@ -3159,6 +3159,10 @@
           "description": "指示节点是否应将自己通告为出口节点。",
           "type": "boolean"
         },
+        "advertise_tags": {
+          "description": "注册节点时请求的 ACL 标签。标签必须在 Tailscale ACL 策略中预先授权。示例：`[\"tag:server\", \"tag:prod\"]`。",
+          "$ref": "#/$defs/__schema25"
+        },
         "relay_server_port": {
           "description": "监听来自其他 Tailscale 节点的中继连接的端口。",
           "type": "integer",
@@ -10861,6 +10865,9 @@
           "$ref": "#/$defs/OCMServiceOptions"
         },
         {
+          "$ref": "#/$defs/OOMKillerServiceOptions"
+        },
+        {
           "$ref": "#/$defs/ResolvedServiceOptions"
         },
         {
@@ -11515,6 +11522,61 @@
       ],
       "additionalProperties": false
     },
+    "OOMKillerServiceOptions": {
+      "id": "OOMKillerServiceOptions",
+      "title": "OOM Killer 服务",
+      "description": "OOM Killer 服务监控内存使用情况，并在超过配置限制时终止进程，从而防止系统级内存耗尽情况的发生。",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "oom-killer"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "memory_limit": {
+          "description": "触发 OOM 强杀的内存限制，支持可读的字节大小格式，如 `128MiB`、`1GiB`。当内存使用量超过该阈值时，OOM killer 将被激活。",
+          "type": "string"
+        },
+        "safety_margin": {
+          "description": "在执行限制前额外减去的内存缓冲量，支持可读的字节大小格式，如 `32MiB`。提供一定余量以避免过于激进的强杀行为。",
+          "type": "string"
+        },
+        "min_interval": {
+          "description": "两次 OOM 检测之间的最小间隔，支持时间字符串格式如 `1s`。防止过于频繁的强杀操作。",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "max_interval": {
+          "description": "两次 OOM 检测之间的最大间隔，支持时间字符串格式如 `30s`。检测间隔会在 `min_interval` 与 `max_interval` 之间动态调整。",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "checks_before_limit": {
+          "description": "在 OOM killer 采取行动之前，内存需要连续超过限制的检测次数。用于减少因瞬时内存峰值引发的误杀。",
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
     "ResolvedServiceOptions": {
       "id": "ResolvedServiceOptions",
       "title": "Resolved",
@@ -11875,7 +11937,8 @@
           "type": "string"
         },
         "oom_killer": {
-          "description": "启用 OOM killer。",
+          "deprecated": true,
+          "description": "**已在 v1.13.0 中移除。** 此字段不再受支持，设置后将返回错误。请改用 `oom-killer` 服务。",
           "type": "boolean"
         }
       },

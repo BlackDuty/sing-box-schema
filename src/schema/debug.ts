@@ -46,8 +46,11 @@ export const DebugOptions = z
         "内存限制（字节），如 `128MiB`，参见 https://pkg.go.dev/runtime/debug#SetMemoryLimit。",
     }),
     oom_killer: z.boolean().optional().meta({
-      description: "Enable OOM killer.",
-      description_zh: "启用 OOM killer。",
+      deprecated: true,
+      description:
+        "**Removed in v1.13.0.** This field is no longer supported and will return an error if set. Use the `oom-killer` service instead.",
+      description_zh:
+        "**已在 v1.13.0 中移除。** 此字段不再受支持，设置后将返回错误。请改用 `oom-killer` 服务。",
     }),
   })
   .meta({

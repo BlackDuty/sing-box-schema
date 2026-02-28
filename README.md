@@ -4,7 +4,7 @@
 
 > Provides type-safe [**sing-box**](https://sing-box.sagernet.org/) configuration syntax support for code editors / TypeScript projects
 
-[![Version - v1.13.0-rc.4](https://img.shields.io/badge/Version-v1.13.0--rc.4-yellow?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.13.0-rc.4) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)](<[https://](https://www.typescriptlang.org/)>) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
+[![Version - v1.13.0](https://img.shields.io/badge/Version-v1.13.0-blue?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.13.0) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)](<[https://](https://www.typescriptlang.org/)>) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
 
 **English** | [**中文**](/README_ZH.md)
 
@@ -20,10 +20,10 @@ This project's tags correspond to the `sing-box` project's versions. Switch to d
 
 This project has the following branches, each adapted to different versions of `sing-box`:
 
-- **main**: The main branch with the latest commits.
-- **stable**: Adapts to the stable version of `sing-box` (currently v1.12.x).
+- **main**: The main branch with the latest stable commits, currently v1.13.x.
+- **stable**: Adapts to the stable version of `sing-box` (currently v1.13.x).
 - **legacy**: Adapts to older versions of `sing-box` (e.g., older versions in the Play Store / App Store that cannot be updated), currently v1.11.x.
-- ** next**: Adapts to the actively developed version of `sing-box` (currently v1.13.x).
+- **next**: Adapts to the next preview version of `sing-box` (no new preview version currently; mirrors stable v1.13.x).
 
 Developers can switch between different branches to adapt to their progress. For regular users, it is recommended to use tags to locate specific versions.
 
@@ -35,7 +35,7 @@ You can use it in Visual Studio Code or other JSON Schema-supported editors. Ope
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0-rc.4/schema.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0/schema.json"
 }
 ```
 
@@ -43,7 +43,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0-rc.4/schema.zh.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0/schema.zh.json"
 }
 ```
 
@@ -54,7 +54,7 @@ In addition to Unpkg's npm mirror, you can use:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.0-rc.4/schema.json"
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.0/schema.json"
 }
 ```
 
@@ -62,7 +62,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.0-rc.4/schema.zh.json"
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.0/schema.zh.json"
 }
 ```
 
@@ -72,7 +72,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.0-rc.4/schema.json"
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.0/schema.json"
 }
 ```
 
@@ -80,7 +80,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.0-rc.4/schema.zh.json"
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.0/schema.zh.json"
 }
 ```
 

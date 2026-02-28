@@ -3159,6 +3159,10 @@
           "description": "Indicates whether the node should advertise itself as an exit node.",
           "type": "boolean"
         },
+        "advertise_tags": {
+          "description": "ACL tags to request when registering the node. Tags must be pre-authorized in the Tailscale ACL policy. Example: `[\"tag:server\", \"tag:prod\"]`.",
+          "$ref": "#/$defs/__schema25"
+        },
         "relay_server_port": {
           "description": "The port to listen on for incoming relay connections from other Tailscale nodes.",
           "type": "integer",
@@ -10861,6 +10865,9 @@
           "$ref": "#/$defs/OCMServiceOptions"
         },
         {
+          "$ref": "#/$defs/OOMKillerServiceOptions"
+        },
+        {
           "$ref": "#/$defs/ResolvedServiceOptions"
         },
         {
@@ -11515,6 +11522,61 @@
       ],
       "additionalProperties": false
     },
+    "OOMKillerServiceOptions": {
+      "id": "OOMKillerServiceOptions",
+      "title": "OOM Killer Service",
+      "description": "The OOM Killer service monitors memory usage and terminates the process when it exceeds the configured limit, preventing system-level out-of-memory conditions.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "oom-killer"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "memory_limit": {
+          "description": "The memory limit that triggers OOM killing. Accepts human-readable byte sizes such as `128MiB` or `1GiB`. When memory usage exceeds this threshold, the OOM killer becomes active.",
+          "type": "string"
+        },
+        "safety_margin": {
+          "description": "An additional memory buffer subtracted from the limit before enforcement. Accepts human-readable byte sizes such as `32MiB`. Provides headroom to avoid aggressive killing.",
+          "type": "string"
+        },
+        "min_interval": {
+          "description": "The minimum interval between consecutive OOM kill checks. Accepts a duration string such as `1s`. Prevents excessive kill frequency.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "max_interval": {
+          "description": "The maximum interval between consecutive OOM kill checks. Accepts a duration string such as `30s`. The interval is dynamically adjusted between `min_interval` and `max_interval`.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "checks_before_limit": {
+          "description": "The number of consecutive checks that must exceed the memory limit before the OOM killer takes action. Reduces false positives from transient memory spikes.",
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
     "ResolvedServiceOptions": {
       "id": "ResolvedServiceOptions",
       "title": "Resolved",
@@ -11875,7 +11937,8 @@
           "type": "string"
         },
         "oom_killer": {
-          "description": "Enable OOM killer.",
+          "deprecated": true,
+          "description": "**Removed in v1.13.0.** This field is no longer supported and will return an error if set. Use the `oom-killer` service instead.",
           "type": "boolean"
         }
       },
