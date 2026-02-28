@@ -22,8 +22,9 @@ Sing-box v1.13.x
 
 - **main**: 主分支，包含最新的稳定提交，当前为 v1.13.x。
 - **stable**: 适配 sing-box 的稳定版本（当前为 v1.13.x）。
-- **legacy**: 适配 sing-box 的旧版本（如 Play Store / App Store 中未能更新的旧版本），当前为 v1.11.x。
 - **next**: 适配 sing-box 的下一个预览版本（当前暂无新预览版，与稳定版 v1.13.x 保持一致）。
+- **legacy/v1.12**: 适配 sing-box 的最终 v1.12.x 正式版。
+- **legacy/v1.11**: 适配 sing-box 的旧版本（v1.11.x，如 Play Store / App Store 中未能更新的旧版本）。
 
 建议开发者可以切换不同的分支以适配进度，而对于普通用户建议使用 tag 来定位版本。
 
