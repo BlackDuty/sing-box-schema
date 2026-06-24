@@ -79,7 +79,7 @@ export const DERPServiceOptions = z
     /**
      * Derper configuration file path.
      */
-    config_path: z.string().meta({
+    config_path: z.string().optional().meta({
       description: "Derper configuration file path. Example: `derper.key`.",
       description_zh: "Derper 配置文件路径。示例：`derper.key`。",
     }),

@@ -2,12 +2,13 @@ import { z } from "zod";
 import { SelectorOutbound } from "./groups/selector";
 import { URLTestOutbound } from "./groups/urltest";
 import { AnyTLSOutboundOptions } from "./protocols/anytls";
+import { BlockOutboundOptions } from "./protocols/block";
 import { DirectOutboundOptions } from "./protocols/direct";
 import { HTTPOutboundOptions } from "./protocols/http";
 import { HysteriaOutboundOptions } from "./protocols/hysteria";
 import { Hysteria2OutboundOptions } from "./protocols/hysteria2";
+import { NaiveOutboundOptions } from "./protocols/naive";
 import { ShadowsocksOutboundOptions } from "./protocols/shadowsocks";
-import { ShadowsocksROutboundOptions } from "./protocols/shadowsocksr";
 import { ShadowTLSOutboundOptions } from "./protocols/shadowtls";
 import { SocksOutboundOptions } from "./protocols/socks";
 import { SSHOutboundOptions } from "./protocols/ssh";
@@ -16,7 +17,6 @@ import { TrojanOutboundOptions } from "./protocols/trojan";
 import { TUICOutboundOptions } from "./protocols/tuic";
 import { VLESSOutboundOptions } from "./protocols/vless";
 import { VMessOutboundOptions } from "./protocols/vmess";
-import { LegacyWireGuardOutboundOptions } from "./protocols/wireguard";
 
 export const Outbound = z
   .discriminatedUnion("type", [
@@ -26,14 +26,14 @@ export const Outbound = z
     ShadowsocksOutboundOptions,
     VMessOutboundOptions,
     TrojanOutboundOptions,
-    LegacyWireGuardOutboundOptions,
+    BlockOutboundOptions,
     HysteriaOutboundOptions,
     ShadowTLSOutboundOptions,
     AnyTLSOutboundOptions,
     Hysteria2OutboundOptions,
     TUICOutboundOptions,
     VLESSOutboundOptions,
-    ShadowsocksROutboundOptions,
+    NaiveOutboundOptions,
     SSHOutboundOptions,
     TorOutboundOptions,
     SelectorOutbound,

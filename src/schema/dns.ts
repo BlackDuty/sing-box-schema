@@ -81,6 +81,10 @@ const LegacyDNSServerAddress = z.union([
 
 export const LegacyDNSServerOptions = z
   .object({
+    type: z.literal("legacy").optional().meta({
+      description: "DNS server type.",
+      description_zh: "DNS 服务器类型。",
+    }),
     tag: z.string().meta({
       description: "The tag of the dns server.",
       description_zh: "DNS 服务器的标签。",
@@ -348,6 +352,10 @@ export const HTTP3DNSServerOptions = z
         "The path of the HTTP3 DNS server. `/dns-query` will be used by default.",
       description_zh: "HTTP3 DNS 服务器的路径。默认使用 `/dns-query`。",
     }),
+    method: z.string().optional().meta({
+      description: "The HTTP method for DNS-over-HTTP/3 requests.",
+      description_zh: "DNS-over-HTTP/3 请求使用的 HTTP 方法。",
+    }),
     headers: HttpHeader.optional().meta({
       description: "Additional headers to be sent to the DNS server.",
       description_zh: "要发送到 DNS 服务器的额外请求头。",
@@ -446,20 +454,24 @@ export const ResolvedDNSServerOptions = z
   });
 
 export const DNSServer = z
-  .discriminatedUnion("type", [
-    LocalDNSServerOptions,
-    HostsDNSServerOptions,
-    TCPDNSServerOptions,
-    UDPDNSServerOptions,
-    TLSDNSServerOptions,
-    QUICDNSServerOptions,
-    HTTPSDNSServerOptions,
-    HTTP3DNSServerOptions,
-    DHCPDNSServerOptions,
-    FakeIPDNSServerOptions,
-    TailscaleDNSServerOptions,
-    ResolvedDNSServerOptions,
-    LegacyDNSServerOptions,
+  .union([
+    z.lazy(() => LegacyDNSServerOptions),
+    z.lazy(() =>
+      z.discriminatedUnion("type", [
+        LocalDNSServerOptions,
+        HostsDNSServerOptions,
+        TCPDNSServerOptions,
+        UDPDNSServerOptions,
+        TLSDNSServerOptions,
+        QUICDNSServerOptions,
+        HTTPSDNSServerOptions,
+        HTTP3DNSServerOptions,
+        DHCPDNSServerOptions,
+        FakeIPDNSServerOptions,
+        TailscaleDNSServerOptions,
+        ResolvedDNSServerOptions,
+      ]),
+    ),
   ])
   .meta({
     id: "DNSServer",

@@ -75,6 +75,56 @@ export const ClashAPIOptions = z
       description_zh:
         "允许从私有网络访问。要从公共网站访问私有网络上的 Clash API，必须启用 `access_control_allow_private_network`。",
     }),
+    /**
+     * Store Clash mode in cache file.
+     */
+    store_mode: z.boolean().optional().meta({
+      description:
+        "Store Clash mode in cache file. Deprecated in sing-box 1.8.0 and migrated to the global cache file.",
+      description_zh:
+        "将 Clash 模式存储在缓存文件中。已在 sing-box 1.8.0 弃用并迁移到全局缓存文件。",
+      deprecated: true,
+    }),
+    /**
+     * Store selected outbound in cache file.
+     */
+    store_selected: z.boolean().optional().meta({
+      description:
+        "Store selected outbound for the Selector outbound in cache file. Deprecated in sing-box 1.8.0 and migrated to the global cache file.",
+      description_zh:
+        "将 Selector 出站中选定的出站存储在缓存文件中。已在 sing-box 1.8.0 弃用并迁移到全局缓存文件。",
+      deprecated: true,
+    }),
+    /**
+     * Store fakeip in cache file.
+     */
+    store_fakeip: z.boolean().optional().meta({
+      description:
+        "Store fakeip in cache file. Deprecated in sing-box 1.8.0 and migrated to `cache_file.store_fakeip`.",
+      description_zh:
+        "将 fakeip 存储在缓存文件中。已在 sing-box 1.8.0 弃用并迁移到 `cache_file.store_fakeip`。",
+      deprecated: true,
+    }),
+    /**
+     * Cache file path.
+     */
+    cache_file: z.string().optional().meta({
+      description:
+        "Cache file path. Deprecated in sing-box 1.8.0 and migrated to `cache_file.enabled` and `cache_file.path`.",
+      description_zh:
+        "缓存文件路径。已在 sing-box 1.8.0 弃用并迁移到 `cache_file.enabled` 和 `cache_file.path`。",
+      deprecated: true,
+    }),
+    /**
+     * Identifier in cache file.
+     */
+    cache_id: z.string().optional().meta({
+      description:
+        "Identifier in cache file. Deprecated in sing-box 1.8.0 and migrated to `cache_file.cache_id`.",
+      description_zh:
+        "缓存文件中的标识符。已在 sing-box 1.8.0 弃用并迁移到 `cache_file.cache_id`。",
+      deprecated: true,
+    }),
   })
   .meta({
     id: "ClashAPIOptions",

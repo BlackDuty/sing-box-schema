@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { listableInts, listableString } from "../../utils";
-import { FwMark, ListenOptions } from "../shared";
+import { FwMark } from "../shared";
 
 export const HTTPProxyOptions = z.object({
   enabled: z.boolean().optional().meta({
@@ -200,6 +200,10 @@ export const TunInboundOptions = z
       description_zh:
         "排除路由的 Android 应用包名。Android 应用规则仅在 Android 下被支持，并且需要 `auto_route`。",
     }),
+    udp_timeout: z.union([z.string(), z.number()]).optional().meta({
+      description: "UDP NAT expiration time. `5m` will be used by default.",
+      description_zh: "UDP NAT 过期时间。默认使用 `5m`。",
+    }),
     stack: z.enum(["system", "gvisor", "mixed"]).optional().meta({
       description:
         "TCP/IP stack. `system` performs L3 to L4 translation using the system network stack, `gvisor` uses gVisor's virtual network stack, and `mixed` pairs the system TCP stack with gVisor's UDP stack. Defaults to `mixed` if the gVisor build tag is enabled, otherwise defaults to `system`.",
@@ -211,54 +215,6 @@ export const TunInboundOptions = z
         "Platform-specific settings, provided by client applications.",
       description_zh: "平台特定的设置，由客户端应用提供。",
     }),
-
-    // Deprecated fields
-    gso: z.boolean().optional().meta({
-      description: "Enable generic segmentation offload.",
-      description_zh: "启用通用分段卸载。",
-      deprecated: true,
-    }),
-    inet4_address: listableString.optional().meta({
-      description: "IPv4 prefix for the tun interface.",
-      description_zh: "tun 接口的 IPv4 前缀。",
-      deprecated: true,
-    }),
-    inet6_address: listableString.optional().meta({
-      description: "IPv6 prefix for the tun interface.",
-      description_zh: "tun 接口的 IPv6 前缀。",
-      deprecated: true,
-    }),
-    inet4_route_address: listableString.optional().meta({
-      description:
-        "Use custom routes instead of default when `auto_route` is enabled.",
-      description_zh: "启用 `auto_route` 时使用自定义路由而不是默认路由。",
-      deprecated: true,
-    }),
-    inet6_route_address: listableString.optional().meta({
-      description:
-        "Use custom routes instead of default when `auto_route` is enabled.",
-      description_zh: "启用 `auto_route` 时使用自定义路由而不是默认路由。",
-      deprecated: true,
-    }),
-    inet4_route_exclude_address: listableString.optional().meta({
-      description: "Exclude custom routes when `auto_route` is enabled.",
-      description_zh: "启用 `auto_route` 时排除自定义路由。",
-      deprecated: true,
-    }),
-    inet6_route_exclude_address: listableString.optional().meta({
-      description: "Exclude custom routes when `auto_route` is enabled.",
-      description_zh: "启用 `auto_route` 时排除自定义路由。",
-      deprecated: true,
-    }),
-    endpoint_independent_nat: z.boolean().optional().meta({
-      description:
-        "Enable endpoint-independent NAT. This item is only available on the gvisor stack; other stacks are endpoint-independent NAT by default. Performance may degrade slightly, so it is not recommended to enable when it is not needed.",
-      description_zh:
-        "启用独立于端点的 NAT。此项仅在 gvisor 栈上可用，其他栈默认启用独立于端点的 NAT。性能可能略有下降，因此不建议在不需要时启用。",
-      deprecated: true,
-    }),
-
-    ...ListenOptions.shape,
   })
   .meta({
     id: "TunInboundOptions",

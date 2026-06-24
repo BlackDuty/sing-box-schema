@@ -53,6 +53,10 @@ export const CCMServiceOptions = z
     }),
 
     ...ListenOptions.shape,
+    detour: z.string().optional().meta({
+      description: "Outbound tag for connecting to the Claude API.",
+      description_zh: "用于连接到 Claude API 的出站标签。",
+    }),
   })
   .meta({
     id: "CCMServiceOptions",

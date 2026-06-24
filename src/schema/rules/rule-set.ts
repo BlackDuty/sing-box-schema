@@ -164,7 +164,7 @@ export const HeadlessRule = z
 // #region Rule Set
 const InlineRuleSetOptions = z
   .object({
-    type: z.literal("inline").meta({
+    type: z.literal("inline").optional().meta({
       description: "Rule set type.",
       description_zh: "规则集类型。",
     }),
@@ -249,11 +249,7 @@ const RemoteRuleSetOptions = z
   });
 
 export const RuleSet = z
-  .discriminatedUnion("type", [
-    InlineRuleSetOptions,
-    LocalRuleSetOptions,
-    RemoteRuleSetOptions,
-  ])
+  .union([InlineRuleSetOptions, LocalRuleSetOptions, RemoteRuleSetOptions])
   .meta({
     id: "RuleSet",
     title: "Rule Set",

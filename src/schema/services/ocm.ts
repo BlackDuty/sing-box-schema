@@ -53,6 +53,10 @@ export const OCMServiceOptions = z
     }),
 
     ...ListenOptions.shape,
+    detour: z.string().optional().meta({
+      description: "Outbound tag for connecting to the OpenAI API.",
+      description_zh: "用于连接到 OpenAI API 的出站标签。",
+    }),
   })
   .meta({
     id: "OCMServiceOptions",

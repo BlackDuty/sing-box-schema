@@ -42,49 +42,6 @@ export type HttpHeader = z.infer<typeof HttpHeader>;
 // #endregion
 
 // #region Listen
-export const InboundOptions = z.object({
-  sniff: z.boolean().optional().meta({
-    description:
-      "Enable sniffing. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
-    description_zh:
-      "启用协议探测。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
-    deprecated: true,
-  }),
-  sniff_override_destination: z.boolean().optional().meta({
-    description:
-      "Override the connection destination address with the sniffed domain. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
-    description_zh:
-      "用探测出的域名覆盖连接目标地址。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
-    deprecated: true,
-  }),
-  sniff_timeout: z.string().optional().meta({
-    description:
-      "Timeout for sniffing (default `300ms`). Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
-    description_zh:
-      "探测超时时间（默认 `300ms`）。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
-    deprecated: true,
-  }),
-  domain_strategy: DomainStrategy.optional().meta({
-    description:
-      "If set, the requested domain name will be resolved to IP before routing. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
-    description_zh:
-      "如果设置，请求的域名将在路由之前解析为 IP。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
-    deprecated: true,
-  }),
-  udp_disable_domain_unmapping: z.boolean().optional().meta({
-    description:
-      "If enabled, for UDP proxy requests addressed to a domain, the original packet address will be sent in the response instead of the mapped domain. Deprecated in sing-box 1.11.0 and removed in 1.13.0.",
-    description_zh:
-      "如果启用，对于地址为域的 UDP 代理请求，将在响应中发送原始包地址而不是映射的域。已在 sing-box 1.11.0 弃用，并将在 1.13.0 移除。",
-    deprecated: true,
-  }),
-  detour: z.string().optional().meta({
-    description:
-      "If set, connections will be forwarded to the specified inbound. Requires target inbound support.",
-    description_zh: "如果设置，连接将被转发到指定的入站。需要目标入站支持。",
-  }),
-});
-export type InboundOptions = z.infer<typeof InboundOptions>;
 
 export const ListenOptions = z
   .object({
@@ -144,6 +101,11 @@ export const ListenOptions = z
       description: "UDP NAT expiration time. `5m` will be used by default.",
       description_zh: "UDP NAT 过期时间。默认使用 `5m`。",
     }),
+    detour: z.string().optional().meta({
+      description:
+        "If set, connections will be forwarded to the specified inbound. Requires target inbound support.",
+      description_zh: "如果设置，连接将被转发到指定的入站。需要目标入站支持。",
+    }),
 
     proxy_protocol: z.boolean().optional().meta({
       description: "Accept proxy protocol.",
@@ -155,8 +117,6 @@ export const ListenOptions = z
       description_zh: "接受没有代理协议头的连接。",
       deprecated: true,
     }),
-
-    ...InboundOptions.shape,
   })
   .meta({
     id: "ListenOptions",

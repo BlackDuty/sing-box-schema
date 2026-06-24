@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DialerOptions, NetworkType } from "@/schema/shared";
+import { DialerOptions } from "@/schema/shared";
 import { listable, listableInts, listableString } from "../../utils";
 
 // #region Route Actions
@@ -22,18 +22,6 @@ const RuleActionRouteOptions = z
         description_zh:
           "详情参阅 [拨号字段](/configuration/shared/dial/#network_strategy)。仅当出站为 direct 且 `outbound.bind_interface`、`outbound.inet4_bind_address` 与 `outbound.inet6_bind_address` 均未设置时生效。",
       }),
-    network_type: listable(NetworkType).optional().meta({
-      description:
-        "See Dial Fields (/configuration/shared/dial/#network_type) for details.",
-      description_zh:
-        "详情参阅 [拨号字段](/configuration/shared/dial/#network_type)。",
-    }),
-    fallback_network_type: listable(NetworkType).optional().meta({
-      description:
-        "See Dial Fields (/configuration/shared/dial/#fallback_network_type) for details.",
-      description_zh:
-        "详情参阅 [拨号字段](/configuration/shared/dial/#fallback_network_type)。",
-    }),
     fallback_delay: z.string().optional().meta({
       description:
         "See Dial Fields (/configuration/shared/dial/#fallback_delay) for details.",
@@ -170,17 +158,35 @@ const RuleActionRoute = z
     title_zh: "规则动作路由",
   });
 
+const RuleActionBypass = z
+  .object({
+    action: z.literal("bypass").meta({
+      description: "Action type.",
+      description_zh: "动作类型。",
+    }),
+    outbound: z.string().optional().meta({
+      description: "Tag of target outbound.",
+      description_zh: "目标出站的标签。",
+    }),
+    ...RuleActionRouteOptions.shape,
+  })
+  .meta({
+    id: "RuleActionBypass",
+    title: "Rule Action Bypass",
+    title_zh: "规则动作绕过",
+  });
+
 const RuleActionReject = z
   .object({
     action: z.literal("reject").meta({
       description: "Action type.",
       description_zh: "动作类型。",
     }),
-    method: z.enum(["default", "drop"]).optional().meta({
+    method: z.enum(["default", "drop", "reply"]).optional().meta({
       description:
-        "`default`: Reply with TCP RST for TCP connections, and ICMP port unreachable for UDP packets. `drop`: Drop packets.",
+        "`default`: Reply with TCP RST for TCP connections, ICMP port unreachable for UDP packets, and ICMP host unreachable for ICMP echo requests. `drop`: Drop packets. `reply`: Reply with ICMP echo reply for ICMP echo requests.",
       description_zh:
-        "`default`: 对于 TCP 连接回复 RST，对于 UDP 包回复 ICMP 端口不可达。`drop`: 丢弃数据包。",
+        "`default`: 对 TCP 连接回复 RST，对 UDP 包回复 ICMP 端口不可达，并对 ICMP 回显请求回复 ICMP 主机不可达。`drop`: 丢弃数据包。`reply`: 对 ICMP 回显请求回复 ICMP 回显响应。",
     }),
     no_drop: z.boolean().optional().meta({
       description:
@@ -195,13 +201,15 @@ const RuleActionReject = z
     title_zh: "规则动作拒绝",
   });
 
+const DirectActionDialerOptions = DialerOptions.omit({ detour: true });
+
 const RuleActionDirect = z
   .object({
     action: z.literal("direct").meta({
       description: "Action type.",
       description_zh: "动作类型。",
     }),
-    ...DialerOptions.shape,
+    ...DirectActionDialerOptions.shape,
   })
   .meta({
     id: "RuleActionDirect",
@@ -464,6 +472,7 @@ const BaseRouteRule = z.object({
 const DefaultRouteRule = z.union([
   BaseRouteRule.extend(RuleActionRouteByDefault.shape),
   BaseRouteRule.extend(RuleActionRoute.shape),
+  BaseRouteRule.extend(RuleActionBypass.shape),
   BaseRouteRule.extend(RuleActionReject.shape),
   BaseRouteRule.extend(RuleActionHijackDNS.shape),
   BaseRouteRule.extend(RuleActionRouteOptionsWithAction.shape),
@@ -472,37 +481,66 @@ const DefaultRouteRule = z.union([
   BaseRouteRule.extend(RuleActionDirect.shape),
 ]);
 
+const BaseLogicalRouteRule = z.object({
+  type: z.literal("logical").meta({
+    description: "Rule type.",
+    description_zh: "规则类型。",
+  }),
+  mode: z.enum(["and", "or"]).meta({
+    description: "`and` or `or`.",
+    description_zh: "`and` 或 `or`。",
+  }),
+  get rules(): z.ZodOptional<z.ZodArray<z.ZodType<RouteRule>>> {
+    return z.array(RouteRule).optional().meta({
+      description: "Included rules.",
+      description_zh: "包括的规则。",
+    });
+  },
+  invert: z.boolean().optional().meta({
+    description: "Invert match result.",
+    description_zh: "反选匹配结果。",
+  }),
+});
+
 const LogicalRouteRule = z
-  .object({
-    type: z.literal("logical").meta({
-      description: "Rule type.",
-      description_zh: "规则类型。",
-    }),
-    mode: z.enum(["and", "or"]).meta({
-      description: "`and` or `or`.",
-      description_zh: "`and` 或 `or`。",
-    }),
-    get rules() {
-      return z.array(RouteRule).optional().meta({
-        description: "Included rules.",
-        description_zh: "包括的规则。",
-      });
-    },
-    invert: z.boolean().optional().meta({
-      description: "Invert match result.",
-      description_zh: "反选匹配结果。",
-    }),
-  })
+  .union([
+    BaseLogicalRouteRule.extend(RuleActionRouteByDefault.shape),
+    BaseLogicalRouteRule.extend(RuleActionRoute.shape),
+    BaseLogicalRouteRule.extend(RuleActionBypass.shape),
+    BaseLogicalRouteRule.extend(RuleActionReject.shape),
+    BaseLogicalRouteRule.extend(RuleActionHijackDNS.shape),
+    BaseLogicalRouteRule.extend(RuleActionRouteOptionsWithAction.shape),
+    BaseLogicalRouteRule.extend(RuleActionSniff.shape),
+    BaseLogicalRouteRule.extend(RuleActionResolve.shape),
+    BaseLogicalRouteRule.extend(RuleActionDirect.shape),
+  ])
   .meta({
     id: "LogicalRouteRule",
     title: "Logical Route Rule",
     title_zh: "逻辑路由规则",
   });
 
+export type RouteRule =
+  | z.infer<typeof DefaultRouteRule>
+  | ({
+      type: "logical";
+      mode: "and" | "or";
+      rules?: RouteRule[];
+      invert?: boolean;
+    } & (
+      | z.infer<typeof RuleActionRouteByDefault>
+      | z.infer<typeof RuleActionRoute>
+      | z.infer<typeof RuleActionBypass>
+      | z.infer<typeof RuleActionReject>
+      | z.infer<typeof RuleActionHijackDNS>
+      | z.infer<typeof RuleActionRouteOptionsWithAction>
+      | z.infer<typeof RuleActionSniff>
+      | z.infer<typeof RuleActionResolve>
+      | z.infer<typeof RuleActionDirect>
+    ));
 export const RouteRule = z.union([DefaultRouteRule, LogicalRouteRule]).meta({
   id: "RouteRule",
   title: "Route Rule",
   title_zh: "路由规则",
 });
-export type RouteRule = z.infer<typeof RouteRule>;
 // #endregion

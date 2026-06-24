@@ -8,11 +8,11 @@ export const CertificateOptions = z
     /**
      * The default X509 trusted CA certificate list.
      */
-    store: z.enum(["system", "mozilla", "none"]).optional().meta({
+    store: z.enum(["system", "mozilla", "chrome", "none"]).optional().meta({
       description:
-        "The default X509 trusted CA certificate list. Options: `system` (System trusted CA certificates), `mozilla` (Mozilla Included List with China CA certificates removed), `none` (Empty list).",
+        "The default X509 trusted CA certificate list. Options: `system` (System trusted CA certificates), `mozilla` (Mozilla Included List with China CA certificates removed), `chrome` (Chrome Root Store with China CA certificates removed), `none` (Empty list).",
       description_zh:
-        "默认的 X509 受信任 CA 证书列表。可选项：`system`（系统受信任的 CA 证书）、`mozilla`（移除中国 CA 证书的 Mozilla 包含列表）、`none`（空列表）。",
+        "默认的 X509 受信任 CA 证书列表。可选项：`system`（系统受信任的 CA 证书）、`mozilla`（移除中国 CA 证书的 Mozilla 包含列表）、`chrome`（移除中国 CA 证书的 Chrome Root Store）、`none`（空列表）。",
     }),
 
     /**

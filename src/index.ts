@@ -19,6 +19,7 @@ export * from "./schema/ntp";
 export * from "./schema/outbound";
 // Protocols
 export * from "./schema/protocols/anytls";
+export * from "./schema/protocols/block";
 export * from "./schema/protocols/direct";
 export * from "./schema/protocols/http";
 export * from "./schema/protocols/hysteria";
@@ -27,7 +28,6 @@ export * from "./schema/protocols/mixed";
 export * from "./schema/protocols/naive";
 export * from "./schema/protocols/redirect";
 export * from "./schema/protocols/shadowsocks";
-export * from "./schema/protocols/shadowsocksr";
 export * from "./schema/protocols/shadowtls";
 export * from "./schema/protocols/socks";
 export * from "./schema/protocols/ssh";

@@ -29,11 +29,11 @@ const DNSRouteAction = z
       description: "Disable cache and save cache in this query.",
       description_zh: "在此查询中禁用缓存。",
     }),
-    rewrite_ttl: z.number().int().optional().meta({
+    rewrite_ttl: z.number().int().optional().nullable().meta({
       description: "Rewrite TTL in DNS responses.",
       description_zh: "重写 DNS 回应中的 TTL。",
     }),
-    client_subnet: z.string().optional().meta({
+    client_subnet: z.string().optional().nullable().meta({
       description:
         "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default. If the value is an IP address instead of a prefix, `/32` or `/128` will be appended automatically. Will override `dns.client_subnet`.",
       description_zh:
@@ -87,11 +87,11 @@ const DNSRouteOptionsAction = z
       description: "Disable cache and save cache in this query.",
       description_zh: "在此查询中禁用缓存。",
     }),
-    rewrite_ttl: z.number().int().optional().meta({
+    rewrite_ttl: z.number().int().optional().nullable().meta({
       description: "Rewrite TTL in DNS responses.",
       description_zh: "重写 DNS 回应中的 TTL。",
     }),
-    client_subnet: z.string().optional().meta({
+    client_subnet: z.string().optional().nullable().meta({
       description:
         "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default. If the value is an IP address instead of a prefix, `/32` or `/128` will be appended automatically. Will override `dns.client_subnet`.",
       description_zh:
@@ -343,6 +343,13 @@ const BaseDNSRule = z.object({
     description: "Make `ip_cidr` rule items in rule-sets match the source IP.",
     description_zh: "使规则集中的 `ip_cidr` 规则匹配源 IP。",
   }),
+  rule_set_ipcidr_match_source: z.boolean().optional().meta({
+    description:
+      "Deprecated in sing-box 1.10.0. `rule_set_ipcidr_match_source` is renamed to `rule_set_ip_cidr_match_source` and will be remove in sing-box 1.11.0. Make `ip_cidr` rule items in rule-sets match the source IP.",
+    description_zh:
+      "已在 sing-box 1.10.0 废弃。`rule_set_ipcidr_match_source` 已重命名为 `rule_set_ip_cidr_match_source` 且将在 sing-box 1.11.0 中被移除。使规则集中的 `ip_cidr` 规则匹配源 IP。",
+    deprecated: true,
+  }),
   rule_set_ip_cidr_accept_empty: z.boolean().optional().meta({
     description:
       "Make `ip_cidr` rules in rule-sets accept empty query response. Only takes effect for address requests (A/AAAA/HTTPS).",
@@ -369,37 +376,56 @@ const DefaultDNSRule = z.union([
   BaseDNSRule.extend(DNSRouteActionPredefined.shape),
 ]);
 
+const BaseLogicalDNSRule = z.object({
+  type: z.literal("logical").meta({
+    description: "Rule type.",
+    description_zh: "规则类型。",
+  }),
+  mode: z.enum(["and", "or"]).meta({
+    description: "`and` or `or`.",
+    description_zh: "`and` 或 `or`。",
+  }),
+  get rules(): z.ZodOptional<z.ZodArray<z.ZodType<DNSRule>>> {
+    return z.array(DNSRule).optional().meta({
+      description: "Included rules.",
+      description_zh: "包括的规则。",
+    });
+  },
+  invert: z.boolean().optional().meta({
+    description: "Invert match result.",
+    description_zh: "反选匹配结果。",
+  }),
+});
+
 const LogicalDNSRule = z
-  .object({
-    type: z.literal("logical").meta({
-      description: "Rule type.",
-      description_zh: "规则类型。",
-    }),
-    mode: z.enum(["and", "or"]).meta({
-      description: "`and` or `or`.",
-      description_zh: "`and` 或 `or`。",
-    }),
-    get rules() {
-      return z.array(DNSRule).optional().meta({
-        description: "Included rules.",
-        description_zh: "包括的规则。",
-      });
-    },
-    invert: z.boolean().optional().meta({
-      description: "Invert match result.",
-      description_zh: "反选匹配结果。",
-    }),
-  })
+  .union([
+    BaseLogicalDNSRule.extend(DNSRouteAction.shape),
+    BaseLogicalDNSRule.extend(DNSRouteOptionsAction.shape),
+    BaseLogicalDNSRule.extend(DNSRejectAction.shape),
+    BaseLogicalDNSRule.extend(DNSRouteActionPredefined.shape),
+  ])
   .meta({
     id: "LogicalDNSRule",
     title: "Logical DNS Rule",
     title_zh: "逻辑 DNS 规则",
   });
 
+export type DNSRule =
+  | z.infer<typeof DefaultDNSRule>
+  | ({
+      type: "logical";
+      mode: "and" | "or";
+      rules?: DNSRule[];
+      invert?: boolean;
+    } & (
+      | z.infer<typeof DNSRouteAction>
+      | z.infer<typeof DNSRouteOptionsAction>
+      | z.infer<typeof DNSRejectAction>
+      | z.infer<typeof DNSRouteActionPredefined>
+    ));
 export const DNSRule = z.union([DefaultDNSRule, LogicalDNSRule]).meta({
   id: "DNSRule",
   title: "DNS Rule",
   title_zh: "DNS 规则",
 });
-export type DNSRule = z.infer<typeof DNSRule>;
 // #endregion
