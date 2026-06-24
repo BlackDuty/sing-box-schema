@@ -6,6 +6,7 @@ import {
   NetworkType,
 } from "@/schema/shared";
 import { listable, listableInts, listableString } from "@/utils";
+import { DNSRCode, DNSRecordOptions } from "../dns-record";
 
 // #region DNS Rule Action
 
@@ -19,6 +20,10 @@ const DNSRouteAction = z
       description: "Tag of target server. Required.",
       description_zh: "目标服务器的标签。必填。",
     }),
+    timeout: z.string().optional().meta({
+      description: "Timeout for DNS query.",
+      description_zh: "DNS 查询超时时间。",
+    }),
     strategy: DomainStrategy.optional().meta({
       description:
         "Set domain strategy for this query. One of `prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`.",
@@ -28,6 +33,10 @@ const DNSRouteAction = z
     disable_cache: z.boolean().optional().meta({
       description: "Disable cache and save cache in this query.",
       description_zh: "在此查询中禁用缓存。",
+    }),
+    disable_optimistic_cache: z.boolean().optional().meta({
+      description: "Disable optimistic DNS cache for this query.",
+      description_zh: "对此查询禁用乐观 DNS 缓存。",
     }),
     rewrite_ttl: z.number().int().optional().nullable().meta({
       description: "Rewrite TTL in DNS responses.",
@@ -87,6 +96,14 @@ const DNSRouteOptionsAction = z
       description: "Disable cache and save cache in this query.",
       description_zh: "在此查询中禁用缓存。",
     }),
+    timeout: z.string().optional().meta({
+      description: "Timeout for DNS query.",
+      description_zh: "DNS 查询超时时间。",
+    }),
+    disable_optimistic_cache: z.boolean().optional().meta({
+      description: "Disable optimistic DNS cache for this query.",
+      description_zh: "对此查询禁用乐观 DNS 缓存。",
+    }),
     rewrite_ttl: z.number().int().optional().nullable().meta({
       description: "Rewrite TTL in DNS responses.",
       description_zh: "重写 DNS 回应中的 TTL。",
@@ -104,41 +121,60 @@ const DNSRouteOptionsAction = z
     title_zh: "DNS 路由选项动作",
   });
 
-const DNSRecord = z.string().meta({
-  description: "Text DNS record.",
-  description_zh: "文本 DNS 记录。",
-});
-
 const DNSRouteActionPredefined = z
   .object({
     action: z.literal("predefined").meta({
       description: "Action type.",
       description_zh: "动作类型。",
     }),
-    rcode: z
-      .enum(["NOERROR", "FORMERR", "SERVFAIL", "NXDOMAIN", "NOTIMP", "REFUSED"])
-      .optional()
-      .meta({
-        description: "The response code.",
-        description_zh: "响应码。",
-      }),
-    answer: listable(DNSRecord).optional().meta({
-      description: "List of text DNS record to respond as answers.",
-      description_zh: "用于作为回答响应的文本 DNS 记录列表。",
+    rcode: DNSRCode.optional().meta({
+      description: "The response code.",
+      description_zh: "响应码。",
     }),
-    ns: listable(DNSRecord).optional().meta({
-      description: "List of text DNS record to respond as name servers.",
-      description_zh: "用于作为名称服务器响应的文本 DNS 记录列表。",
+    answer: listable(DNSRecordOptions).optional().meta({
+      description: "List of DNS records to respond as answers.",
+      description_zh: "用于作为回答响应的 DNS 记录列表。",
     }),
-    extra: listable(DNSRecord).optional().meta({
-      description: "List of text DNS record to respond as extra records.",
-      description_zh: "用于作为额外记录响应的文本 DNS 记录列表。",
+    ns: listable(DNSRecordOptions).optional().meta({
+      description: "List of DNS records to respond as name servers.",
+      description_zh: "用于作为名称服务器响应的 DNS 记录列表。",
+    }),
+    extra: listable(DNSRecordOptions).optional().meta({
+      description: "List of DNS records to respond as extra records.",
+      description_zh: "用于作为额外记录响应的 DNS 记录列表。",
     }),
   })
   .meta({
     id: "DNSRouteActionPredefined",
     title: "DNS Route Action Predefined",
     title_zh: "DNS 路由动作预定义",
+  });
+
+const DNSEvaluateAction = z
+  .object({
+    ...DNSRouteAction.shape,
+    action: z.literal("evaluate").meta({
+      description: "Action type.",
+      description_zh: "动作类型。",
+    }),
+  })
+  .meta({
+    id: "DNSEvaluateAction",
+    title: "DNS Evaluate Action",
+    title_zh: "DNS 评估动作",
+  });
+
+const DNSRespondAction = z
+  .object({
+    action: z.literal("respond").meta({
+      description: "Action type.",
+      description_zh: "动作类型。",
+    }),
+  })
+  .meta({
+    id: "DNSRespondAction",
+    title: "DNS Respond Action",
+    title_zh: "DNS 响应动作",
   });
 
 // #endregion
@@ -238,6 +274,26 @@ const BaseDNSRule = z.object({
       "Match any IP with query response. Only takes effect for address requests (A/AAAA/HTTPS).",
     description_zh: "匹配任意 IP。仅对地址请求（A/AAAA/HTTPS）生效。",
   }),
+  match_response: z.boolean().optional().meta({
+    description: "Match DNS response fields instead of DNS query fields.",
+    description_zh: "匹配 DNS 响应字段而不是 DNS 查询字段。",
+  }),
+  response_rcode: DNSRCode.optional().meta({
+    description: "Match DNS response code.",
+    description_zh: "匹配 DNS 响应码。",
+  }),
+  response_answer: listable(DNSRecordOptions).optional().meta({
+    description: "Match DNS answer records.",
+    description_zh: "匹配 DNS 回答记录。",
+  }),
+  response_ns: listable(DNSRecordOptions).optional().meta({
+    description: "Match DNS name server records.",
+    description_zh: "匹配 DNS 名称服务器记录。",
+  }),
+  response_extra: listable(DNSRecordOptions).optional().meta({
+    description: "Match DNS extra records.",
+    description_zh: "匹配 DNS 额外记录。",
+  }),
   source_port: listableInts.optional().meta({
     description: "Match source port.",
     description_zh: "匹配源端口。",
@@ -273,6 +329,10 @@ const BaseDNSRule = z.object({
   package_name: listableString.optional().meta({
     description: "Match android package name.",
     description_zh: "匹配 Android 应用包名。",
+  }),
+  package_name_regex: listableString.optional().meta({
+    description: "Match Android package name using regular expression.",
+    description_zh: "使用正则表达式匹配 Android 应用包名。",
   }),
   user: listableString.optional().meta({
     description: "Match user name. Only supported on Linux.",
@@ -335,6 +395,18 @@ const BaseDNSRule = z.object({
       "Only supported on Linux, Windows, and macOS. Match default interface address.",
     description_zh: "仅支持 Linux、Windows 和 macOS。匹配默认接口地址。",
   }),
+  source_mac_address: listableString.optional().meta({
+    description: "Match source MAC address.",
+    description_zh: "匹配源 MAC 地址。",
+  }),
+  source_hostname: listableString.optional().meta({
+    description: "Match source hostname.",
+    description_zh: "匹配源主机名。",
+  }),
+  preferred_by: listableString.optional().meta({
+    description: "Match specified outbounds' preferred routes.",
+    description_zh: "匹配指定出站的首选路由。",
+  }),
   rule_set: listableString.optional().meta({
     description: "Match [rule-set](/configuration/route/#rule_set).",
     description_zh: "匹配 [规则集](/zh/configuration/route/#rule_set)。",
@@ -374,6 +446,8 @@ const DefaultDNSRule = z.union([
   BaseDNSRule.extend(DNSRouteOptionsAction.shape),
   BaseDNSRule.extend(DNSRejectAction.shape),
   BaseDNSRule.extend(DNSRouteActionPredefined.shape),
+  BaseDNSRule.extend(DNSEvaluateAction.shape),
+  BaseDNSRule.extend(DNSRespondAction.shape),
 ]);
 
 const BaseLogicalDNSRule = z.object({
@@ -403,6 +477,8 @@ const LogicalDNSRule = z
     BaseLogicalDNSRule.extend(DNSRouteOptionsAction.shape),
     BaseLogicalDNSRule.extend(DNSRejectAction.shape),
     BaseLogicalDNSRule.extend(DNSRouteActionPredefined.shape),
+    BaseLogicalDNSRule.extend(DNSEvaluateAction.shape),
+    BaseLogicalDNSRule.extend(DNSRespondAction.shape),
   ])
   .meta({
     id: "LogicalDNSRule",
@@ -422,6 +498,8 @@ export type DNSRule =
       | z.infer<typeof DNSRouteOptionsAction>
       | z.infer<typeof DNSRejectAction>
       | z.infer<typeof DNSRouteActionPredefined>
+      | z.infer<typeof DNSEvaluateAction>
+      | z.infer<typeof DNSRespondAction>
     ));
 export const DNSRule = z.union([DefaultDNSRule, LogicalDNSRule]).meta({
   id: "DNSRule",

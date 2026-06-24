@@ -7,6 +7,7 @@ import {
   OutboundTLSOptions,
   ServerOptions,
 } from "@/schema/shared";
+import { QUICOptions } from "../http-client";
 
 export const TUICUser = z.object({
   name: z.string().optional(),
@@ -53,6 +54,7 @@ export const TUICInboundOptions = z
       description_zh:
         "TLS 配置（必填），参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
     }),
+    ...QUICOptions.shape,
 
     ...ListenOptions.shape,
   })
@@ -115,6 +117,7 @@ export const TUICOutboundOptions = z
       description_zh:
         "TLS 配置（必填），参阅 [TLS](/zh/configuration/shared/tls/#outbound)。",
     }),
+    ...QUICOptions.shape,
 
     ...ServerOptions.shape,
     ...DialerOptions.shape,

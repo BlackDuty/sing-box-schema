@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   DialerOptions,
+  DomainResolverOptions,
   HttpHeader,
   InboundTLSOptions,
   ListenOptions,
@@ -8,6 +9,7 @@ import {
   OutboundTLSOptions,
   ServerOptions,
 } from "@/schema/shared";
+import { HTTPClientOptions, QUICOptions } from "../http-client";
 
 export const Hysteria2Obfs = z.object({
   type: z.string().optional().meta({
@@ -18,6 +20,14 @@ export const Hysteria2Obfs = z.object({
   password: z.string().optional().meta({
     description: "QUIC traffic obfuscator password.",
     description_zh: "QUIC 流量混淆器密码。",
+  }),
+  min_packet_size: z.number().int().optional().meta({
+    description: "Minimum packet size for the gecko obfuscator.",
+    description_zh: "gecko 混淆器的最小数据包大小。",
+  }),
+  max_packet_size: z.number().int().optional().meta({
+    description: "Maximum packet size for the gecko obfuscator.",
+    description_zh: "gecko 混淆器的最大数据包大小。",
   }),
 });
 
@@ -78,6 +88,37 @@ export const Hysteria2Masquerade = z
       "HTTP3 服务器认证失败时的行为（对象配置）。类型：`file`（directory）、`proxy`（url, rewrite_host）、`string`（status_code, headers, content）。与 `masquerade` 冲突，若未配置则返回 404 页。",
   });
 
+const Hysteria2Realm = z.object({
+  server_url: z.string().meta({
+    description: "Realm server URL.",
+    description_zh: "Realm 服务器 URL。",
+  }),
+  token: z.string().optional().meta({
+    description: "Realm token.",
+    description_zh: "Realm 令牌。",
+  }),
+  realm_id: z.string().meta({
+    description: "Realm ID.",
+    description_zh: "Realm ID。",
+  }),
+  stun_servers: z.union([z.string(), z.array(z.string())]).meta({
+    description: "STUN servers.",
+    description_zh: "STUN 服务器。",
+  }),
+  http_client: HTTPClientOptions.optional().meta({
+    description: "HTTP client options for realm requests.",
+    description_zh: "Realm 请求使用的 HTTP 客户端选项。",
+  }),
+});
+
+const Hysteria2InboundRealm = z.object({
+  ...Hysteria2Realm.shape,
+  stun_domain_resolver: DomainResolverOptions.optional().meta({
+    description: "Domain resolver options for STUN servers.",
+    description_zh: "STUN 服务器的域名解析选项。",
+  }),
+});
+
 export const Hysteria2InboundOptions = z
   .object({
     type: z.literal("hysteria2"),
@@ -111,6 +152,7 @@ export const Hysteria2InboundOptions = z
       description_zh:
         "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
     }),
+    ...QUICOptions.shape,
     masquerade: z.union([z.string(), Hysteria2Masquerade]).optional().meta({
       description:
         "HTTP3 server behavior when authentication fails. Accepts a URL string shorthand (file:// or http(s)://) or a full masquerade object. Conflicts with `masquerade.type`. A 404 page will be returned if masquerade is not configured.",
@@ -120,6 +162,14 @@ export const Hysteria2InboundOptions = z
     brutal_debug: z.boolean().optional().meta({
       description: "Enable debug information logging for Hysteria Brutal CC.",
       description_zh: "启用 Hysteria Brutal CC 的调试信息日志记录。",
+    }),
+    bbr_profile: z.string().optional().meta({
+      description: "Hysteria BBR profile.",
+      description_zh: "Hysteria BBR 配置。",
+    }),
+    realm: Hysteria2InboundRealm.optional().meta({
+      description: "Hysteria2 realm options.",
+      description_zh: "Hysteria2 Realm 选项。",
     }),
 
     ...ListenOptions.shape,
@@ -149,6 +199,10 @@ export const Hysteria2OutboundOptions = z
         "Port hopping interval. `30s` is used by default. Since sing-box 1.11.0.",
       description_zh: "端口跳跃间隔。默认值 `30s`。自 sing-box 1.11.0 起可用。",
     }),
+    hop_interval_max: z.string().optional().meta({
+      description: "Maximum port hopping interval.",
+      description_zh: "最大端口跳跃间隔。",
+    }),
     up_mbps: z.number().int().optional().meta({
       description:
         "Max bandwidth, in Mbps. If empty, the BBR congestion control algorithm is used instead of Hysteria CC.",
@@ -177,9 +231,18 @@ export const Hysteria2OutboundOptions = z
       description_zh:
         "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#outbound)。",
     }),
+    ...QUICOptions.shape,
     brutal_debug: z.boolean().optional().meta({
       description: "Enable debug information logging for Hysteria Brutal CC.",
       description_zh: "启用 Hysteria Brutal CC 的调试信息日志记录。",
+    }),
+    bbr_profile: z.string().optional().meta({
+      description: "Hysteria BBR profile.",
+      description_zh: "Hysteria BBR 配置。",
+    }),
+    realm: Hysteria2Realm.optional().meta({
+      description: "Hysteria2 realm options.",
+      description_zh: "Hysteria2 Realm 选项。",
     }),
 
     ...ServerOptions.shape,

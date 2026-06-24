@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { listable } from "@/utils";
+import { listable, listableString } from "@/utils";
 import { RouteRule } from "./rules/route-rule";
 import { RuleSet } from "./rules/rule-set";
 import {
@@ -81,6 +81,14 @@ export const RouteOptions = z
       description: "Find process info for each connection.",
       description_zh: "为每个连接查找进程信息。",
     }),
+    find_neighbor: z.boolean().optional().meta({
+      description: "Find neighbor info for each connection.",
+      description_zh: "为每个连接查找邻居信息。",
+    }),
+    dhcp_lease_files: listableString.optional().meta({
+      description: "DHCP lease files used to find neighbor information.",
+      description_zh: "用于查找邻居信息的 DHCP 租约文件。",
+    }),
     auto_detect_interface: z.boolean().optional().meta({
       description:
         "Only supported on Linux, Windows and macOS. Bind outbound connections to the default NIC by default to prevent routing loops under tun. Takes no effect if `outbound.bind_interface` is set.",
@@ -140,6 +148,10 @@ export const RouteOptions = z
         "See [Dial Fields](/configuration/shared/dial/#fallback_delay) for details.",
       description_zh:
         "详情参阅 [拨号字段](/configuration/shared/dial/#fallback_delay)。",
+    }),
+    default_http_client: z.string().optional().meta({
+      description: "Default HTTP client tag.",
+      description_zh: "默认 HTTP 客户端标签。",
     }),
 
     // Removed

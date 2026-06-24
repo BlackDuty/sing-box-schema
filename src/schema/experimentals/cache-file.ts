@@ -54,6 +54,10 @@ export const CacheFileOptions = z
         "Timeout of rejected DNS response cache. `7d` is used by default.",
       description_zh: "拒绝的 DNS 响应缓存超时。默认使用 `7d`。",
     }),
+    store_dns: z.boolean().optional().meta({
+      description: "Store DNS cache in the cache file.",
+      description_zh: "将 DNS 缓存存储在缓存文件中。",
+    }),
   })
   .meta({
     id: "CacheFileOptions",

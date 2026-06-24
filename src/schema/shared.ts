@@ -174,6 +174,10 @@ export const DomainResolverOptions = z
         "Tag of a another server to resolve the domain name in the address.",
       description_zh: "用于解析本 DNS 服务器的域名的另一个 DNS 服务器的标签。",
     }),
+    timeout: z.string().optional().meta({
+      description: "Timeout for DNS resolution.",
+      description_zh: "DNS 解析超时时间。",
+    }),
     strategy: DomainStrategy.optional().meta({
       description:
         "The domain strategy for resolving the domain name in the address.",
@@ -182,6 +186,10 @@ export const DomainResolverOptions = z
     disable_cache: z.boolean().optional().meta({
       description: "Disable cache and save cache in this query.",
       description_zh: "在此查询中禁用缓存。",
+    }),
+    disable_optimistic_cache: z.boolean().optional().meta({
+      description: "Disable optimistic DNS cache for this resolution.",
+      description_zh: "对此解析禁用乐观 DNS 缓存。",
     }),
     rewrite_ttl: z.number().int().optional().meta({
       description: "Rewrite TTL in DNS responses.",
@@ -382,6 +390,26 @@ const TLSCurvePreference = z
   .meta({
     description: "TLS curve preference.",
     description_zh: "TLS 曲线偏好。",
+  });
+
+const CertificateProviderReference = z
+  .union([
+    z.string(),
+    z.object({
+      type: z.string().meta({
+        description: "Certificate provider type.",
+        description_zh: "证书提供者类型。",
+      }),
+      tag: z.string().optional().meta({
+        description: "Certificate provider tag.",
+        description_zh: "证书提供者标签。",
+      }),
+    }),
+  ])
+  .meta({
+    id: "CertificateProviderReference",
+    title: "Certificate Provider Reference",
+    title_zh: "证书提供者引用",
   });
 
 const DNS01Challenge = z
@@ -640,10 +668,20 @@ export const InboundTLSOptions = z
       description: "Enable kernel TLS receive support.",
       description_zh: "启用内核 TLS 接收支持。",
     }),
+    handshake_timeout: z.string().optional().meta({
+      description: "TLS handshake timeout.",
+      description_zh: "TLS 握手超时时间。",
+    }),
+    certificate_provider: CertificateProviderReference.optional().meta({
+      description:
+        "Certificate provider options or shared certificate provider tag.",
+      description_zh: "证书提供者选项或共享证书提供者标签。",
+    }),
     acme: InboundACMEOptions.optional().meta({
       description:
         "ACME (Automatic Certificate Management Environment) options.",
       description_zh: "ACME（自动证书管理环境）选项。",
+      deprecated: true,
     }),
     ech: InboundECHOptions.optional().meta({
       description: "ECH (Encrypted Client Hello) options.",
@@ -746,6 +784,10 @@ export const OutboundTLSOptions = z
       description: "Enable TLS.",
       description_zh: "启用 TLS。",
     }),
+    engine: z.string().optional().meta({
+      description: "TLS engine.",
+      description_zh: "TLS 引擎。",
+    }),
     disable_sni: z.boolean().optional().meta({
       description: "Do not send server name in ClientHello (client only).",
       description_zh: "不在 ClientHello 中发送服务器名称（仅客户端）。",
@@ -828,6 +870,14 @@ export const OutboundTLSOptions = z
       description_zh:
         "通过将 TLS 握手分割为多个 TLS 记录来绕过防火墙。在关注性能时优先使用 `record_fragment`。",
     }),
+    spoof: z.string().optional().meta({
+      description: "TLS spoofing strategy.",
+      description_zh: "TLS 伪装策略。",
+    }),
+    spoof_method: z.string().optional().meta({
+      description: "TLS spoofing method.",
+      description_zh: "TLS 伪装方法。",
+    }),
     kernel_tx: z.boolean().optional().meta({
       description: "Enable kernel TLS transmit support.",
       description_zh: "启用内核 TLS 发送支持。",
@@ -835,6 +885,10 @@ export const OutboundTLSOptions = z
     kernel_rx: z.boolean().optional().meta({
       description: "Enable kernel TLS receive support.",
       description_zh: "启用内核 TLS 接收支持。",
+    }),
+    handshake_timeout: z.string().optional().meta({
+      description: "TLS handshake timeout.",
+      description_zh: "TLS 握手超时时间。",
     }),
     ech: OutboundECHOptions.optional().meta({
       description: "ECH (Encrypted Client Hello) options.",

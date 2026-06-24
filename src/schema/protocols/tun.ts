@@ -47,6 +47,14 @@ export const TunInboundOptions = z
       description: "IPv4 and IPv6 prefix for the tun interface.",
       description_zh: "tun 接口的 IPv4 和 IPv6 前缀。",
     }),
+    dns_mode: z.string().optional().meta({
+      description: "DNS handling mode for the TUN interface.",
+      description_zh: "TUN 接口的 DNS 处理模式。",
+    }),
+    dns_address: listableString.optional().meta({
+      description: "DNS addresses for the TUN interface.",
+      description_zh: "TUN 接口的 DNS 地址。",
+    }),
     mtu: z.number().int().optional().meta({
       description: "The maximum transmission unit.",
       description_zh: "最大传输单元。",
@@ -199,6 +207,14 @@ export const TunInboundOptions = z
         "Exclude android packages in route. Android package rules are only supported on Android and require `auto_route`.",
       description_zh:
         "排除路由的 Android 应用包名。Android 应用规则仅在 Android 下被支持，并且需要 `auto_route`。",
+    }),
+    include_mac_address: listableString.optional().meta({
+      description: "Limit source MAC addresses in route.",
+      description_zh: "限制路由的源 MAC 地址。",
+    }),
+    exclude_mac_address: listableString.optional().meta({
+      description: "Exclude source MAC addresses in route.",
+      description_zh: "排除路由的源 MAC 地址。",
     }),
     udp_timeout: z.union([z.string(), z.number()]).optional().meta({
       description: "UDP NAT expiration time. `5m` will be used by default.",

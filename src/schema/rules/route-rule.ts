@@ -64,6 +64,14 @@ const RuleActionRouteOptions = z
       description_zh:
         "通过分段 TLS 握手数据包到多个 TLS 记录来绕过防火墙检测。",
     }),
+    tls_spoof: z.string().optional().meta({
+      description: "TLS spoofing strategy.",
+      description_zh: "TLS 伪装策略。",
+    }),
+    tls_spoof_method: z.string().optional().meta({
+      description: "TLS spoofing method.",
+      description_zh: "TLS 伪装方法。",
+    }),
   })
   .meta({
     id: "RuleActionRouteOptions",
@@ -106,6 +114,10 @@ const RuleActionResolve = z
       description_zh:
         "指定要使用的 DNS 服务器的标签，而不是通过 DNS 路由进行选择。",
     }),
+    timeout: z.string().optional().meta({
+      description: "Timeout for DNS resolution.",
+      description_zh: "DNS 解析超时时间。",
+    }),
     strategy: z
       .enum(["prefer_ipv4", "prefer_ipv6", "ipv4_only", "ipv6_only"])
       .optional()
@@ -118,6 +130,10 @@ const RuleActionResolve = z
     disable_cache: z.boolean().optional().meta({
       description: "Disable cache and save cache in this query.",
       description_zh: "在此查询中禁用缓存。",
+    }),
+    disable_optimistic_cache: z.boolean().optional().meta({
+      description: "Disable optimistic DNS cache for this resolution.",
+      description_zh: "对此解析禁用乐观 DNS 缓存。",
     }),
     rewrite_ttl: z.number().int().optional().nullable().meta({
       description: "Rewrite TTL in DNS responses.",
@@ -379,6 +395,10 @@ const BaseRouteRule = z.object({
     description: "Match android package name.",
     description_zh: "匹配 Android 应用包名。",
   }),
+  package_name_regex: listableString.optional().meta({
+    description: "Match Android package name using regular expression.",
+    description_zh: "使用正则表达式匹配 Android 应用包名。",
+  }),
   user: listableString.optional().meta({
     description: "Match user name.",
     description_zh: "匹配用户名。",
@@ -441,6 +461,14 @@ const BaseRouteRule = z.object({
     description:
       "Only supported on Linux, Windows, and macOS. Match default interface address.",
     description_zh: "仅支持 Linux、Windows 和 macOS。匹配默认接口地址。",
+  }),
+  source_mac_address: listableString.optional().meta({
+    description: "Match source MAC address.",
+    description_zh: "匹配源 MAC 地址。",
+  }),
+  source_hostname: listableString.optional().meta({
+    description: "Match source hostname.",
+    description_zh: "匹配源主机名。",
   }),
   preferred_by: listableString.optional().meta({
     description:

@@ -8,140 +8,6 @@ import {
   OutboundTLSOptions,
 } from "./shared";
 
-// #region Legacy DNS Servers
-const LegacyDNSServerAddress = z.union([
-  z.literal("local").meta({
-    description: "System",
-    description_zh: "系统默认",
-  }),
-  z.literal("fakeip").meta({
-    description: "FakeIP",
-    description_zh: "FakeIP",
-  }),
-  z.string().startsWith("tcp://").meta({
-    description: "TCP",
-    description_zh: "TCP",
-  }),
-  z.union([z.ipv4(), z.ipv6(), z.string().startsWith("udp://")]).meta({
-    description: "UDP",
-    description_zh: "UDP",
-  }),
-  z.string().startsWith("tls://").meta({
-    description: "TLS",
-    description_zh: "TLS",
-  }),
-  z.string().startsWith("http://").meta({
-    description: "HTTP",
-    description_zh: "HTTP",
-  }),
-  z.string().startsWith("quic://").meta({
-    description: "QUIC",
-    description_zh: "QUIC",
-  }),
-  z.string().startsWith("h3://").meta({
-    description: "HTTP3",
-    description_zh: "HTTP3",
-  }),
-  z
-    .union([
-      z.literal("rcode://success").meta({
-        description: "No error",
-        description_zh: "无错误",
-      }),
-      z.literal("rcode://format_error").meta({
-        description: "Format error",
-        description_zh: "请求格式错误",
-      }),
-      z.literal("rcode://server_failure").meta({
-        description: "Server failure",
-        description_zh: "服务器出错",
-      }),
-      z.literal("rcode://name_error").meta({
-        description: "Non-existent domain",
-        description_zh: "域名不存在",
-      }),
-      z.literal("rcode://not_implemented").meta({
-        description: "Not implemented",
-        description_zh: "功能未实现",
-      }),
-      z.literal("rcode://refused").meta({
-        description: "Query refused",
-        description_zh: "请求被拒绝",
-      }),
-    ])
-    .meta({
-      description: "RCode",
-      description_zh: "RCode",
-    }),
-  z.string().startsWith("dhcp://").meta({
-    description: "DHCP",
-    description_zh: "DHCP",
-  }),
-]);
-
-export const LegacyDNSServerOptions = z
-  .object({
-    type: z.literal("legacy").optional().meta({
-      description: "DNS server type.",
-      description_zh: "DNS 服务器类型。",
-    }),
-    tag: z.string().meta({
-      description: "The tag of the dns server.",
-      description_zh: "DNS 服务器的标签。",
-    }),
-    address: LegacyDNSServerAddress.meta({
-      description: "The address of the dns server.",
-      description_zh: "DNS 服务器的地址。",
-    }),
-    address_resolver: z.string().optional().meta({
-      description:
-        "Tag of another server to resolve the domain name in the address. Required if the address contains a domain.",
-      description_zh:
-        "用于解析本 DNS 服务器的域名的另一个 DNS 服务器的标签。如果地址包含域名，则为必填项。",
-    }),
-    address_strategy: DomainStrategy.optional().meta({
-      description:
-        "The domain strategy for resolving the domain name in the address. One of `prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`. `dns.strategy` will be used if empty.",
-      description_zh:
-        "用于解析本 DNS 服务器的域名的策略。可选项：`prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`。为空时将使用 `dns.strategy`。",
-    }),
-    strategy: DomainStrategy.optional().meta({
-      description:
-        "Default domain strategy for resolving the domain names. One of `prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`. Takes no effect if overridden by other settings.",
-      description_zh:
-        "默认解析策略。可选项：`prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`。如果被其他设置覆盖则不生效。",
-    }),
-    detour: z.string().optional().meta({
-      description:
-        "Tag of an outbound for connecting to the dns server. Default outbound will be used if empty.",
-      description_zh:
-        "用于连接到 DNS 服务器的出站的标签。如果为空，将使用默认出站。",
-    }),
-    address_fallback_delay: z.string().optional().meta({
-      description:
-        "The time to wait for a response from the primary upstream DNS server before trying a fallback resolver.",
-      description_zh: "在尝试回退解析器之前等待主上游 DNS 服务器响应的时间。",
-      deprecated: true,
-    }),
-    client_subnet: z.string().optional().meta({
-      description:
-        "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default. If the value is an IP address instead of a prefix, `/32` or `/128` will be appended automatically. Can be overridden by `rules.[].client_subnet`. Will override `dns.client_subnet`.",
-      description_zh:
-        "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。如果值是 IP 地址而不是前缀，则会自动附加 `/32` 或 `/128`。可以被 `rules.[].client_subnet` 覆盖。将覆盖 `dns.client_subnet`。",
-    }),
-  })
-  .meta({
-    id: "LegacyDNSServer",
-    title: "Legacy DNS Server",
-    title_zh: "旧式 DNS 服务器",
-    description:
-      "Legacy DNS servers is deprecated and will be removed in sing-box 1.14.0, check Migration.",
-    description_zh:
-      "旧的 DNS 服务器配置已废弃且将在 sing-box 1.14.0 中被移除，参阅 迁移指南。",
-    deprecated: true,
-  });
-// #endregion
-
 // #region DNS Servers
 export const LocalDNSServerOptions = z
   .object({
@@ -425,6 +291,11 @@ export const TailscaleDNSServerOptions = z
       description_zh:
         "是否在 MagicDNS 之外还接受默认 DNS 解析器作为回退查询。若未启用，对非 Tailscale 域名查询将返回 `NXDOMAIN`。",
     }),
+    accept_search_domain: z.boolean().optional().meta({
+      description:
+        "Indicates whether the Tailscale search domain should be accepted.",
+      description_zh: "是否接受 Tailscale 搜索域。",
+    }),
   })
   .meta({
     id: "TailscaleDNSServerOptions",
@@ -455,7 +326,6 @@ export const ResolvedDNSServerOptions = z
 
 export const DNSServer = z
   .union([
-    z.lazy(() => LegacyDNSServerOptions),
     z.lazy(() =>
       z.discriminatedUnion("type", [
         LocalDNSServerOptions,
@@ -482,12 +352,37 @@ export type DNSServer = z.infer<typeof DNSServer>;
 // #endregion
 
 // #region DNS
+export const OptimisticDNSOptions = z
+  .union([
+    z.boolean(),
+    z.object({
+      enabled: z.boolean().optional().meta({
+        description: "Enable optimistic DNS cache.",
+        description_zh: "启用乐观 DNS 缓存。",
+      }),
+      timeout: z.string().optional().meta({
+        description:
+          "Maximum time to wait for the upstream response before using the optimistic cache response.",
+        description_zh: "在使用乐观缓存响应之前等待上游响应的最长时间。",
+      }),
+    }),
+  ])
+  .meta({
+    id: "OptimisticDNSOptions",
+    title: "Optimistic DNS",
+    title_zh: "乐观 DNS",
+  });
+
 export const DNSClientOptions = z.object({
   strategy: DomainStrategy.optional().meta({
     description:
       "Default domain strategy for resolving the domain names. One of `prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`.",
     description_zh:
       "默认解析域名策略。可选值：`prefer_ipv4` `prefer_ipv6` `ipv4_only` `ipv6_only`。",
+  }),
+  timeout: z.string().optional().meta({
+    description: "Timeout for DNS queries.",
+    description_zh: "DNS 查询超时时间。",
   }),
   disable_cache: z.boolean().optional().meta({
     description: "Disable dns cache.",
@@ -507,6 +402,10 @@ export const DNSClientOptions = z.object({
     description: "LRU cache capacity. Value less than 1024 will be ignored.",
     description_zh: "LRU 缓存容量。小于 1024 的值将被忽略。",
   }),
+  optimistic: OptimisticDNSOptions.optional().meta({
+    description: "Optimistic DNS cache options.",
+    description_zh: "乐观 DNS 缓存选项。",
+  }),
   client_subnet: z.string().optional().meta({
     description:
       "Append a `edns0-subnet` OPT extra record with the specified IP prefix to every query by default. If the value is an IP address instead of a prefix, `/32` or `/128` will be appended automatically. Can be overridden by `servers.[].client_subnet` or `rules.[].client_subnet`.",
@@ -514,30 +413,6 @@ export const DNSClientOptions = z.object({
       "默认情况下，将带有指定 IP 前缀的 `edns0-subnet` OPT 附加记录附加到每个查询。如果值是 IP 地址而不是前缀，则会自动附加 `/32` 或 `/128`。可以被 `servers.[].client_subnet` 或 `rules.[].client_subnet` 覆盖。",
   }), // prefixable
 });
-
-export const LegacyDNSFakeIPOptions = z
-  .object({
-    enabled: z.boolean().optional().meta({
-      description: "Enable FakeIP service.",
-      description_zh: "启用 FakeIP 服务。",
-    }),
-    inet4_range: z.string().optional().meta({
-      description: "IPv4 address range for FakeIP.",
-      description_zh: "用于 FakeIP 的 IPv4 地址范围。",
-    }), // prefix
-    inet6_range: z.string().optional().meta({
-      description: "IPv6 address range for FakeIP.",
-      description_zh: "用于 FakeIP 的 IPv6 地址范围。",
-    }), // prefix
-  })
-  .meta({
-    id: "LegacyDNSFakeIPOptions",
-    title: "Legacy DNS FakeIP",
-    title_zh: "旧版 DNS FakeIP",
-    description: "Legacy fake-ip configuration is deprecated",
-    description_zh: "旧的 fake-ip 配置已废弃",
-    deprecated: true,
-  });
 
 export const DNSOptions = z
   .object({
@@ -559,10 +434,6 @@ export const DNSOptions = z
         "Stores a reverse mapping of IP addresses after responding to a DNS query in order to provide domain names when routing. Since this process relies on the act of resolving domain names by an application before making a request, it can be problematic in environments such as macOS, where DNS is proxied and cached by the system.",
       description_zh:
         "在响应 DNS 查询后存储 IP 地址的反向映射以为路由目的提供域名。由于此过程依赖于应用程序在发出请求之前解析域名的行为，因此在 macOS 等 DNS 由系统代理和缓存的环境中可能会出现问题。",
-    }),
-    fakeip: LegacyDNSFakeIPOptions.optional().meta({
-      description: "[FakeIP](./fakeip/) settings.",
-      description_zh: "[FakeIP](./fakeip/) 设置。",
     }),
 
     ...DNSClientOptions.shape,

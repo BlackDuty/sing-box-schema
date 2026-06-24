@@ -2,6 +2,28 @@ import { z } from "zod";
 import { DialerOptions } from "@/schema/shared";
 import { listableString } from "@/utils";
 
+const TailscaleSSHServerOptions = z.union([
+  z.boolean(),
+  z.object({
+    enabled: z.boolean().optional().meta({
+      description: "Enable Tailscale SSH server.",
+      description_zh: "启用 Tailscale SSH 服务器。",
+    }),
+    disable_pty: z.boolean().optional().meta({
+      description: "Disable PTY support.",
+      description_zh: "禁用 PTY 支持。",
+    }),
+    disable_sftp: z.boolean().optional().meta({
+      description: "Disable SFTP support.",
+      description_zh: "禁用 SFTP 支持。",
+    }),
+    disable_forwarding: z.boolean().optional().meta({
+      description: "Disable SSH forwarding support.",
+      description_zh: "禁用 SSH 转发支持。",
+    }),
+  }),
+]);
+
 export const TailscaleEndpointOptions = z
   .object({
     type: z.literal("tailscale"),
@@ -93,6 +115,10 @@ export const TailscaleEndpointOptions = z
     udp_timeout: z.union([z.string(), z.number()]).optional().meta({
       description: "UDP NAT expiration time. `5m` will be used by default.",
       description_zh: "UDP NAT 过期时间。默认使用 `5m`。",
+    }),
+    ssh_server: TailscaleSSHServerOptions.optional().meta({
+      description: "Tailscale SSH server options.",
+      description_zh: "Tailscale SSH 服务器选项。",
     }),
 
     ...DialerOptions.shape,

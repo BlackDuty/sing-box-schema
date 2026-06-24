@@ -1,15 +1,18 @@
 // Root Configuration
 
 export * from "./schema/certificate";
+export * from "./schema/certificate-provider";
 export * from "./schema/configuration";
 export * from "./schema/debug";
 // DNS
 export * from "./schema/dns";
+export * from "./schema/dns-record";
 // Endpoints
 export * from "./schema/endpoint";
 export * from "./schema/experimental";
 export * from "./schema/groups/selector";
 export * from "./schema/groups/urltest";
+export * from "./schema/http-client";
 // Inbounds
 export * from "./schema/inbound";
 // Global Settings

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Network, NetworkType } from "@/schema/shared";
 import { listable, listableInts, listableString } from "../../utils";
+import { HTTPClientOptions } from "../http-client";
 
 // #region Headless Rule
 const DNSQueryType = z.union([z.string(), z.number().int()]).meta({
@@ -76,6 +77,10 @@ const DefaultHeadlessRule = z.object({
   package_name: listableString.optional().meta({
     description: "Match android package name.",
     description_zh: "匹配 Android 应用包名。",
+  }),
+  package_name_regex: listableString.optional().meta({
+    description: "Match Android package name using regular expression.",
+    description_zh: "使用正则表达式匹配 Android 应用包名。",
   }),
   network_type: listable(NetworkType).optional().meta({
     description:
@@ -232,10 +237,15 @@ const RemoteRuleSetOptions = z
       description: "Download URL of rule-set.",
       description_zh: "规则集的下载 URL。",
     }),
+    http_client: HTTPClientOptions.optional().meta({
+      description: "HTTP client used to download the rule set.",
+      description_zh: "用于下载规则集的 HTTP 客户端。",
+    }),
     download_detour: z.string().optional().meta({
       description:
         "Tag of the outbound to download rule-set. Default outbound will be used if empty.",
       description_zh: "用于下载规则集的出站的标签。如果为空，将使用默认出站。",
+      deprecated: true,
     }),
     update_interval: z.string().optional().meta({
       description: "Update interval of rule-set. `1d` will be used if empty.",

@@ -7,6 +7,7 @@ import {
   OutboundTLSOptions,
   ServerOptions,
 } from "@/schema/shared";
+import { QUICOptions } from "../http-client";
 
 // #region Shared
 export const HysteriaUser = z.object({
@@ -60,24 +61,28 @@ export const HysteriaInboundOptions = z
         "The QUIC stream-level flow control window for receiving data. `15728640 (15 MB/s)` will be used if empty.",
       description_zh:
         "用于接收数据的 QUIC 流级流控制窗口。为空时默认 `15728640 (15 MB/s)`。",
+      deprecated: true,
     }),
     recv_window_client: z.number().int().optional().meta({
       description:
         "The QUIC connection-level flow control window for receiving data. `67108864 (64 MB/s)` will be used if empty.",
       description_zh:
         "用于接收数据的 QUIC 连接级流控制窗口。为空时默认 `67108864 (64 MB/s)`。",
+      deprecated: true,
     }),
     max_conn_client: z.number().int().optional().meta({
       description:
         "The maximum number of QUIC concurrent bidirectional streams that a peer is allowed to open. `1024` will be used if empty.",
       description_zh:
         "允许对等点打开的 QUIC 并发双向流的最大数量。为空时默认 `1024`。",
+      deprecated: true,
     }),
     disable_mtu_discovery: z.boolean().optional().meta({
       description:
         "Disables Path MTU Discovery (RFC 8899). Packets will then be at most 1252 (IPv4) / 1232 (IPv6) bytes in size. Force enabled on for systems other than Linux and Windows.",
       description_zh:
         "禁用路径 MTU 发现 (RFC 8899)。数据包大小将限制在 1252 (IPv4) / 1232 (IPv6) 字节。Linux 和 Windows 以外的系统上会强制启用。",
+      deprecated: true,
     }),
     tls: InboundTLSOptions.optional().meta({
       description:
@@ -85,6 +90,7 @@ export const HysteriaInboundOptions = z
       description_zh:
         "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#inbound)。",
     }),
+    ...QUICOptions.shape,
 
     ...ListenOptions.shape,
   })
@@ -152,18 +158,21 @@ export const HysteriaOutboundOptions = z
         "The QUIC stream-level flow control window for receiving data. `15728640 (15 MB/s)` will be used if empty.",
       description_zh:
         "用于接收数据的 QUIC 流级流控制窗口。为空时默认 `15728640 (15 MB/s)`。",
+      deprecated: true,
     }),
     recv_window: z.number().int().optional().meta({
       description:
         "The QUIC connection-level flow control window for receiving data. `67108864 (64 MB/s)` will be used if empty.",
       description_zh:
         "用于接收数据的 QUIC 连接级流控制窗口。为空时默认 `67108864 (64 MB/s)`。",
+      deprecated: true,
     }),
     disable_mtu_discovery: z.boolean().optional().meta({
       description:
         "Disables Path MTU Discovery (RFC 8899). Packets will then be at most 1252 (IPv4) / 1232 (IPv6) bytes in size. Force enabled on for systems other than Linux and Windows.",
       description_zh:
         "禁用路径 MTU 发现 (RFC 8899)。数据包大小将限制在 1252 (IPv4) / 1232 (IPv6) 字节。Linux 和 Windows 以外的系统上会强制启用。",
+      deprecated: true,
     }),
     network: Network.optional().meta({
       description:
@@ -176,6 +185,7 @@ export const HysteriaOutboundOptions = z
       description_zh:
         "TLS 配置，参阅 [TLS](/zh/configuration/shared/tls/#outbound)。",
     }),
+    ...QUICOptions.shape,
 
     ...ServerOptions.shape,
     ...DialerOptions.shape,
