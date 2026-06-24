@@ -1,12 +1,12 @@
 ---
 name: sync-sing-box-schema
-description: Use when schema updates must reflect the current HEAD in ~/Projects/Personal/sing-box as the authoritative source of truth.
+description: Use when schema updates must reflect the current HEAD in ~/Projects/Public/sing-box as the authoritative source of truth.
 ---
 
 # Sync sing-box Schema
 
 ## Overview
-Align local Zod definitions with the live checkout at `~/Projects/Personal/sing-box`, treating that repository's HEAD as the upstream source of truth instead of any fixed tag.
+Align local Zod definitions with the live checkout at `~/Projects/Public/sing-box`, treating that repository's HEAD as the upstream source of truth instead of any fixed tag.
 
 ## When to Use
 - Copying or modifying schema fragments because of upstream protocol or metadata changes observed at HEAD.
@@ -15,7 +15,7 @@ Align local Zod definitions with the live checkout at `~/Projects/Personal/sing-
 
 ## Workflow
 1. **Start from the checked-out sing-box repository**
-   - Ensure `~/Projects/Personal/sing-box` is up to date and on the desired branch; use `git fetch`/`git pull` as needed and verify HEAD is clean.
+   - Ensure `~/Projects/Public/sing-box` is up to date and on the desired branch; use `git fetch`/`git pull` as needed and verify HEAD is clean.
    - Always read files directly from that checkout (HEAD), never from older tags or other clones.
 
 2. **Trace the relevant upstream sources at HEAD**
@@ -48,5 +48,5 @@ Align local Zod definitions with the live checkout at `~/Projects/Personal/sing-
 
 ## Common Mistakes
 - Assuming an older release tag still applies and skipping updates to reflect HEAD.
-- Forgetting to refresh `~/Projects/Personal/sing-box` before copying field metadata.
+- Forgetting to refresh `~/Projects/Public/sing-box` before copying field metadata.
 - Changing schema exports without checking `src/index.ts`, leading to missing public entry points.
