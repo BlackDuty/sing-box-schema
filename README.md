@@ -4,7 +4,7 @@
 
 > Provides type-safe [**sing-box**](https://sing-box.sagernet.org/) configuration syntax support for code editors / TypeScript projects
 
-[![Version - v1.13.0](https://img.shields.io/badge/Version-v1.13.0-blue?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.13.0) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)](<[https://](https://www.typescriptlang.org/)>) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
+[![Version - v1.13.13](https://img.shields.io/badge/Version-v1.13.13-blue?style=for-the-badge&logo=task&logoColor=white)](https://github.com/SagerNet/sing-box/tree/v1.13.13) [![JSON Schema - Draft 2020-12](/badges/JSON_Schema-Draft_2020--12-white.svg)](https://json-schema.org/draft/2020-12) [![Typescript - 5](https://img.shields.io/badge/typescript-5-grey.svg?style=for-the-badge&logo=typescript&logoColor=white&labelColor=007ACC)](<[https://](https://www.typescriptlang.org/)>) [![Zod - 4](https://img.shields.io/badge/Zod-4-grey.svg?style=for-the-badge&logo=zod&logoColor=white&labelColor=408AFE)](https://zod.dev)
 
 **English** | [**中文**](/README_ZH.md)
 
@@ -36,7 +36,7 @@ You can use it in Visual Studio Code or other JSON Schema-supported editors. Ope
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0/schema.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.13/schema.json"
 }
 ```
 
@@ -44,7 +44,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.0/schema.zh.json"
+  "$schema": "https://unpkg.com/@black-duty/sing-box-schema@1.13.13/schema.zh.json"
 }
 ```
 
@@ -55,7 +55,7 @@ In addition to Unpkg's npm mirror, you can use:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.0/schema.json"
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.13/schema.json"
 }
 ```
 
@@ -63,7 +63,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.0/schema.zh.json"
+  "$schema": "https://raw.githubusercontent.com/BlackDuty/sing-box-schema/refs/tags/v1.13.13/schema.zh.json"
 }
 ```
 
@@ -73,7 +73,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.0/schema.json"
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.13/schema.json"
 }
 ```
 
@@ -81,7 +81,7 @@ Or use the Chinese version:
 
 ```json
 {
-  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.0/schema.zh.json"
+  "$schema": "https://github.com/BlackDuty/sing-box-schema/releases/download/v1.13.13/schema.zh.json"
 }
 ```
 
